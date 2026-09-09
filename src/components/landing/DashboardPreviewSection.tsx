@@ -109,7 +109,7 @@ export default function DashboardPreviewSection() {
                 {activeRole === "patient" && <PatientMockupView />}
                 {activeRole === "reception" && <ReceptionMockupView />}
                 {activeRole === "lab" && <LabMockupView />}
-                {activeRole === "pharmacy" && <PharmacyMockupView />}
+                {activeRole === "pharmacist" && <PharmacyMockupView />}
               </motion.div>
             </AnimatePresence>
           </div>

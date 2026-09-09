@@ -100,8 +100,8 @@ export interface Translations {
 
 export const DICTIONARY: Record<Language, Translations> = {
   en: {
-    brandTitle: "Medinnova Care",
-    brandTag: "Pay-Per-Service Hospital Network",
+    brandTitle: "MedCore HMS",
+    brandTag: "Indian Hospital Operating System",
     navFeatures: "Features",
     navDemo: "Live Demo",
     navWorkflow: "Patient Journey",

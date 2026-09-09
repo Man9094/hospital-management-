@@ -70,7 +70,7 @@ export default function ForgotPasswordPage() {
             </div>
             <div>
               <h1 className="font-poppins font-extrabold text-3xl tracking-wider uppercase text-white">
-                MEDINNOVA <span className="text-[#13C5DD] text-sm lowercase font-semibold">care</span>
+                MEDCORE <span className="text-[#13C5DD] text-sm lowercase font-semibold">hms</span>
               </h1>
               <p className="text-slate-400 text-xs uppercase tracking-[0.3em] font-bold mt-1">
                 Account Recovery
@@ -116,7 +116,7 @@ export default function ForgotPasswordPage() {
                 <Cross className="w-6 h-6 stroke-[2.5]" />
               </div>
               <div className="font-poppins font-extrabold text-xl tracking-wider uppercase text-white">
-                MEDINNOVA <span className="text-[#13C5DD] text-xs lowercase font-semibold">care</span>
+                MEDCORE <span className="text-[#13C5DD] text-xs lowercase font-semibold">hms</span>
               </div>
             </div>
           </div>

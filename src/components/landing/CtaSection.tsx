@@ -1,75 +1,54 @@
 "use client";
 
-import React, { useState } from "react";
-import { motion } from "framer-motion";
-import { usePortal } from "@/context/PortalContext";
-import { useLanguage } from "@/context/LanguageContext";
-import PatientAdmissionModal from "@/components/modals/PatientAdmissionModal";
-import { ArrowRight, ShieldCheck, Sparkles, CheckCircle2, Bed, Calendar } from "lucide-react";
+import React from "react";
+import Link from "next/link";
+import { ArrowRight, Building2, ShieldCheck, CheckCircle2 } from "lucide-react";
 
 export default function CtaSection() {
-  const { openAuthModal } = usePortal();
-  const { t, language } = useLanguage();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   return (
-    <section className="py-24 relative overflow-hidden bg-slate-50 dark:bg-slate-900/60">
+    <section className="py-20 lg:py-28 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative rounded-3xl bg-[#1D2A4D] text-white p-8 sm:p-16 border-4 border-[#13C5DD] shadow-2xl text-center space-y-6">
+        
+        <div className="relative rounded-3xl p-8 sm:p-14 bg-gradient-to-r from-[#1D2A4D] via-[#0F365F] to-[#13C5DD] text-white shadow-2xl overflow-hidden text-center space-y-8">
           
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#13C5DD]/20 text-[#13C5DD] text-xs font-extrabold uppercase border border-[#13C5DD]/40">
-            <Sparkles className="w-4 h-4 text-yellow-300" />
-            {language === "gu" ? "ઝીરો માસિક ફી — ઘરેથી સરળ હેલ્થકેર" : "Zero Subscription — Easy Home Care"}
+          <div className="max-w-3xl mx-auto space-y-4">
+            <span className="px-3 py-1 rounded-full bg-white/10 text-cyan-200 text-xs font-black uppercase tracking-wider">
+              Modernize Your Hospital Infrastructure
+            </span>
+            <h2 className="text-3xl sm:text-5xl font-black font-poppins tracking-tight">
+              Ready to Upgrade to MedCore Hospital Operating System?
+            </h2>
+            <p className="text-sm sm:text-base text-slate-200 max-w-2xl mx-auto">
+              Transform registration queues, clinical EMR, diagnostics, pharmacy stock, and billing into one synchronized hospital platform.
+            </p>
           </div>
 
-          <h2 className="text-3xl sm:text-5xl font-extrabold font-poppins text-white tracking-tight leading-tight max-w-3xl mx-auto uppercase">
-            {language === "gu"
-              ? "તમારા પરિવાર માટે આજે જ અનુકૂળ ડોક્ટર અને બેડ પસંદ કરો"
-              : language === "hi"
-              ? "अपने परिवार के लिए आज ही डॉक्टर और बेड चुनें"
-              : "Select Your Preferred Doctor & Hospital Bed Today"}
-          </h2>
-
-          <p className="text-slate-300 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
-            ભારતની ૫૦૦+ હોસ્પિટલો અને ૧૨,૦૦૦+ નિષ્ણાત તબીબો સાથે જોડાયેલા ઓનલાઇન પોર્ટલ પરથી ઘરે બેઠા જ સેવાઓ મેળવો.
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
-            <motion.button
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.96 }}
-              onClick={() => setIsModalOpen(true)}
-              className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#13C5DD] hover:bg-[#10b1c7] text-white font-extrabold text-xs uppercase tracking-wider shadow-xl flex items-center justify-center gap-2"
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link
+              href="/app"
+              className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-white text-[#1D2A4D] font-black text-sm uppercase tracking-wider shadow-lg hover:bg-slate-100 hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
             >
-              <Bed className="w-5 h-5" />
-              {language === "gu" ? "ઘરે બેઠા દર્દી એડમિટ કરો (₹199)" : "Admit Patient From Home"}
-            </motion.button>
-
-            <a
-              href="#doctors"
-              className="w-full sm:w-auto px-8 py-4 rounded-full bg-white/10 text-white hover:bg-white/20 border border-white/20 text-xs font-extrabold uppercase tracking-wider flex items-center justify-center gap-2"
+              <span>Explore Live Hospital Workspace</span>
+              <ArrowRight className="w-4 h-4 text-[#13C5DD]" />
+            </Link>
+            <Link
+              href="/login"
+              className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-[#13C5DD]/20 border border-white/30 text-white font-extrabold text-sm uppercase tracking-wider hover:bg-white/20 transition-all flex items-center justify-center gap-2"
             >
-              <Calendar className="w-4 h-4 text-[#13C5DD]" />
-              {language === "gu" ? "અમારા ડોકટરો પસંદ કરો" : "Select Specialist Doctor"}
-            </a>
+              <Building2 className="w-4 h-4" />
+              <span>Staff Portal Login</span>
+            </Link>
           </div>
 
-          <div className="pt-4 flex flex-wrap items-center justify-center gap-6 text-xs text-slate-400 font-bold uppercase">
-            <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-[#00C896]" /> કોઈ માસિક સબ્સ્ક્રિપ્શન ચાર્જ નથી
-            </span>
-            <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-[#00C896]" /> ૧૦૦% પારદર્શક સર્વિસ ફી
-            </span>
-            <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-[#00C896]" /> આયુષ્માન ભારત (PM-JAY) સુસંગત
-            </span>
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-slate-200 pt-2 font-medium">
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-300" /> Full Role-Based Access</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-300" /> Instant UHID Integration</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-300" /> Transparent Indian Demo Data</span>
           </div>
 
         </div>
-      </div>
 
-      <PatientAdmissionModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      </div>
     </section>
   );
 }

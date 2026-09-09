@@ -6,74 +6,111 @@ export type RoleType =
   | "super_admin" 
   | "hospital_admin" 
   | "doctor" 
-  | "patient" 
+  | "nurse"
   | "reception" 
   | "lab" 
-  | "pharmacy";
+  | "radiology"
+  | "pharmacist" 
+  | "billing"
+  | "patient";
 
-interface RoleMeta {
+export interface RoleMeta {
   id: RoleType;
   name: string;
   badge: string;
   description: string;
   avatar: string;
+  email: string;
 }
 
 export const ROLES: Record<RoleType, RoleMeta> = {
   super_admin: {
     id: "super_admin",
-    name: "Super Admin",
-    badge: "Enterprise HQ",
-    description: "Multi-tenant telemetry, SaaS licensing & security policy center",
-    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150"
+    name: "Rajesh Kumar",
+    badge: "Super Admin",
+    description: "Enterprise HQ, multi-hospital governance & security policies",
+    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150",
+    email: "superadmin@medcore.in"
   },
   hospital_admin: {
     id: "hospital_admin",
-    name: "Hospital Admin",
-    badge: "Metro Health Main",
-    description: "Bed occupancy, department billing, staff roster & hospital ROI",
-    avatar: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=150"
+    name: "Priya Sharma",
+    badge: "Hospital Administrator",
+    description: "Bed occupancy, departmental performance, billing & operational analytics",
+    avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=150",
+    email: "admin@medcore.in"
   },
   doctor: {
     id: "doctor",
-    name: "Dr. Sarah Jenkins (Cardiology)",
-    badge: "Attending Physician",
-    description: "OPD consultation queue, EHR vitals, electronic prescriptions",
-    avatar: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=150"
+    name: "Dr. Rajesh Patel",
+    badge: "Senior Consultant (MD)",
+    description: "OPD queue, Clinical EMR, SOAP notes, e-prescriptions & diagnostics",
+    avatar: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=150",
+    email: "doctor@medcore.in"
   },
-  patient: {
-    id: "patient",
-    name: "Alexander Vance",
-    badge: "Patient ID #88492",
-    description: "Personal health passport, lab reports, instant appointment booking",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150"
+  nurse: {
+    id: "nurse",
+    name: "Sister Anjali Nair",
+    badge: "Nursing Station Lead",
+    description: "Inpatient vitals, medication administration, IV logs & handover charts",
+    avatar: "https://images.unsplash.com/photo-1594824813576-9c4c7f39446f?auto=format&fit=crop&q=80&w=150",
+    email: "nurse@medcore.in"
   },
   reception: {
     id: "reception",
     name: "Elena Rostova",
-    badge: "Front Desk & Triage",
-    description: "Express check-in counter, token generation & emergency intake",
-    avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=150"
+    badge: "Front Desk & OPD",
+    description: "Patient registration, UHID generation, token dispenser & appointments",
+    avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=150",
+    email: "reception@medcore.in"
   },
   lab: {
     id: "lab",
     name: "David Chen",
-    badge: "Senior Pathologist",
-    description: "Blood test queue, radiology imaging upload & critical alert sign-off",
-    avatar: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=150"
+    badge: "Senior Pathologist (LIS)",
+    description: "Sample barcodes, result validation, reference ranges & verified reports",
+    avatar: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=150",
+    email: "lab@medcore.in"
   },
-  pharmacy: {
-    id: "pharmacy",
+  radiology: {
+    id: "radiology",
+    name: "Dr. Alpa Bhatt",
+    badge: "Radiologist (RIS)",
+    description: "X-Ray, CT, MRI imaging study reviews and PACS reporting",
+    avatar: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=150",
+    email: "radiology@medcore.in"
+  },
+  pharmacist: {
+    id: "pharmacist",
     name: "Maria Santos",
-    badge: "Lead Pharmacist",
-    description: "E-prescription queue, inventory auto-reorder & billing POS",
-    avatar: "https://images.unsplash.com/photo-1582750433449-648ed127bb54?auto=format&fit=crop&q=80&w=150"
+    badge: "Chief Pharmacist",
+    description: "Prescription dispensing, FEFO batch tracking & inventory management",
+    avatar: "https://images.unsplash.com/photo-1582750433449-648ed127bb54?auto=format&fit=crop&q=80&w=150",
+    email: "pharmacy@medcore.in"
+  },
+  billing: {
+    id: "billing",
+    name: "Ketan Trivedi",
+    badge: "Billing & TPA Claims",
+    description: "Itemized GST billing, cash/UPI receipts & PM-JAY/TPA cashless processing",
+    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150",
+    email: "billing@medcore.in"
+  },
+  patient: {
+    id: "patient",
+    name: "Alexander Vance",
+    badge: "Patient (MC-2026-000106)",
+    description: "Personal health passport, lab reports, e-prescriptions & invoice receipts",
+    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=150",
+    email: "patient@medcore.in"
   }
 };
 
 interface PortalContextType {
   activeRole: RoleType;
   setActiveRole: (role: RoleType) => void;
+  selectedUhid: string | null;
+  setSelectedUhid: (uhid: string | null) => void;
   isAuthModalOpen: boolean;
   setIsAuthModalOpen: (open: boolean) => void;
   authModalMode: "login" | "signup" | "forgot";
@@ -89,6 +126,7 @@ const PortalContext = createContext<PortalContextType | undefined>(undefined);
 
 export function PortalProvider({ children }: { children: React.ReactNode }) {
   const [activeRole, setActiveRole] = useState<RoleType>("hospital_admin");
+  const [selectedUhid, setSelectedUhid] = useState<string | null>(null);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authModalMode, setAuthModalMode] = useState<"login" | "signup" | "forgot">("login");
   const [isDemoVideoOpen, setIsDemoVideoOpen] = useState(false);
@@ -104,6 +142,8 @@ export function PortalProvider({ children }: { children: React.ReactNode }) {
       value={{
         activeRole,
         setActiveRole,
+        selectedUhid,
+        setSelectedUhid,
         isAuthModalOpen,
         setIsAuthModalOpen,
         authModalMode,

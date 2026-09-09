@@ -27,7 +27,7 @@ export default function BenefitsPersonaSection() {
         <div className="text-center max-w-3xl mx-auto space-y-3">
           <div>
             <span className="medinova-subheading text-xs">
-              ABOUT MEDINNOVA CARE
+              ABOUT MEDCORE HMS
             </span>
           </div>
           <h2 className="text-2xl sm:text-4xl font-extrabold font-poppins text-[#1D2A4D] dark:text-white uppercase">

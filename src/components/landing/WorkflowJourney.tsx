@@ -1,84 +1,138 @@
 "use client";
 
-import React, { useState } from "react";
-import { useLanguage } from "@/context/LanguageContext";
-import { UserPlus, Stethoscope, FlaskConical, Pill, CreditCard, LogOut, CheckCircle } from "lucide-react";
+import React from "react";
+import {
+  Users,
+  Calendar,
+  Heart,
+  Stethoscope,
+  FlaskConical,
+  Pill,
+  Bed,
+  CreditCard,
+  FileCheck,
+  ArrowDown
+} from "lucide-react";
 
 export default function WorkflowJourney() {
-  const { t } = useLanguage();
-  const [activeStep, setActiveStep] = useState(0);
-
-  const STEPS = [
-    { number: "01", title: t.step1, icon: UserPlus, desc: "રિસેપ્શન અથવા દર્દી કિયોસ્ક દ્વારા ઝડપી નોંધણી અને ઓપીડી ટોકન બારકોડ પ્રિન્ટિંગ.", details: "૩૦ સેકન્ડથી પણ ઓછા સમયમાં એન્ટ્રી." },
-    { number: "02", title: t.step2, icon: Stethoscope, desc: "ડોક્ટર દ્વારા દર્દીની તપાસ, બીપી/વજન વિટલ્સ અને ડિજિટલ દવાઓનું લખાણ.", details: "પ્રિસ્ક્રિપ્શન પ્રિન્ટ અને વોટ્સએપ મેસેજ." },
-    { number: "03", title: t.step3, icon: FlaskConical, desc: "લેબ સેમ્પલ કલેક્શન, ઓટો પેથોલોજી રિપોર્ટ એન્ટ્રી અને એક્સ-રે રિપોર્ટિંગ.", details: "ઓટોમેટિક રિપોર્ટ તૈયાર અને સાઇન." },
-    { number: "04", title: t.step4, icon: Pill, desc: "મેડિકલ સ્ટોર દ્વારા બારકોડ સ્કેન કરી પ્રિસ્ક્રિપ્શન દવાઓ આપવી.", details: "એક્સપાયરી ડેટ ચકાસણી સાથે સ્ટોક ઓછો." },
-    { number: "05", title: t.step5, icon: CreditCard, desc: "ઓપીડી કન્સલ્ટેશન, લેબ ટેસ્ટ અને દવાઓનું કમ્બાઈન્ડ જીએસટી પાકું બિલ.", details: "કેશ, યુપીઆઈ, કાર્ડ કે વીમા કેશલેસ." },
-    { number: "06", title: t.step6, icon: LogOut, desc: "હોસ્પિટલમાંથી ડીજિટલ ડિસ્ચાર્જ કાર્ડ અને આગળની તપાસ તારીખ યાદ અપાવવી.", details: "દર્દી માટે ઓનલાઇન પાસપોર્ટ." }
+  const steps = [
+    {
+      num: "01",
+      title: "Patient Registration & Unique UHID",
+      desc: "Reception records demographics, links ABHA Health ID, blood group and generates a permanent lifetime UHID (e.g. MC-2026-000106).",
+      icon: Users,
+      role: "Reception Desk",
+    },
+    {
+      num: "02",
+      title: "OPD Appointment & Token Dispatch",
+      desc: "Automated queue assigns doctor consultation token number (Token A-101), calculates estimated wait time, and routes patient to triage.",
+      icon: Calendar,
+      role: "Queue Manager",
+    },
+    {
+      num: "03",
+      title: "Triage & Baseline Vitals Intake",
+      desc: "Nursing staff records blood pressure, pulse, temperature, and SpO2 with automated warning badges for abnormal parameters.",
+      icon: Heart,
+      role: "Nursing Station",
+    },
+    {
+      num: "04",
+      title: "Doctor Clinical EMR & Examination",
+      desc: "Attending consultant examines patient, documents SOAP notes, assigns ICD-10 diagnosis code, and generates digital treatment plan.",
+      icon: Stethoscope,
+      role: "Attending Physician",
+    },
+    {
+      num: "05",
+      title: "Laboratory & Radiology Investigations",
+      desc: "LIS generates sample barcode for blood tests; RIS tracks imaging studies. Verified pathology and radiology findings sync automatically.",
+      icon: FlaskConical,
+      role: "Pathology & Radiology",
+    },
+    {
+      num: "06",
+      title: "E-Prescription & FEFO Pharmacy",
+      desc: "Doctor's e-prescription routes directly to pharmacy. Pharmacist dispenses medicines from earliest-expiry batches with stock tracking.",
+      icon: Pill,
+      role: "Hospital Pharmacy",
+    },
+    {
+      num: "07",
+      title: "Inpatient Bed Admission (If Required)",
+      desc: "Direct admission to ICU, Deluxe, or General ward bed. Automatic bed status update, daily rounds charting, and medication scheduling.",
+      icon: Bed,
+      role: "IPD Ward Staff",
+    },
+    {
+      num: "08",
+      title: "Automatic GST Billing & Cashless TPA",
+      desc: "System compiles itemized charges across consultation, diagnostics, medicines, and ward stay. Supports PM-JAY and instant UPI receipts.",
+      icon: CreditCard,
+      role: "Billing & Accounts",
+    },
+    {
+      num: "09",
+      title: "Clinical Discharge & Patient Portal",
+      desc: "Doctor signs verified discharge summary. Patient accesses complete reports, bills, and follow-up advice on their encrypted personal health portal.",
+      icon: FileCheck,
+      role: "Patient Health Passport",
+    },
   ];
 
   return (
-    <section id="workflow" className="py-20 border-y border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/30">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="workflow" className="py-20 lg:py-28">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
         
-        {/* Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-3 mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00C896]/10 text-[#00C896] text-xs font-bold">
-            {t.workflowBadge}
+        {/* Section Header */}
+        <div className="text-center max-w-3xl mx-auto space-y-4">
+          <div className="text-xs font-extrabold text-[#13C5DD] uppercase tracking-wider">
+            SEAMLESS CONTINUITY OF CARE
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold font-poppins text-slate-900 dark:text-white">
-            {t.workflowTitle}
+          <h2 className="text-3xl sm:text-5xl font-black font-poppins text-slate-900 dark:text-white tracking-tight">
+            The Complete Connected Patient Journey
           </h2>
-          <p className="text-slate-600 dark:text-slate-400 text-sm">
-            {t.workflowSub}
+          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400">
+            Never lose patient context. Every doctor visit, test result, pharmacy dispensation, and bed movement is permanently linked to one UHID record.
           </p>
         </div>
 
-        {/* Step Indicator */}
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-2 mb-8">
-          {STEPS.map((step, idx) => {
+        {/* 9-Step Timeline Journey */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative">
+          {steps.map((step) => {
             const Icon = step.icon;
             return (
-              <button
-                key={idx}
-                onClick={() => setActiveStep(idx)}
-                className={`p-3 rounded-xl border text-left transition-all ${
-                  activeStep === idx
-                    ? "bg-[#0F6CBD] text-white border-[#0F6CBD] shadow-sm"
-                    : "bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800"
-                }`}
+              <div
+                key={step.num}
+                className="p-6 rounded-3xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 shadow-md hover:shadow-xl transition-all space-y-3 relative group"
               >
-                <div className="flex items-center justify-between mb-1">
-                  <span className={`text-[10px] font-bold ${activeStep === idx ? "text-white/80" : "text-slate-400"}`}>
-                    {step.number}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl font-black font-poppins text-[#13C5DD]">
+                      {step.num}
+                    </span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#13C5DD]" />
+                  </div>
+                  <span className="px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-extrabold uppercase">
+                    {step.role}
                   </span>
-                  <Icon className="w-4 h-4" />
                 </div>
-                <div className="text-xs font-bold truncate">{step.title}</div>
-              </button>
+
+                <div className="w-10 h-10 rounded-xl bg-[#13C5DD]/15 text-[#13C5DD] flex items-center justify-center">
+                  <Icon className="w-5 h-5" />
+                </div>
+
+                <h3 className="text-base font-extrabold font-poppins text-slate-900 dark:text-white">
+                  {step.title}
+                </h3>
+
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                  {step.desc}
+                </p>
+              </div>
             );
           })}
-        </div>
-
-        {/* Step Content */}
-        <div className="p-6 sm:p-8 rounded-2xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 shadow-md space-y-4">
-          <div className="flex items-center gap-3">
-            <span className="w-8 h-8 rounded-xl bg-[#0F6CBD] text-white font-extrabold text-sm flex items-center justify-center">
-              {STEPS[activeStep].number}
-            </span>
-            <h3 className="text-xl font-bold font-poppins text-slate-900 dark:text-white">
-              {STEPS[activeStep].title}
-            </h3>
-          </div>
-
-          <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
-            {STEPS[activeStep].desc}
-          </p>
-
-          <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center gap-2 text-xs font-bold text-[#00C896]">
-            <CheckCircle className="w-4 h-4 shrink-0" />
-            <span>{STEPS[activeStep].details}</span>
-          </div>
         </div>
 
       </div>

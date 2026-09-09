@@ -1,109 +1,177 @@
 "use client";
 
-import React from "react";
-import { Building2, ShieldCheck, Activity, DollarSign, Users, Database, Globe, TrendingUp, AlertTriangle } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import {
+  ShieldCheck,
+  Building2,
+  Users,
+  Activity,
+  Server,
+  Lock,
+  Search,
+  Filter,
+  Loader2,
+  CheckCircle2,
+  Clock
+} from "lucide-react";
 
 export default function SuperAdminPanel() {
+  const [logs, setLogs] = useState<any[]>([]);
+  const [moduleFilter, setModuleFilter] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadAuditLogs() {
+      setLoading(true);
+      try {
+        const res = await fetch(`/api/audit${moduleFilter ? `?module=${moduleFilter}` : ''}`);
+        const json = await res.json();
+        if (json.success && json.logs) {
+          setLogs(json.logs);
+        }
+      } catch (err) {
+        console.error("Failed to load audit logs:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadAuditLogs();
+  }, [moduleFilter]);
+
   return (
     <div className="space-y-6">
       
       {/* Title */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-3xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 shadow-md">
         <div>
-          <h1 className="text-2xl font-extrabold font-poppins text-slate-900 dark:text-white">
-            Super Admin Global Command Center
+          <div className="text-xs font-extrabold text-[#13C5DD] uppercase tracking-wider flex items-center gap-1.5">
+            <ShieldCheck className="w-4 h-4" /> SUPER ADMIN & SECURITY GOVERNANCE
+          </div>
+          <h1 className="text-2xl font-extrabold font-poppins text-slate-900 dark:text-white mt-1">
+            Enterprise SaaS Platform Telemetry & Immutable Audit Trail
           </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Multi-tenant telemetry, SaaS licensing, server infrastructure & global security policy center
-          </p>
-        </div>
-        <span className="self-start px-3 py-1 rounded-full bg-[#00C896]/15 text-[#00C896] text-xs font-bold flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full bg-[#00C896] animate-ping" /> Global Tenant Health: Optimal
-        </span>
-      </div>
-
-      {/* Top Telemetry Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-1">
-          <div className="text-xs text-slate-400 font-medium">Total Multi-Hospital Tenants</div>
-          <div className="text-3xl font-extrabold font-poppins text-slate-900 dark:text-white">520 Nodes</div>
-          <div className="text-[11px] text-[#00C896] font-semibold flex items-center gap-1">
-            <TrendingUp className="w-3.5 h-3.5" /> +14 Networks Onboarded
-          </div>
         </div>
 
-        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-1">
-          <div className="text-xs text-slate-400 font-medium">SaaS Monthly ARR</div>
-          <div className="text-3xl font-extrabold font-poppins text-slate-900 dark:text-white">$482,500</div>
-          <div className="text-[11px] text-[#0F6CBD] dark:text-[#4CC9F0] font-semibold">
-            99.8% Annual Renewal Rate
-          </div>
-        </div>
-
-        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-1">
-          <div className="text-xs text-slate-400 font-medium">Cloud Database Write Latency</div>
-          <div className="text-3xl font-extrabold font-poppins text-[#00C896]">1.2 ms</div>
-          <div className="text-[11px] text-slate-400 font-medium">AWS / Azure Bio-Cloud Vault</div>
-        </div>
-
-        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-1">
-          <div className="text-xs text-slate-400 font-medium">HIPAA Encryption Status</div>
-          <div className="text-3xl font-extrabold font-poppins text-blue-500">AES-256</div>
-          <div className="text-[11px] text-[#00C896] font-semibold">Zero PHI Vulnerabilities</div>
+        <div className="px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-xs font-extrabold flex items-center gap-1.5">
+          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" /> System Integrity 100%
         </div>
       </div>
 
-      {/* Hospital Tenants Table */}
-      <div className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-lg space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-base font-bold font-poppins text-slate-900 dark:text-white">
-            Active Multi-Branch SaaS Tenants
-          </h2>
-          <button className="px-3 py-1.5 rounded-xl bg-[#0F6CBD] text-white text-xs font-bold">
-            + Provision New Hospital Node
-          </button>
+      {/* Enterprise Architecture Status */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="p-5 rounded-3xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 shadow-lg space-y-2">
+          <div className="flex items-center justify-between text-xs text-slate-400 font-bold uppercase">
+            <span>Primary Hospital Facility</span>
+            <Building2 className="w-4 h-4 text-[#13C5DD]" />
+          </div>
+          <div className="text-base font-extrabold text-slate-900 dark:text-white">
+            Apex MedCore Multispeciality
+          </div>
+          <div className="text-[11px] text-slate-400">
+            Reg: <span className="font-mono">GJ-AHM-MED-2024-8841</span>
+          </div>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="border-b border-slate-200 dark:border-slate-800 text-slate-400 uppercase font-semibold">
-              <tr>
-                <th className="pb-3">Hospital Organization</th>
-                <th className="pb-3">Plan Tier</th>
-                <th className="pb-3">Active Doctors</th>
-                <th className="pb-3">IPD Beds</th>
-                <th className="pb-3">Status</th>
-                <th className="pb-3">SLA Health</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
-              <tr>
-                <td className="py-3 font-bold text-slate-900 dark:text-white">St. Jude Health System</td>
-                <td><span className="px-2 py-0.5 rounded bg-blue-500/10 text-blue-500 font-bold">Enterprise</span></td>
-                <td>142 Doctors</td>
-                <td>500 Beds</td>
-                <td><span className="text-[#00C896] font-bold">Active</span></td>
-                <td>99.999% SLA</td>
-              </tr>
-              <tr>
-                <td className="py-3 font-bold text-slate-900 dark:text-white">Mayo Specialist Network</td>
-                <td><span className="px-2 py-0.5 rounded bg-blue-500/10 text-blue-500 font-bold">Enterprise</span></td>
-                <td>280 Doctors</td>
-                <td>850 Beds</td>
-                <td><span className="text-[#00C896] font-bold">Active</span></td>
-                <td>100% SLA</td>
-              </tr>
-              <tr>
-                <td className="py-3 font-bold text-slate-900 dark:text-white">Metro City Clinic</td>
-                <td><span className="px-2 py-0.5 rounded bg-teal-500/10 text-teal-500 font-bold">Professional</span></td>
-                <td>18 Doctors</td>
-                <td>40 Beds</td>
-                <td><span className="text-[#00C896] font-bold">Active</span></td>
-                <td>99.98% SLA</td>
-              </tr>
-            </tbody>
-          </table>
+        <div className="p-5 rounded-3xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 shadow-lg space-y-2">
+          <div className="flex items-center justify-between text-xs text-slate-400 font-bold uppercase">
+            <span>Security Architecture</span>
+            <Lock className="w-4 h-4 text-emerald-500" />
+          </div>
+          <div className="text-base font-extrabold text-emerald-600 dark:text-emerald-400">
+            ABDM & HIPAA Aligned
+          </div>
+          <div className="text-[11px] text-slate-400">
+            AES-256 GCM Payload Encryption
+          </div>
         </div>
+
+        <div className="p-5 rounded-3xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 shadow-lg space-y-2">
+          <div className="flex items-center justify-between text-xs text-slate-400 font-bold uppercase">
+            <span>Active Staff Sessions</span>
+            <Users className="w-4 h-4 text-purple-500" />
+          </div>
+          <div className="text-base font-extrabold text-slate-900 dark:text-white">
+            12 Role-Segregated Users
+          </div>
+          <div className="text-[11px] text-slate-400">
+            Strict RBAC & API Authorization
+          </div>
+        </div>
+      </div>
+
+      {/* Immutable Security Audit Log Viewer */}
+      <div className="p-6 rounded-3xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 shadow-xl space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-slate-100 dark:border-slate-800">
+          <div>
+            <h2 className="text-base font-extrabold font-poppins text-slate-900 dark:text-white flex items-center gap-2">
+              <Clock className="w-5 h-5 text-[#13C5DD]" /> Immutable System Audit Log
+            </h2>
+            <p className="text-xs text-slate-400 mt-0.5">Tamper-evident logs of medical consultations, drug dispensing, payments & patient access.</p>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Filter className="w-4 h-4 text-slate-400" />
+            <select
+              value={moduleFilter}
+              onChange={(e) => setModuleFilter(e.target.value)}
+              className="p-2 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-bold"
+            >
+              <option value="">All Hospital Modules</option>
+              <option value="Reception">Reception Desk</option>
+              <option value="OPD">OPD Queue</option>
+              <option value="EMR">Doctor EMR</option>
+              <option value="LIS">Laboratory (LIS)</option>
+              <option value="Pharmacy">Pharmacy</option>
+              <option value="Billing">Billing Desk</option>
+              <option value="IPD Admission">IPD Admission</option>
+            </select>
+          </div>
+        </div>
+
+        {loading ? (
+          <div className="py-12 text-center">
+            <Loader2 className="w-6 h-6 text-[#13C5DD] animate-spin mx-auto" />
+          </div>
+        ) : logs.length === 0 ? (
+          <div className="py-8 text-center text-xs text-slate-400">No audit log records found.</div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs text-left font-mono">
+              <thead className="bg-slate-100 dark:bg-slate-900 text-slate-500 font-extrabold uppercase">
+                <tr>
+                  <th className="p-3">Timestamp</th>
+                  <th className="p-3">User & Role</th>
+                  <th className="p-3">Module</th>
+                  <th className="p-3">Action</th>
+                  <th className="p-3">Patient UHID</th>
+                  <th className="p-3">Details & Telemetry</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-xs">
+                {logs.map((log) => (
+                  <tr key={log.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td className="p-3 text-slate-400 whitespace-nowrap">{log.timestamp}</td>
+                    <td className="p-3">
+                      <div className="font-bold text-slate-900 dark:text-white font-sans">{log.user_name || "System"}</div>
+                      <div className="text-[10px] text-[#13C5DD] uppercase">{log.role}</div>
+                    </td>
+                    <td className="p-3 font-bold text-slate-700 dark:text-slate-300 font-sans">{log.module}</td>
+                    <td className="p-3">
+                      <span className="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-bold text-[10px]">
+                        {log.action}
+                      </span>
+                    </td>
+                    <td className="p-3 font-extrabold text-[#13C5DD]">{log.patient_uhid || "—"}</td>
+                    <td className="p-3 font-sans text-slate-600 dark:text-slate-300 max-w-xs truncate">
+                      {log.details}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
 
     </div>

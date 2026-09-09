@@ -1,85 +1,92 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
-import { ShieldCheck, Lock, FileKey, History, Cloud, Award, CheckCircle2 } from "lucide-react";
-
-const SEC_ITEMS = [
-  {
-    icon: ShieldCheck,
-    title: "HIPAA & HL7/FHIR Compliant",
-    desc: "Signed Business Associate Agreement (BAA) with full protected health information (PHI) safeguards."
-  },
-  {
-    icon: Lock,
-    title: "256-Bit AES Data Encryption",
-    desc: "End-to-end data encryption in transit via TLS 1.3 and at rest with hardware security modules (HSM)."
-  },
-  {
-    icon: FileKey,
-    title: "Granular Role Access Control (RBAC)",
-    desc: "Restrict field-level medical history access so nurses, doctors, and pharmacists only view authorized data."
-  },
-  {
-    icon: History,
-    title: "Immutable Audit Log Trail",
-    desc: "Every record modification, view, and prescription export is cryptographically logged for compliance audits."
-  },
-  {
-    icon: Cloud,
-    title: "Automated Geo-Redundant Backups",
-    desc: "Hourly automated snapshot backups with zero data loss RPO and sub-minute disaster recovery RTO."
-  },
-  {
-    icon: Award,
-    title: "SOC 2 Type II & ISO 27001 Certified",
-    desc: "Independently audited annually by tier-1 security firms to guarantee enterprise clinical safety."
-  }
-];
+import {
+  ShieldCheck,
+  Lock,
+  Server,
+  FileCheck,
+  EyeOff,
+  KeyRound,
+  CheckCircle2
+} from "lucide-react";
 
 export default function SecuritySection() {
+  const securityFeatures = [
+    {
+      title: "Role-Based Access Control (RBAC)",
+      desc: "Strict segregation of duties enforced at both the API and database levels across Super Admin, Doctors, Nurses, Pathologists, Pharmacists, and Billing Staff.",
+      icon: KeyRound,
+    },
+    {
+      title: "Encrypted Data Transmission & Storage",
+      desc: "Architected for AES-256 GCM encryption at rest and TLS 1.3 in transit, protecting sensitive patient demographics, diagnosis notes, and financial records.",
+      icon: Lock,
+    },
+    {
+      title: "Immutable Tamper-Evident Audit Logs",
+      desc: "Comprehensive activity logging capturing every record inspection, clinical modification, drug dispensing, and discount approval with IP tracking.",
+      icon: FileCheck,
+    },
+    {
+      title: "ABDM & FHIR Health Data Ready",
+      desc: "Designed with Ayushman Bharat Digital Mission (ABDM), ABHA Health ID integration, and standardized healthcare interoperability schemas in mind.",
+      icon: Server,
+    },
+  ];
+
   return (
-    <section id="security" className="py-24 relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="security" className="py-20 lg:py-28 bg-slate-50 dark:bg-[#0B0F17]/60 border-y border-slate-200 dark:border-slate-800">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
         
-        {/* Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00C896]/10 text-[#00C896] text-xs font-bold uppercase tracking-wider">
-            Uncompromising Medical Trust
+        {/* Section Header */}
+        <div className="text-center max-w-3xl mx-auto space-y-4">
+          <div className="text-xs font-extrabold text-[#13C5DD] uppercase tracking-wider">
+            HEALTHCARE SECURITY & DATA PRIVACY
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-poppins text-slate-900 dark:text-white">
-            Bank-Grade Security for Sensitive Clinical Data
+          <h2 className="text-3xl sm:text-5xl font-black font-poppins text-slate-900 dark:text-white tracking-tight">
+            Designed for Indian Healthcare Compliance
           </h2>
-          <p className="text-slate-600 dark:text-slate-400 text-base">
-            Protected Health Information (PHI) demands the highest cybersecurity posture. MedCore delivers zero-trust architecture.
+          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400">
+            MedCore HMS is architected with rigorous healthcare data protection standards, strict least-privilege role boundaries, and patient privacy at its core.
           </p>
         </div>
 
-        {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {SEC_ITEMS.map((item, idx) => {
-            const Icon = item.icon;
+        {/* 4 Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {securityFeatures.map((feat, idx) => {
+            const Icon = feat.icon;
             return (
-              <motion.div
+              <div
                 key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: idx * 0.08 }}
-                viewport={{ once: true }}
-                className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-md hover:border-[#00C896] transition-all group"
+                className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 shadow-md space-y-4"
               >
-                <div className="w-12 h-12 rounded-2xl bg-[#00C896]/10 text-[#00C896] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <div className="w-12 h-12 rounded-2xl bg-[#13C5DD]/15 text-[#13C5DD] flex items-center justify-center">
                   <Icon className="w-6 h-6" />
                 </div>
-                <h3 className="text-lg font-bold font-poppins text-slate-900 dark:text-white mb-2">
-                  {item.title}
+                <h3 className="text-lg font-extrabold font-poppins text-slate-900 dark:text-white">
+                  {feat.title}
                 </h3>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                  {item.desc}
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                  {feat.desc}
                 </p>
-              </motion.div>
+              </div>
             );
           })}
+        </div>
+
+        {/* Security Assurance Banner */}
+        <div className="p-6 rounded-3xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-800 dark:text-emerald-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+          <div className="flex items-center gap-3">
+            <ShieldCheck className="w-6 h-6 text-emerald-500 shrink-0" />
+            <div>
+              <strong className="text-sm font-bold block">Patient Data Isolation & Zero Third-Party Tracking</strong>
+              <span>Medical records and patient identities are never shared or indexed. Each hospital organization operates with isolated database structures.</span>
+            </div>
+          </div>
+          <span className="px-3 py-1.5 rounded-full bg-emerald-500 text-white font-extrabold text-[11px] whitespace-nowrap shadow-sm">
+            Security Verified
+          </span>
         </div>
 
       </div>

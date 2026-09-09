@@ -160,7 +160,7 @@ export default function AdminPage() {
             </div>
             <div>
               <span className="font-poppins font-extrabold text-lg text-[#1D2A4D] dark:text-white tracking-wide uppercase">
-                MEDINNOVA <span className="text-[#13C5DD] text-xs font-bold lowercase">admin</span>
+                MEDCORE <span className="text-[#13C5DD] text-xs font-bold lowercase">admin</span>
               </span>
             </div>
           </Link>
@@ -821,11 +821,11 @@ function SettingsSection() {
         <div className="p-6 rounded-2xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 space-y-4">
           <h3 className="text-sm font-extrabold text-slate-900 dark:text-white flex items-center gap-2"><Building2 className="w-4 h-4 text-[#13C5DD]" /> Hospital Information</h3>
           {[
-            { label: "Hospital Name", value: "MedInnova Care Hospital" },
-            { label: "Registration No.", value: "GJ-AHD-HMS-2024-0891" },
-            { label: "NABH Accredited", value: "Yes (Valid till Dec 2027)" },
-            { label: "ABDM Integration", value: "Active (ABHA ID Verified)" },
-            { label: "Address", value: "Satellite Road, Ahmedabad, Gujarat 380015" },
+            { label: "Hospital Name", value: "Apex MedCore Superspeciality Hospital" },
+            { label: "Registration No.", value: "GJ-AHM-MED-2024-8841" },
+            { label: "Quality Framework", value: "NABH Workflow Aligned" },
+            { label: "ABDM Architecture", value: "Integration Ready (ABHA Verified)" },
+            { label: "Address", value: "SG Highway, Bodakdev, Ahmedabad, Gujarat 380054" },
           ].map((field) => (
             <div key={field.label} className="flex items-start justify-between py-2 border-b border-slate-100 dark:border-slate-800 last:border-0">
               <span className="text-xs text-slate-500 font-bold">{field.label}</span>
