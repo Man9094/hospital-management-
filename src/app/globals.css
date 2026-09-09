@@ -1,26 +1,92 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --bg-main: #F3F6F9;
+    --card-bg: #FFFFFF;
+    --text-primary: #1D2A4D;
+    --text-secondary: #555555;
+    --border-color: #DEE2E6;
+    --primary: #13C5DD;
+    --secondary: #1D2A4D;
+    --accent: #13C5DD;
+    --danger: #E63946;
+  }
+
+  .dark {
+    --bg-main: #0B0F17;
+    --card-bg: #1D2A4D;
+    --text-primary: #F8FAFC;
+    --text-secondary: #A0AEC0;
+    --border-color: #2D3748;
+    --primary: #13C5DD;
+    --secondary: #1D2A4D;
+    --accent: #13C5DD;
+    --danger: #E63946;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  font-family: var(--font-mukta), var(--font-inter), Roboto, system-ui, sans-serif;
+  overflow-x: hidden;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-poppins), var(--font-mukta), 'Roboto Condensed', sans-serif;
+}
+
+/* Medinova Section Header Accent Line */
+.medinova-subheading {
+  display: inline-block;
+  color: #13C5DD;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 1px;
+  border-bottom: 4px solid #13C5DD;
+  padding-bottom: 2px;
+  margin-bottom: 12px;
+}
+
+/* Marquee Animation */
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  display: flex;
+  width: 200%;
+  animation: marquee 35s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #13C5DD;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #1D2A4D;
+}
+
+/* ECG Heartbeat Animation for ECGPulse component */
+@keyframes ecgBeat {
+  0% { stroke-dashoffset: 1000; }
+  100% { stroke-dashoffset: 0; }
 }
