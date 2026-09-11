@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { usePortal } from "@/context/PortalContext";
 import {
   Stethoscope,
@@ -17,7 +17,15 @@ import {
   Loader2,
   Save,
   Check,
-  Search
+  Search,
+  Play,
+  Pause,
+  RotateCcw,
+  Sparkles,
+  ArrowRight,
+  ShieldCheck,
+  Activity,
+  DoorOpen
 } from "lucide-react";
 
 export default function DoctorPanel() {
@@ -28,6 +36,18 @@ export default function DoctorPanel() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+
+  // Doctor status & Delay State
+  const [doctorStatus, setDoctorStatus] = useState<string>("in_cabin");
+  const [delayMinutes, setDelayMinutes] = useState<number>(0);
+  const [delayReason, setDelayReason] = useState<string>("");
+  const [cabinNumber, setCabinNumber] = useState<string>("Cabin 104");
+  const [savingStatus, setSavingStatus] = useState(false);
+
+  // Live In-Cabin Consultation Stopwatch
+  const [timerSeconds, setTimerSeconds] = useState<number>(0);
+  const [isTimerRunning, setIsTimerRunning] = useState<boolean>(false);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Consultation form state
   const [chiefComplaint, setChiefComplaint] = useState("");
@@ -56,33 +76,68 @@ export default function DoctorPanel() {
   const [generalAdvice, setGeneralAdvice] = useState("Drink plenty of warm fluids. Avoid cold and dusty environments.");
   const [selectedLabs, setSelectedLabs] = useState<string[]>([]);
 
+  // Stopwatch interval
   useEffect(() => {
-    async function loadData() {
-      setLoading(true);
-      try {
-        const [aptRes, labRes] = await Promise.all([
-          fetch("/api/appointments"),
-          fetch("/api/lab?catalog=true")
-        ]);
-        const aptJson = await aptRes.json();
-        const labJson = await labRes.json();
-
-        if (aptJson.success && aptJson.appointments) {
-          setAppointments(aptJson.appointments);
-          if (aptJson.appointments.length > 0) {
-            selectPatient(aptJson.appointments[0]);
-          }
-        }
-        if (labJson.success && labJson.tests) {
-          setLabCatalog(labJson.tests);
-        }
-      } catch (err) {
-        console.error("Failed to load doctor console:", err);
-      } finally {
-        setLoading(false);
-      }
+    if (isTimerRunning) {
+      timerRef.current = setInterval(() => {
+        setTimerSeconds((prev) => prev + 1);
+      }, 1000);
+    } else if (timerRef.current) {
+      clearInterval(timerRef.current);
     }
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [isTimerRunning]);
 
+  const loadData = async () => {
+    try {
+      const [aptRes, labRes, docRes] = await Promise.all([
+        fetch("/api/appointments"),
+        fetch("/api/lab?catalog=true"),
+        fetch("/api/doctor-status?doctorId=3")
+      ]);
+      const aptJson = await aptRes.json();
+      const labJson = await labRes.json();
+      const docJson = await docRes.json();
+
+      if (aptJson.success && aptJson.appointments) {
+        setAppointments(aptJson.appointments);
+        
+        // Pick active in_consultation appointment, or first one
+        const active = aptJson.appointments.find((a: any) => a.status === "in_consultation");
+        if (active) {
+          selectPatient(active);
+          // If start time exists, sync elapsed seconds
+          if (active.consultation_start_time) {
+            const elapsed = Math.max(0, Math.floor((Date.now() - new Date(active.consultation_start_time).getTime()) / 1000));
+            setTimerSeconds(elapsed);
+            setIsTimerRunning(true);
+          }
+        } else if (aptJson.appointments.length > 0 && !selectedApt) {
+          selectPatient(aptJson.appointments[0]);
+        }
+      }
+
+      if (labJson.success && labJson.tests) {
+        setLabCatalog(labJson.tests);
+      }
+
+      if (docJson.success && docJson.doctors && docJson.doctors.length > 0) {
+        const d = docJson.doctors[0];
+        setDoctorStatus(d.status || "available");
+        setDelayMinutes(d.delay_minutes || 0);
+        setDelayReason(d.delay_reason || "");
+        setCabinNumber(d.cabin_number || "Cabin 104");
+      }
+    } catch (err) {
+      console.error("Failed to load doctor console:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     loadData();
   }, []);
 
@@ -94,6 +149,72 @@ export default function DoctorPanel() {
     setTreatmentPlan("");
     setSelectedLabs([]);
     setSuccessMessage("");
+
+    if (apt.status === "in_consultation" && apt.consultation_start_time) {
+      const elapsed = Math.max(0, Math.floor((Date.now() - new Date(apt.consultation_start_time).getTime()) / 1000));
+      setTimerSeconds(elapsed);
+      setIsTimerRunning(true);
+    } else {
+      setTimerSeconds(0);
+      setIsTimerRunning(false);
+    }
+  };
+
+  const handleUpdateDoctorStatus = async (newStatus?: string, newDelay?: number) => {
+    setSavingStatus(true);
+    try {
+      const statusToSave = newStatus !== undefined ? newStatus : doctorStatus;
+      const delayToSave = newDelay !== undefined ? newDelay : delayMinutes;
+
+      await fetch("/api/doctor-status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          doctor_id: 3,
+          status: statusToSave,
+          delay_minutes: delayToSave,
+          delay_reason: delayReason,
+          cabin_number: cabinNumber,
+        }),
+      });
+
+      setDoctorStatus(statusToSave);
+      setDelayMinutes(delayToSave);
+      await loadData();
+    } catch (err) {
+      console.error("Failed to update status:", err);
+    } finally {
+      setSavingStatus(false);
+    }
+  };
+
+  // Start Consultation & Timer
+  const handleStartConsultation = async () => {
+    if (!selectedApt) return;
+    try {
+      await fetch("/api/appointments", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          appointment_id: selectedApt.id,
+          action: "start_consultation",
+          consultation_start_time: new Date().toISOString(),
+        }),
+      });
+
+      setTimerSeconds(0);
+      setIsTimerRunning(true);
+      await loadData();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // Format Stopwatch
+  const formatTime = (secs: number) => {
+    const m = Math.floor(secs / 60);
+    const s = secs % 60;
+    return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
   };
 
   const handleAddRxItem = () => {
@@ -117,6 +238,8 @@ export default function DoctorPanel() {
     setSubmitting(true);
     setSuccessMessage("");
 
+    const durationMin = Math.max(1, Math.round((timerSeconds / 60) * 10) / 10);
+
     try {
       const res = await fetch("/api/emr", {
         method: "POST",
@@ -124,6 +247,7 @@ export default function DoctorPanel() {
         body: JSON.stringify({
           patient_uhid: selectedApt.patient_uhid,
           appointment_id: selectedApt.id,
+          duration_minutes: durationMin,
           chief_complaint: chiefComplaint,
           history_present_illness: hpi,
           examination_findings: examination,
@@ -140,11 +264,9 @@ export default function DoctorPanel() {
 
       const json = await res.json();
       if (json.success) {
-        setSuccessMessage("Consultation recorded, e-prescription created & lab investigations ordered!");
-        // Refresh appointment list
-        const aptRes = await fetch("/api/appointments");
-        const aptJson = await aptRes.json();
-        if (aptJson.success) setAppointments(aptJson.appointments);
+        setIsTimerRunning(false);
+        setSuccessMessage(`Consultation recorded (${durationMin} min duration), e-prescription created & lab investigations ordered!`);
+        await loadData();
       } else {
         alert(json.error || "Failed to save consultation");
       }
@@ -156,26 +278,107 @@ export default function DoctorPanel() {
     }
   };
 
+  // Metrics
+  const completedApts = appointments.filter((a) => a.status === "completed" && a.duration_minutes > 0);
+  const avgDuration =
+    completedApts.length > 0
+      ? (completedApts.reduce((acc, curr) => acc + curr.duration_minutes, 0) / completedApts.length).toFixed(1)
+      : "12.0";
+
+  const activeInCabinApt = appointments.find((a) => a.status === "in_consultation");
+
   return (
     <div className="space-y-6">
       
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-3xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 shadow-md">
-        <div>
-          <div className="text-xs font-extrabold text-[#13C5DD] uppercase tracking-wider flex items-center gap-1.5">
-            <Stethoscope className="w-4 h-4" /> CLINICAL EMR CONSOLE • OPD QUEUE
+      {/* Header & Doctor Cabin Status Bar */}
+      <div className="p-6 rounded-3xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 shadow-xl space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <div className="text-xs font-extrabold text-[#13C5DD] uppercase tracking-wider flex items-center gap-1.5">
+              <Stethoscope className="w-4 h-4" /> CLINICAL EMR CONSOLE • OPD CABIN & QUEUE
+            </div>
+            <h1 className="text-2xl font-extrabold font-poppins text-slate-900 dark:text-white mt-1 flex items-center gap-2">
+              Dr. Rajesh Patel <span className="text-sm font-semibold text-slate-400">({cabinNumber})</span>
+            </h1>
           </div>
-          <h1 className="text-2xl font-extrabold font-poppins text-slate-900 dark:text-white mt-1">
-            Doctor Clinical Consultation & E-Prescription Desk
-          </h1>
+
+          {selectedApt && (
+            <button
+              onClick={() => setSelectedUhid(selectedApt.patient_uhid)}
+              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#13C5DD] to-[#0F6CBD] text-white text-xs font-extrabold uppercase shadow-md flex items-center gap-2 hover:opacity-95 transition-opacity"
+            >
+              <Eye className="w-4 h-4" /> Dossier ({selectedApt.patient_uhid})
+            </button>
+          )}
         </div>
-        {selectedApt && (
-          <button
-            onClick={() => setSelectedUhid(selectedApt.patient_uhid)}
-            className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#13C5DD] to-[#0F6CBD] text-white text-xs font-extrabold uppercase shadow-md flex items-center gap-2 hover:opacity-95 transition-opacity"
-          >
-            <Eye className="w-4 h-4" /> View Full Dossier ({selectedApt.patient_uhid})
-          </button>
+
+        {/* Doctor Status & Delay Controls */}
+        <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 flex flex-col lg:flex-row lg:items-center justify-between gap-4 text-xs">
+          
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="font-extrabold text-slate-700 dark:text-slate-300">Doctor Presence:</span>
+            {[
+              { key: "in_cabin", label: "In Cabin" },
+              { key: "available", label: "Available" },
+              { key: "running_late", label: "Running Late" },
+              { key: "on_rounds", label: "On Rounds" },
+              { key: "on_break", label: "On Break" }
+            ].map((st) => (
+              <button
+                key={st.key}
+                type="button"
+                onClick={() => handleUpdateDoctorStatus(st.key)}
+                className={`px-3 py-1.5 rounded-xl font-extrabold transition-all ${
+                  doctorStatus === st.key
+                    ? "bg-[#13C5DD] text-[#1D2A4D] shadow-sm"
+                    : "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-100"
+                }`}
+              >
+                ● {st.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Delay Time Selector */}
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="font-extrabold text-slate-700 dark:text-slate-300 flex items-center gap-1">
+              <AlertTriangle className="w-3.5 h-3.5 text-amber-500" /> Delay:
+            </span>
+            {[0, 15, 30, 45, 60].map((mins) => (
+              <button
+                key={mins}
+                type="button"
+                onClick={() => handleUpdateDoctorStatus(mins > 0 ? "running_late" : "in_cabin", mins)}
+                className={`px-2.5 py-1 rounded-xl font-bold ${
+                  delayMinutes === mins
+                    ? "bg-amber-500 text-slate-900 font-extrabold shadow-sm"
+                    : "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700"
+                }`}
+              >
+                {mins === 0 ? "On Time" : `+${mins}m`}
+              </button>
+            ))}
+            {savingStatus && <Loader2 className="w-4 h-4 text-[#13C5DD] animate-spin ml-2" />}
+          </div>
+
+        </div>
+
+        {/* Doctor Delay Alert Banner */}
+        {delayMinutes > 0 && (
+          <div className="p-3.5 rounded-2xl bg-amber-500/15 border border-amber-500/30 text-amber-800 dark:text-amber-200 text-xs font-bold flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0" />
+              <span>
+                Doctor Delay Active: <strong>+{delayMinutes} minutes</strong>. All OPD patient slot times have been dynamically adjusted.
+              </span>
+            </div>
+            <button
+              onClick={() => handleUpdateDoctorStatus("in_cabin", 0)}
+              className="text-[10px] uppercase font-black underline hover:text-amber-900"
+            >
+              Clear Delay
+            </button>
+          </div>
         )}
       </div>
 
@@ -189,11 +392,17 @@ export default function DoctorPanel() {
       {/* Main Grid: Queue & EMR Console */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
-        {/* Left Column: OPD Queue List */}
+        {/* Left Column: OPD Queue List & Case Slot Numbers */}
         <div className="lg:col-span-4 p-5 rounded-3xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 shadow-xl space-y-4">
+          
           <div className="flex items-center justify-between text-xs font-bold pb-2 border-b border-slate-100 dark:border-slate-800">
-            <span className="text-slate-900 dark:text-white">Today's Patient Queue ({appointments.length})</span>
-            <span className="text-[#13C5DD] font-extrabold">Active OPD</span>
+            <div>
+              <span className="text-slate-900 dark:text-white font-extrabold">OPD Queue</span>
+              <span className="text-[10px] text-slate-400 block">Avg Time: {avgDuration} min/case</span>
+            </div>
+            <span className="px-2.5 py-1 rounded-full bg-[#13C5DD]/15 text-[#13C5DD] text-[10px] font-black">
+              {appointments.length} Total Cases
+            </span>
           </div>
 
           {loading ? (
@@ -206,33 +415,51 @@ export default function DoctorPanel() {
             <div className="space-y-2 max-h-[600px] overflow-y-auto pr-1">
               {appointments.map((apt) => {
                 const isSelected = selectedApt?.id === apt.id;
+                const isInCabin = apt.status === "in_consultation";
+
                 return (
                   <div
                     key={apt.id}
                     onClick={() => selectPatient(apt)}
                     className={`p-3.5 rounded-2xl border text-xs cursor-pointer transition-all ${
                       isSelected
-                        ? "bg-[#13C5DD]/10 border-[#13C5DD] shadow-sm"
+                        ? "bg-[#13C5DD]/10 border-[#13C5DD] shadow-sm ring-1 ring-[#13C5DD]"
                         : "bg-slate-50 dark:bg-slate-900/60 border-slate-200 dark:border-slate-800 hover:border-slate-300"
                     }`}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-xl bg-[#13C5DD] text-[#1D2A4D] font-extrabold flex items-center justify-center text-xs shadow-sm">
-                          {apt.token_number}
+                        <div className={`w-9 h-9 rounded-xl font-black flex flex-col items-center justify-center text-[10px] shadow-sm ${
+                          isInCabin ? "bg-emerald-500 text-slate-900 animate-pulse" : "bg-[#13C5DD] text-[#1D2A4D]"
+                        }`}>
+                          <span className="text-[8px] uppercase leading-none">CASE</span>
+                          <span className="text-xs leading-none">#{apt.case_number || 1}</span>
                         </div>
                         <div>
-                          <div className="font-extrabold text-slate-900 dark:text-white">{apt.patient_name}</div>
-                          <div className="text-[10px] text-slate-400">{apt.patient_uhid} • {apt.gender}, {apt.age}y</div>
+                          <div className="font-extrabold text-slate-900 dark:text-white flex items-center gap-1.5">
+                            {apt.patient_name}
+                            <span className="text-[10px] text-[#13C5DD] font-mono">({apt.token_number})</span>
+                          </div>
+                          <div className="text-[10px] text-slate-400">
+                            Slot: {apt.slot_time} {apt.has_delay && <span className="text-amber-500 font-bold">→ {apt.adjusted_slot_time}</span>}
+                          </div>
                         </div>
                       </div>
-                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                        apt.status === "completed" ? "bg-emerald-500/20 text-emerald-500" :
-                        apt.status === "in_consultation" ? "bg-blue-500/20 text-blue-500 animate-pulse" :
-                        "bg-amber-500/20 text-amber-500"
-                      }`}>
-                        {apt.status === "in_consultation" ? "In Room" : apt.status}
-                      </span>
+
+                      <div className="text-right">
+                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                          apt.status === "completed" ? "bg-emerald-500/20 text-emerald-500" :
+                          isInCabin ? "bg-emerald-500 text-slate-900 font-black" :
+                          "bg-amber-500/20 text-amber-500"
+                        }`}>
+                          {isInCabin ? "IN CABIN" : apt.status}
+                        </span>
+                        {apt.duration_minutes > 0 && (
+                          <div className="text-[9px] font-bold text-slate-400 mt-0.5">
+                            ⏱️ {apt.duration_minutes}m
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 );
@@ -241,26 +468,56 @@ export default function DoctorPanel() {
           )}
         </div>
 
-        {/* Right Column: Active EMR Consultation Writer */}
+        {/* Right Column: Active EMR Consultation Writer & Live Stopwatch */}
         <div className="lg:col-span-8 p-6 rounded-3xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 shadow-xl space-y-6">
           {selectedApt ? (
             <form onSubmit={handleSaveConsultation} className="space-y-6">
               
-              {/* Active Patient Card Header */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800 gap-2">
+              {/* Active Patient Card Header with Live Consultation Stopwatch */}
+              <div className="p-4 rounded-2xl bg-gradient-to-r from-slate-50 to-cyan-50/30 dark:from-slate-900 dark:to-slate-800/80 border border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
-                  <div className="text-base font-extrabold font-poppins text-slate-900 dark:text-white flex items-center gap-2">
+                  <div className="text-xs font-black text-[#13C5DD] uppercase tracking-wider flex items-center gap-1.5">
+                    <DoorOpen className="w-4 h-4" /> CASE #{selectedApt.case_number || 1} • TOKEN {selectedApt.token_number}
+                  </div>
+                  <div className="text-lg font-extrabold font-poppins text-slate-900 dark:text-white flex items-center gap-2 mt-0.5">
                     {selectedApt.patient_name}
                     <span className="text-xs font-bold text-[#13C5DD]">({selectedApt.patient_uhid})</span>
                   </div>
                   <div className="text-xs text-slate-400 mt-0.5">
-                    Blood: <strong className="text-slate-700 dark:text-slate-200">{selectedApt.blood_group || "N/A"}</strong> | Slot: {selectedApt.slot_time} | Token: {selectedApt.token_number}
+                    {selectedApt.gender}, {selectedApt.age}y • Blood: <strong>{selectedApt.blood_group || "N/A"}</strong> • Slot: {selectedApt.slot_time}
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-500 text-xs font-bold flex items-center gap-1">
-                    <CheckCircle2 className="w-3.5 h-3.5" /> Verified Patient
-                  </span>
+
+                {/* Consultation Timer Control */}
+                <div className="flex items-center gap-3 bg-white dark:bg-slate-950 p-2.5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                  <div>
+                    <div className="text-[9px] uppercase font-extrabold text-slate-400">Consultation Duration</div>
+                    <div className="text-2xl font-black font-mono text-[#13C5DD]">
+                      {formatTime(timerSeconds)}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-1">
+                    {!isTimerRunning ? (
+                      <button
+                        type="button"
+                        onClick={handleStartConsultation}
+                        className="px-3 py-2 rounded-xl bg-emerald-500 text-slate-900 font-black text-xs flex items-center gap-1 hover:bg-emerald-400 transition-colors"
+                        title="Admit to Cabin & Start Timer"
+                      >
+                        <Play className="w-3.5 h-3.5 fill-current" /> Admit Case
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setIsTimerRunning(false)}
+                        className="p-2 rounded-xl bg-amber-500/15 text-amber-500 hover:bg-amber-500/25"
+                        title="Pause Timer"
+                      >
+                        <Pause className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
 
@@ -432,7 +689,7 @@ export default function DoctorPanel() {
                 </div>
               </div>
 
-              {/* Lab Investigation Orders Selector */}
+              {/* Lab Investigations */}
               <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800">
                 <span className="text-xs font-extrabold text-slate-900 dark:text-white flex items-center gap-1.5">
                   <FlaskConical className="w-4 h-4 text-[#13C5DD]" /> Order Diagnostic Investigations
@@ -481,7 +738,7 @@ export default function DoctorPanel() {
                     </>
                   ) : (
                     <>
-                      <Save className="w-4 h-4" /> Save Consultation & Issue Rx
+                      <Save className="w-4 h-4" /> Save Consultation ({formatTime(timerSeconds)}) & Issue Rx
                     </>
                   )}
                 </button>

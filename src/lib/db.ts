@@ -117,11 +117,16 @@ db.exec(`
     appointment_date TEXT NOT NULL,
     slot_time TEXT NOT NULL,
     token_number TEXT NOT NULL, -- e.g. A-101
+    case_number INTEGER, -- e.g. 1, 2, 3 (Sequential daily case slot)
+    cabin_number TEXT DEFAULT 'Cabin 104', -- Cabin/Room allocated
+    consultation_start_time TEXT, -- e.g. 2026-09-11T10:05:00Z
+    consultation_end_time TEXT, -- e.g. 2026-09-11T10:18:00Z
+    duration_minutes REAL DEFAULT 0, -- Duration spent in minutes (e.g. 13.0)
     type TEXT NOT NULL DEFAULT 'Walk-in' CHECK(type IN ('Walk-in', 'Online', 'Follow-up', 'Emergency')),
     consultation_type TEXT NOT NULL DEFAULT 'In-Person' CHECK(consultation_type IN ('In-Person', 'Teleconsultation')),
     status TEXT NOT NULL DEFAULT 'waiting' CHECK(status IN ('scheduled', 'waiting', 'in_consultation', 'completed', 'cancelled', 'no_show')),
     chief_complaint TEXT,
-    priority TEXT NOT NULL DEFAULT 'Normal' CHECK(priority IN ('Normal', 'Urgent', 'Emergency')),
+    priority TEXT NOT NULL DEFAULT 'Normal' CHECK(priority IN ('Normal', 'Urgent', 'Emergency', 'Senior Citizen', 'Follow-up')),
     created_at TEXT NOT NULL DEFAULT (datetime('now')),
     FOREIGN KEY (patient_uhid) REFERENCES patients(uhid) ON DELETE CASCADE,
     FOREIGN KEY (doctor_id) REFERENCES users(id) ON DELETE CASCADE,
@@ -521,6 +526,83 @@ db.exec(`
     success INTEGER NOT NULL DEFAULT 0,
     attempted_at TEXT NOT NULL DEFAULT (datetime('now'))
   );
+
+  -- 22. DOCTOR LIVE CABIN STATUS & DELAY MANAGEMENT
+  CREATE TABLE IF NOT EXISTS doctor_status (
+    doctor_id INTEGER PRIMARY KEY,
+    status TEXT NOT NULL DEFAULT 'available' CHECK(status IN ('available', 'in_cabin', 'running_late', 'on_rounds', 'emergency_call', 'on_break')),
+    delay_minutes INTEGER NOT NULL DEFAULT 0,
+    delay_reason TEXT,
+    cabin_number TEXT NOT NULL DEFAULT 'Cabin 104',
+    active_case_number INTEGER,
+    updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+    FOREIGN KEY (doctor_id) REFERENCES users(id) ON DELETE CASCADE
+  );
+
+  -- 23. PATIENT OTP AUTHENTICATION
+  CREATE TABLE IF NOT EXISTS patient_otps (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    identifier TEXT NOT NULL,
+    otp_code TEXT NOT NULL,
+    expires_at TEXT NOT NULL,
+    verified INTEGER NOT NULL DEFAULT 0,
+    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+  );
+  CREATE INDEX IF NOT EXISTS idx_patient_otps_ident ON patient_otps(identifier);
+
+  -- 24. WHATSAPP AUTOMATED GATEWAY SETTINGS & TRANSMISSION LOGS
+  CREATE TABLE IF NOT EXISTS whatsapp_gateway_settings (
+    id INTEGER PRIMARY KEY DEFAULT 1,
+    hospital_number TEXT NOT NULL DEFAULT '+91 79 2658 9000',
+    sender_name TEXT NOT NULL DEFAULT 'Apex MedCore Hospital',
+    provider TEXT NOT NULL DEFAULT 'auto_gateway',
+    api_endpoint TEXT,
+    api_key TEXT,
+    instance_id TEXT,
+    is_enabled INTEGER NOT NULL DEFAULT 1,
+    updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+  );
+
+  CREATE TABLE IF NOT EXISTS whatsapp_messages (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    message_id TEXT NOT NULL UNIQUE,
+    recipient_phone TEXT NOT NULL,
+    patient_uhid TEXT,
+    otp_code TEXT NOT NULL,
+    message_body TEXT NOT NULL,
+    provider TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'delivered',
+    gateway_response TEXT,
+    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+  );
+  CREATE INDEX IF NOT EXISTS idx_wa_phone ON whatsapp_messages(recipient_phone);
+  CREATE INDEX IF NOT EXISTS idx_wa_time ON whatsapp_messages(created_at);
 `);
+
+// Safe column migrations for existing SQLite database file
+try {
+  const tableInfo = db.prepare(`PRAGMA table_info(appointments)`).all() as Array<{ name: string }>;
+  const existingCols = new Set(tableInfo.map((col) => col.name));
+
+  if (!existingCols.has("case_number")) {
+    db.prepare(`ALTER TABLE appointments ADD COLUMN case_number INTEGER`).run();
+  }
+  if (!existingCols.has("cabin_number")) {
+    db.prepare(`ALTER TABLE appointments ADD COLUMN cabin_number TEXT DEFAULT 'Cabin 104'`).run();
+  }
+  if (!existingCols.has("consultation_start_time")) {
+    db.prepare(`ALTER TABLE appointments ADD COLUMN consultation_start_time TEXT`).run();
+  }
+  if (!existingCols.has("consultation_end_time")) {
+    db.prepare(`ALTER TABLE appointments ADD COLUMN consultation_end_time TEXT`).run();
+  }
+  if (!existingCols.has("duration_minutes")) {
+    db.prepare(`ALTER TABLE appointments ADD COLUMN duration_minutes REAL DEFAULT 0`).run();
+  }
+
+  db.prepare(`CREATE INDEX IF NOT EXISTS idx_appointments_case ON appointments(case_number)`).run();
+} catch (migErr) {
+  console.log("DB migration info:", migErr);
+}
 
 export default db;

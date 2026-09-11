@@ -12,7 +12,11 @@ import {
   AlertTriangle,
   QrCode,
   Loader2,
-  Eye
+  Eye,
+  Monitor,
+  DoorOpen,
+  Clock,
+  Sparkles
 } from "lucide-react";
 
 export default function ReceptionPanel() {
@@ -20,6 +24,7 @@ export default function ReceptionPanel() {
   const [activeTab, setActiveTab] = useState<"register" | "token" | "search">("token");
   const [patients, setPatients] = useState<any[]>([]);
   const [appointments, setAppointments] = useState<any[]>([]);
+  const [doctors, setDoctors] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -47,27 +52,32 @@ export default function ReceptionPanel() {
     department_id: "DEP-MED",
     slot_time: "10:30 AM",
     chief_complaint: "General OPD Consultation",
+    cabin_number: "Cabin 104",
   });
 
   const [issuedToken, setIssuedToken] = useState<any>(null);
 
-  const loadPatientsAndQueue = async () => {
+  const loadReceptionData = async () => {
     try {
-      const [pRes, aRes] = await Promise.all([
+      const [pRes, aRes, dRes] = await Promise.all([
         fetch(`/api/patients${searchQuery ? `?query=${searchQuery}` : ''}`),
-        fetch("/api/appointments")
+        fetch("/api/appointments"),
+        fetch("/api/doctor-status")
       ]);
       const pJson = await pRes.json();
       const aJson = await aRes.json();
-      if (pJson.success) setPatients(pJson.patients);
-      if (aJson.success) setAppointments(aJson.appointments);
+      const dJson = await dRes.json();
+
+      if (pJson.success) setPatients(pJson.patients || []);
+      if (aJson.success) setAppointments(aJson.appointments || []);
+      if (dJson.success) setDoctors(dJson.doctors || []);
     } catch (err) {
       console.error("Failed to load reception data:", err);
     }
   };
 
   useEffect(() => {
-    loadPatientsAndQueue();
+    loadReceptionData();
   }, [searchQuery]);
 
   const handleRegisterPatient = async (e: React.FormEvent) => {
@@ -87,7 +97,7 @@ export default function ReceptionPanel() {
         setFeedback(`Patient registered successfully! UHID: ${json.uhid}`);
         setTokenData({ ...tokenData, patient_uhid: json.uhid });
         setActiveTab("token");
-        loadPatientsAndQueue();
+        loadReceptionData();
       } else {
         alert(json.error || "Failed to register patient");
       }
@@ -112,6 +122,8 @@ export default function ReceptionPanel() {
 
     try {
       const today = new Date().toISOString().split("T")[0];
+      const selectedDoc = doctors.find((d) => d.doctor_id === parseInt(tokenData.doctor_id));
+
       const res = await fetch("/api/appointments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -122,14 +134,15 @@ export default function ReceptionPanel() {
           appointment_date: today,
           slot_time: tokenData.slot_time,
           chief_complaint: tokenData.chief_complaint,
+          cabin_number: selectedDoc?.cabin_number || "Cabin 104",
         }),
       });
 
       const json = await res.json();
       if (json.success) {
         setIssuedToken(json);
-        setFeedback(`Token ${json.token_number} generated successfully!`);
-        loadPatientsAndQueue();
+        setFeedback(`Case #${json.case_number} (Token ${json.token_number}) generated successfully!`);
+        loadReceptionData();
       } else {
         alert(json.error || "Failed to issue token");
       }
@@ -151,36 +164,45 @@ export default function ReceptionPanel() {
             <UserCheck className="w-4 h-4" /> FRONT DESK & PATIENT REGISTRATION
           </div>
           <h1 className="text-2xl font-extrabold font-poppins text-slate-900 dark:text-white mt-1">
-            Reception Desk • UHID Generation & OPD Token Dispatcher
+            Reception Desk • UHID Generation & Case Slot Dispatcher
           </h1>
         </div>
 
-        {/* Tab Controls */}
-        <div className="flex items-center gap-2 p-1 rounded-2xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
-          <button
-            onClick={() => setActiveTab("token")}
-            className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
-              activeTab === "token" ? "bg-[#13C5DD] text-[#1D2A4D] shadow-sm font-extrabold" : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
-            }`}
+        {/* Tab Controls & Waiting Board Quick Link */}
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 p-1 rounded-2xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+            <button
+              onClick={() => setActiveTab("token")}
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
+                activeTab === "token" ? "bg-[#13C5DD] text-[#1D2A4D] shadow-sm font-extrabold" : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
+              }`}
+            >
+              Issue Case Slot
+            </button>
+            <button
+              onClick={() => setActiveTab("register")}
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
+                activeTab === "register" ? "bg-[#13C5DD] text-[#1D2A4D] shadow-sm font-extrabold" : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
+              }`}
+            >
+              + New Patient
+            </button>
+            <button
+              onClick={() => setActiveTab("search")}
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
+                activeTab === "search" ? "bg-[#13C5DD] text-[#1D2A4D] shadow-sm font-extrabold" : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
+              }`}
+            >
+              Search Directory
+            </button>
+          </div>
+
+          <a
+            href="#opd-board"
+            className="px-3.5 py-2 rounded-2xl bg-[#1D2A4D] dark:bg-slate-800 text-[#13C5DD] border border-[#13C5DD]/30 text-xs font-extrabold flex items-center gap-1.5 shadow-sm hover:bg-[#13C5DD] hover:text-[#1D2A4D] transition-colors"
           >
-            Issue OPD Token
-          </button>
-          <button
-            onClick={() => setActiveTab("register")}
-            className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
-              activeTab === "register" ? "bg-[#13C5DD] text-[#1D2A4D] shadow-sm font-extrabold" : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
-            }`}
-          >
-            + New Patient (UHID)
-          </button>
-          <button
-            onClick={() => setActiveTab("search")}
-            className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
-              activeTab === "search" ? "bg-[#13C5DD] text-[#1D2A4D] shadow-sm font-extrabold" : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
-            }`}
-          >
-            Search Directory
-          </button>
+            <Monitor className="w-4 h-4" /> Live Display Board
+          </a>
         </div>
       </div>
 
@@ -201,7 +223,7 @@ export default function ReceptionPanel() {
           {activeTab === "token" && (
             <form onSubmit={handleIssueToken} className="space-y-4">
               <h2 className="text-base font-extrabold font-poppins text-slate-900 dark:text-white flex items-center gap-2">
-                <Ticket className="w-5 h-5 text-[#13C5DD]" /> Dispense Live OPD Consultation Token
+                <Ticket className="w-5 h-5 text-[#13C5DD]" /> Dispense Live OPD Consultation Token & Case Slot
               </h2>
 
               <div className="space-y-3 text-xs">
@@ -233,9 +255,9 @@ export default function ReceptionPanel() {
                       onChange={(e) => setTokenData({ ...tokenData, doctor_id: e.target.value })}
                       className="w-full p-3 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800"
                     >
-                      <option value="3">Dr. Rajesh Patel (General Medicine)</option>
-                      <option value="4">Dr. Sneha Shah (Cardiology)</option>
-                      <option value="5">Dr. Amit Mehta (Orthopedics)</option>
+                      <option value="3">Dr. Rajesh Patel (General Medicine - Cabin 104)</option>
+                      <option value="4">Dr. Sneha Shah (Cardiology - Cabin 201)</option>
+                      <option value="5">Dr. Amit Mehta (Orthopedics - Cabin 108)</option>
                     </select>
                   </div>
                   <div>
@@ -271,17 +293,22 @@ export default function ReceptionPanel() {
                 className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-[#13C5DD] to-[#0F6CBD] text-white font-extrabold text-xs shadow-md uppercase disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Ticket className="w-4 h-4" />}
-                Generate & Print Token
+                Generate & Print Case Slot Token
               </button>
 
               {issuedToken && (
                 <div className="p-5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-center space-y-2 animate-in zoom-in-95">
                   <div className="text-xs text-emerald-500 font-extrabold uppercase">Token Issued Successfully!</div>
-                  <div className="text-5xl font-black font-poppins text-slate-900 dark:text-white tracking-wider">
-                    {issuedToken.token_number}
+                  <div className="flex items-center justify-center gap-3">
+                    <span className="px-4 py-1.5 rounded-xl bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-black text-lg">
+                      CASE #{issuedToken.case_number}
+                    </span>
+                    <span className="text-4xl font-black font-poppins text-slate-900 dark:text-white tracking-wider">
+                      {issuedToken.token_number}
+                    </span>
                   </div>
                   <div className="text-xs text-slate-400">
-                    Appointment #{issuedToken.appointment_number} • Direct patient to OPD Consultation Wing
+                    Allocated to <strong>{issuedToken.cabin_number || "Cabin 104"}</strong> • Direct patient to OPD waiting lounge
                   </div>
                 </div>
               )}
@@ -447,41 +474,72 @@ export default function ReceptionPanel() {
 
         </div>
 
-        {/* Right Live Waiting Monitor */}
+        {/* Right Live Waiting Monitor & Cabin Status */}
         <div className="lg:col-span-5 p-6 rounded-3xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 shadow-xl space-y-4">
           <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
             <h2 className="text-base font-extrabold font-poppins text-slate-900 dark:text-white flex items-center gap-2">
-              <QrCode className="w-5 h-5 text-[#00C896]" /> Live OPD Waiting Display
+              <QrCode className="w-5 h-5 text-[#00C896]" /> Live Doctor Cabins & Queue
             </h2>
             <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-500 text-[10px] font-extrabold">
               LIVE QUEUE
             </span>
           </div>
 
-          <div className="space-y-2 max-h-[500px] overflow-y-auto">
-            {appointments.map((apt) => (
-              <div
-                key={apt.id}
-                className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-[#13C5DD] text-[#1D2A4D] font-black flex items-center justify-center text-xs shadow-sm">
-                    {apt.token_number}
-                  </div>
-                  <div>
-                    <div className="font-extrabold text-slate-900 dark:text-white">{apt.patient_name}</div>
-                    <div className="text-[10px] text-slate-400">{apt.doctor_name} • Slot {apt.slot_time}</div>
-                  </div>
-                </div>
-                <span className={`px-2.5 py-1 rounded-full text-[10px] font-extrabold ${
-                  apt.status === "completed" ? "bg-emerald-500/15 text-emerald-500" :
-                  apt.status === "in_consultation" ? "bg-blue-500/15 text-blue-500" :
-                  "bg-amber-500/15 text-amber-500"
-                }`}>
-                  ● {apt.status.toUpperCase()}
-                </span>
+          {/* Doctor Delays Warning Strip if any doctor is late */}
+          {doctors.some((d) => d.delay_minutes > 0) && (
+            <div className="p-3 rounded-2xl bg-amber-500/15 border border-amber-500/30 text-amber-800 dark:text-amber-200 text-xs font-bold space-y-1">
+              <div className="flex items-center gap-1.5 font-black text-amber-600 dark:text-amber-400">
+                <AlertTriangle className="w-3.5 h-3.5" /> DOCTOR DELAY ALERTS:
               </div>
-            ))}
+              {doctors.filter((d) => d.delay_minutes > 0).map((d) => (
+                <div key={d.doctor_id} className="text-[11px]">
+                  • <strong>{d.doctor_name} ({d.cabin_number})</strong>: +{d.delay_minutes} mins delay {d.delay_reason && `(${d.delay_reason})`}
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="space-y-2 max-h-[500px] overflow-y-auto">
+            {appointments.map((apt) => {
+              const isInCabin = apt.status === "in_consultation";
+              return (
+                <div
+                  key={apt.id}
+                  className={`p-3.5 rounded-2xl border flex items-center justify-between text-xs transition-all ${
+                    isInCabin
+                      ? "bg-emerald-500/10 border-emerald-500/40 shadow-sm"
+                      : "bg-slate-50 dark:bg-slate-900/60 border-slate-200 dark:border-slate-800"
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className={`w-9 h-9 rounded-xl font-black flex flex-col items-center justify-center text-[10px] shadow-sm ${
+                      isInCabin ? "bg-emerald-500 text-slate-900 animate-pulse" : "bg-[#13C5DD] text-[#1D2A4D]"
+                    }`}>
+                      <span className="text-[7px] leading-none">CASE</span>
+                      <span className="text-xs leading-none">#{apt.case_number || 1}</span>
+                    </div>
+                    <div>
+                      <div className="font-extrabold text-slate-900 dark:text-white flex items-center gap-1.5">
+                        {apt.patient_name}
+                        <span className="text-[10px] text-slate-400 font-mono">({apt.token_number})</span>
+                      </div>
+                      <div className="text-[10px] text-slate-400">
+                        {apt.doctor_name} • {apt.current_cabin_number || "Cabin 104"} • Slot {apt.slot_time}
+                        {apt.has_delay && <span className="text-amber-500 font-bold ml-1">(Est: {apt.adjusted_slot_time})</span>}
+                      </div>
+                    </div>
+                  </div>
+
+                  <span className={`px-2.5 py-1 rounded-full text-[10px] font-extrabold ${
+                    apt.status === "completed" ? "bg-emerald-500/15 text-emerald-500" :
+                    isInCabin ? "bg-emerald-500 text-slate-900 animate-pulse" :
+                    "bg-amber-500/15 text-amber-500"
+                  }`}>
+                    ● {isInCabin ? "IN CABIN" : apt.status.toUpperCase()}
+                  </span>
+                </div>
+              );
+            })}
           </div>
         </div>
 

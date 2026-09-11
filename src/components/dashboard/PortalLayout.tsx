@@ -34,7 +34,8 @@ import {
   Building2,
   Heart,
   Eye,
-  RefreshCw
+  RefreshCw,
+  Monitor
 } from "lucide-react";
 
 export default function PortalLayout({ children }: { children: React.ReactNode }) {
@@ -97,8 +98,14 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
     }
   };
 
-  const navItems = [
+  const patientNavItems = [
+    { hash: "", label: "My Health & OPD Status", icon: LayoutDashboard },
+    { hash: "#opd-board", label: "Live OPD Display Board", icon: Monitor },
+  ];
+
+  const staffNavItems = [
     { hash: "", label: "Command Dashboard", icon: LayoutDashboard },
+    { hash: "#opd-board", label: "Live OPD Display Board", icon: Monitor },
     { hash: "#patients", label: "Patient & UHID Directory", icon: Users },
     { hash: "#appointments", label: "OPD Appointments Queue", icon: Calendar },
     { hash: "#emr", label: "Clinical Doctor EMR", icon: Stethoscope },
@@ -111,6 +118,8 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
     { hash: "#billing", label: "Billing & TPA Claims", icon: CreditCard },
     { hash: "#security", label: "Security & Audit Logs", icon: ShieldCheck },
   ];
+
+  const navItems = activeRole === "patient" ? patientNavItems : staffNavItems;
 
   return (
     <div className="min-h-screen bg-[#F3F6F9] dark:bg-[#0B0F17] flex flex-col font-sans transition-colors duration-300">

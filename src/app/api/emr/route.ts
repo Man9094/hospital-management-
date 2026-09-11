@@ -127,9 +127,37 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // 5. Update appointment status to completed if appointment_id provided
+    // 5. Update appointment status to completed and record duration if appointment_id provided
     if (appointment_id) {
-      db.prepare(`UPDATE appointments SET status = 'completed' WHERE id = ?`).run(appointment_id);
+      const apt = db.prepare(`SELECT * FROM appointments WHERE id = ?`).get(appointment_id) as any;
+      const nowIso = new Date().toISOString();
+      let calculatedDuration = body.duration_minutes ? parseFloat(body.duration_minutes) : 0;
+
+      if (!calculatedDuration && apt?.consultation_start_time) {
+        const start = new Date(apt.consultation_start_time).getTime();
+        const end = Date.now();
+        calculatedDuration = Math.max(1, Math.round(((end - start) / 60000) * 10) / 10);
+      } else if (!calculatedDuration) {
+        calculatedDuration = 10.0; // default estimated duration
+      }
+
+      db.prepare(`
+        UPDATE appointments 
+        SET status = 'completed',
+            consultation_end_time = ?,
+            duration_minutes = ?
+        WHERE id = ?
+      `).run(nowIso, calculatedDuration, appointment_id);
+
+      // Reset active case in doctor status
+      if (apt?.doctor_id) {
+        db.prepare(`
+          UPDATE doctor_status 
+          SET active_case_number = NULL,
+              updated_at = datetime('now')
+          WHERE doctor_id = ? AND active_case_number = ?
+        `).run(apt.doctor_id, apt.case_number);
+      }
     }
 
     // 6. Audit Log

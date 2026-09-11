@@ -241,6 +241,26 @@ export async function runSeed() {
       em_name: "Karthik Iyer (Brother)",
       em_phone: "+91 98795 33212",
       status: "active"
+    },
+    {
+      uhid: "MC-2026-000108",
+      name: "Man Chaudhary",
+      age: 24,
+      gender: "Male",
+      mobile: "+91 93288 98884",
+      email: "man.chaudhary@gmail.com",
+      address: "102, Shanti Heights, Ring Road",
+      city: "Ahmedabad",
+      state: "Gujarat",
+      blood: "B+",
+      allergies: "None",
+      chronic: "Routine OPD Health Checkup",
+      abha: "91-9328-8988-8884",
+      insurance: "Star Health Premier Guard",
+      policy: "SH-93288988",
+      em_name: "Chaudhary Family",
+      em_phone: "+91 93288 98884",
+      status: "active"
     }
   ];
 
@@ -284,23 +304,41 @@ export async function runSeed() {
     insertBed.run(b.id, b.ward, b.num, b.status, b.uhid, b.time);
   }
 
-  // 6. APPOINTMENTS (OPD QUEUE)
+  // 6. APPOINTMENTS (OPD QUEUE) & DOCTOR STATUS
   const doctorUser = db.prepare(`SELECT id FROM users WHERE email = 'doctor@medcore.in'`).get() as { id: number };
   const cardDoctor = db.prepare(`SELECT id FROM users WHERE email = 'doctor.shah@medcore.in'`).get() as { id: number };
+  const orthDoctor = db.prepare(`SELECT id FROM users WHERE email = 'doctor.mehta@medcore.in'`).get() as { id: number };
+
+  // Seed Doctor Cabin Status & Live Delays
+  const insertDocStatus = db.prepare(`
+    INSERT OR REPLACE INTO doctor_status (doctor_id, status, delay_minutes, delay_reason, cabin_number, active_case_number, updated_at)
+    VALUES (?, ?, ?, ?, ?, ?, datetime('now'))
+  `);
+
+  if (doctorUser) {
+    insertDocStatus.run(doctorUser.id, "in_cabin", 15, "Emergency Ward Round & Morning Handover", "Cabin 104 (OPD Wing 1)", 1);
+  }
+  if (cardDoctor) {
+    insertDocStatus.run(cardDoctor.id, "available", 0, null, "Cabin 201 (Heart Wing)", null);
+  }
+  if (orthDoctor) {
+    insertDocStatus.run(orthDoctor.id, "on_rounds", 30, "Post-Op ICU Dressing Rounds", "Cabin 108 (Ortho Wing)", null);
+  }
 
   const appointments = [
-    { num: "APT-2026-001", uhid: "MC-2026-000106", doc: doctorUser?.id || 3, dept: "DEP-MED", date: "2026-09-09", slot: "10:00 AM", token: "A-101", status: "in_consultation", complaint: "Persistent dry cough, mild wheezing and fatigue for 4 days" },
-    { num: "APT-2026-002", uhid: "MC-2026-000107", doc: cardDoctor?.id || 4, dept: "DEP-CARD", date: "2026-09-09", slot: "10:30 AM", token: "A-102", status: "waiting", complaint: "Routine cardiovascular screening, episodic palpitations" },
-    { num: "APT-2026-003", uhid: "MC-2026-000101", doc: doctorUser?.id || 3, dept: "DEP-MED", date: "2026-09-09", slot: "11:00 AM", token: "A-103", status: "waiting", complaint: "Follow-up diabetic HbA1c evaluation & neuropathy review" },
-    { num: "APT-2026-004", uhid: "MC-2026-000102", doc: doctorUser?.id || 3, dept: "DEP-MED", date: "2026-09-09", slot: "11:30 AM", token: "A-104", status: "scheduled", complaint: "Thyroid profile review & routine health checkup" }
+    { id: 1, num: "APT-2026-001", uhid: "MC-2026-000106", doc: doctorUser?.id || 3, dept: "DEP-MED", date: "2026-09-09", slot: "10:00 AM", token: "A-101", caseNo: 1, cabin: "Cabin 104", status: "in_consultation", complaint: "Persistent dry cough, mild wheezing and fatigue for 4 days", startTime: "2026-09-09T10:02:00Z", duration: 8.5 },
+    { id: 2, num: "APT-2026-002", uhid: "MC-2026-000108", doc: doctorUser?.id || 3, dept: "DEP-MED", date: "2026-09-09", slot: "10:20 AM", token: "A-102", caseNo: 2, cabin: "Cabin 104", status: "waiting", complaint: "Health checkup, routine vitals & general medical consultation", startTime: null, duration: 0 },
+    { id: 3, num: "APT-2026-003", uhid: "MC-2026-000107", doc: cardDoctor?.id || 4, dept: "DEP-CARD", date: "2026-09-09", slot: "10:30 AM", token: "A-103", caseNo: 3, cabin: "Cabin 201", status: "waiting", complaint: "Routine cardiovascular screening, episodic palpitations", startTime: null, duration: 0 },
+    { id: 4, num: "APT-2026-004", uhid: "MC-2026-000101", doc: doctorUser?.id || 3, dept: "DEP-MED", date: "2026-09-09", slot: "11:00 AM", token: "A-104", caseNo: 4, cabin: "Cabin 104", status: "waiting", complaint: "Follow-up diabetic HbA1c evaluation & neuropathy review", startTime: null, duration: 0 },
+    { id: 5, num: "APT-2026-005", uhid: "MC-2026-000102", doc: doctorUser?.id || 3, dept: "DEP-MED", date: "2026-09-09", slot: "11:30 AM", token: "A-105", caseNo: 5, cabin: "Cabin 104", status: "scheduled", complaint: "Thyroid profile review & routine health checkup", startTime: null, duration: 0 }
   ];
 
   const insertAppt = db.prepare(`
-    INSERT OR REPLACE INTO appointments (appointment_number, patient_uhid, doctor_id, department_id, appointment_date, slot_time, token_number, type, consultation_type, status, chief_complaint, priority)
-    VALUES (?, ?, ?, ?, ?, ?, ?, 'Walk-in', 'In-Person', ?, ?, 'Normal')
+    INSERT OR REPLACE INTO appointments (id, appointment_number, patient_uhid, doctor_id, department_id, appointment_date, slot_time, token_number, case_number, cabin_number, consultation_start_time, duration_minutes, type, consultation_type, status, chief_complaint, priority)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Walk-in', 'In-Person', ?, ?, 'Normal')
   `);
   for (const a of appointments) {
-    insertAppt.run(a.num, a.uhid, a.doc, a.dept, a.date, a.slot, a.token, a.status, a.complaint);
+    insertAppt.run(a.id, a.num, a.uhid, a.doc, a.dept, a.date, a.slot, a.token, a.caseNo, a.cabin, a.startTime, a.duration, a.status, a.complaint);
   }
 
   // 7. VITALS RECORDS

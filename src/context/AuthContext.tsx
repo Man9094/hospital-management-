@@ -69,16 +69,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         body: JSON.stringify({ email, password, rememberMe }),
       });
 
-      const data = await res.json();
+      let data: any = {};
+      try {
+        data = await res.json();
+      } catch (jsonErr) {
+        console.error("Failed to parse login response JSON:", jsonErr);
+        return { success: false, error: `Server error (${res.status}). Please try again.` };
+      }
 
       if (res.ok && data.success) {
         setUser(data.user);
         return { success: true };
       }
 
-      return { success: false, error: data.error || "Login failed." };
-    } catch {
-      return { success: false, error: "Network error. Please check your connection." };
+      return { success: false, error: data.error || `Authentication failed (${res.status})` };
+    } catch (err: any) {
+      console.error("Login fetch error:", err);
+      return { success: false, error: err?.message || "Network error. Please check your connection." };
     }
   };
 

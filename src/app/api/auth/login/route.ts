@@ -6,6 +6,7 @@ import {
   setAuthCookie,
   checkRateLimit,
   recordLoginAttempt,
+  AUTH_COOKIE_NAME,
 } from "@/lib/auth";
 
 interface UserRow {
@@ -92,8 +93,6 @@ export async function POST(request: NextRequest) {
     recordLoginAttempt(db, ip, cleanEmail, true);
 
     // Update last_login
-    db.prepare(`UPDATE users SET last_login = datetime('now'), updated_at = datetime('now') WHERE id = ?`).run(user.id);
-
     const token = await createToken(
       {
         userId: user.id,
@@ -104,9 +103,7 @@ export async function POST(request: NextRequest) {
       rememberMe === true
     );
 
-    await setAuthCookie(token, rememberMe === true);
-
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       user: {
         id: user.id,
@@ -115,10 +112,21 @@ export async function POST(request: NextRequest) {
         role: user.role,
       },
     });
-  } catch (error) {
+
+    const maxAge = rememberMe === true ? 7 * 24 * 60 * 60 : 24 * 60 * 60;
+    response.cookies.set(AUTH_COOKIE_NAME, token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge,
+      path: "/",
+    });
+
+    return response;
+  } catch (error: any) {
     console.error("Login error:", error);
     return NextResponse.json(
-      { error: "An unexpected error occurred. Please try again." },
+      { error: error?.message || "An unexpected error occurred during login. Please try again." },
       { status: 500 }
     );
   }

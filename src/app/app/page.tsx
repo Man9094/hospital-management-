@@ -11,6 +11,7 @@ import PatientPanel from "@/components/dashboard/panels/PatientPanel";
 import ReceptionPanel from "@/components/dashboard/panels/ReceptionPanel";
 import LabPanel from "@/components/dashboard/panels/LabPanel";
 import PharmacyPanel from "@/components/dashboard/panels/PharmacyPanel";
+import OPDWaitingBoard from "@/components/dashboard/OPDWaitingBoard";
 import {
   Calendar,
   Users,
@@ -83,6 +84,9 @@ export default function SaaSAppPage() {
           {activeRole === "billing" && <BillingClaimsView />}
         </>
       )}
+
+      {/* #opd-board: Fullscreen Digital Signage OPD Waiting Display */}
+      {hash === "#opd-board" && <OPDWaitingBoard />}
 
       {/* #patients: Full Patient & UHID Directory */}
       {hash === "#patients" && <PatientDirectoryView />}
