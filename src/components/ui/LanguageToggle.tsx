@@ -23,16 +23,16 @@ export default function LanguageToggle() {
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-800 dark:text-slate-200 hover:border-[#0F6CBD] transition-all"
+        className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-[#F8F2F2] dark:bg-[#18141C] border border-[#E3DFDB] dark:border-[#3B3041] text-xs font-semibold text-[#1D1B1B] dark:text-[#FEF8F7] hover:border-[#4A1F2B] dark:hover:border-[#C08491] transition-all shadow-xs"
       >
-        <Globe className="w-4 h-4 text-[#0F6CBD] dark:text-[#4CC9F0]" />
+        <Globe className="w-4 h-4 text-[#4A1F2B] dark:text-[#C08491]" />
         <span>{currentLang.label}</span>
-        <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+        <ChevronDown className="w-3.5 h-3.5 text-[#837376]" />
       </motion.button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-48 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl p-1.5 z-50">
-          <div className="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+        <div className="absolute right-0 mt-2 w-48 rounded-md bg-white dark:bg-[#241D29] border border-[#E3DFDB] dark:border-[#3B3041] shadow-lg p-1.5 z-50">
+          <div className="px-3 py-1.5 text-[10px] font-bold text-[#837376] uppercase tracking-wider">
             ભાષા પસંદ કરો / भाषा चुनें / Select Language
           </div>
           {LANGUAGES.map((lang) => (
@@ -42,20 +42,20 @@ export default function LanguageToggle() {
                 setLanguage(lang.id);
                 setOpen(false);
               }}
-              className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-left text-xs transition-colors ${
+              className={`w-full flex items-center justify-between px-3 py-2 rounded text-left text-xs transition-colors ${
                 language === lang.id
-                  ? "bg-[#0F6CBD]/10 text-[#0F6CBD] dark:text-[#4CC9F0] font-bold"
-                  : "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+                  ? "bg-[#F3E9EB] text-[#4A1F2B] dark:bg-[#32293D] dark:text-[#F7B5C3] font-bold"
+                  : "text-[#1D1B1B] dark:text-[#FEF8F7] hover:bg-[#F8F2F2] dark:hover:bg-[#18141C]"
               }`}
             >
               <div className="flex items-center gap-2">
                 <span>{lang.flag}</span>
                 <div>
                   <div className="font-bold">{lang.label}</div>
-                  <div className="text-[10px] text-slate-400">{lang.subLabel}</div>
+                  <div className="text-[10px] text-[#837376]">{lang.subLabel}</div>
                 </div>
               </div>
-              {language === lang.id && <Check className="w-4 h-4 text-[#00C896]" />}
+              {language === lang.id && <Check className="w-4 h-4 text-[#3F6B52]" />}
             </button>
           ))}
         </div>

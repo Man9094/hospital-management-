@@ -14,12 +14,12 @@ export default function ThemeToggle() {
       whileTap={{ scale: 0.95 }}
       onClick={toggleTheme}
       aria-label="Toggle Dark and Light Mode"
-      className="relative p-2.5 rounded-2xl bg-slate-200/80 dark:bg-slate-800/80 text-slate-800 dark:text-slate-200 hover:text-[#0F6CBD] dark:hover:text-[#4CC9F0] transition-colors border border-slate-300/50 dark:border-slate-700/50 shadow-sm"
+      className="relative p-2 rounded-md bg-[#F8F2F2] dark:bg-[#18141C] text-[#514346] dark:text-[#D5C2C5] hover:bg-[#F3E9EB] dark:hover:bg-[#32293D] hover:text-[#4A1F2B] dark:hover:text-[#FEF8F7] transition-colors border border-[#E3DFDB] dark:border-[#3B3041] shadow-xs"
     >
       {theme === "dark" ? (
-        <Sun className="w-4 h-4 text-[#4CC9F0]" />
+        <Sun className="w-4 h-4 text-[#F7B5C3]" />
       ) : (
-        <Moon className="w-4 h-4 text-[#0F6CBD]" />
+        <Moon className="w-4 h-4 text-[#4A1F2B]" />
       )}
     </motion.button>
   );

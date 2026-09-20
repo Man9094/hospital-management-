@@ -217,35 +217,33 @@ export default function LoginPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-[#0B0F17] flex flex-col justify-center py-10 sm:px-6 lg:px-8 relative overflow-hidden transition-colors">
+    <div className="min-h-screen bg-[#F7F6F3] dark:bg-[#18141C] flex flex-col justify-center py-10 sm:px-6 lg:px-8 relative overflow-hidden transition-colors text-[#1D1B1B] dark:text-[#FEF8F7]">
       
-      {/* Background Subtle Gradient Blobs */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-gradient-to-tr from-[#0F6CBD]/15 via-[#13C5DD]/20 to-transparent blur-3xl pointer-events-none rounded-full" />
-
       {/* Brand Header */}
       <div className="sm:mx-auto sm:w-full sm:max-w-lg text-center space-y-2.5">
         <Link href="/" className="inline-flex items-center gap-2.5">
-          <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-[#0F6CBD] to-[#13C5DD] flex items-center justify-center text-white shadow-lg shadow-[#13C5DD]/20 font-bold">
-            <Cross className="w-6 h-6 stroke-[2.5]" />
+          <div className="w-10 h-10 rounded-md bg-[#4A1F2B] flex items-center justify-center text-white shadow-xs font-bold">
+            <Cross className="w-5 h-5 stroke-[2.5]" />
           </div>
-          <span className="font-poppins font-black text-2xl text-slate-900 dark:text-white uppercase tracking-tight">
-            MEDCORE <span className="text-[#13C5DD] text-xs font-bold lowercase">hms</span>
+          <span className="font-sans font-bold text-2xl text-[#1D1B1B] dark:text-white uppercase tracking-tight">
+            MEDCORE <span className="text-[#4A1F2B] dark:text-[#C08491] text-xs font-bold lowercase">hms</span>
           </span>
         </Link>
-        <p className="text-xs text-slate-500 dark:text-slate-400 font-extrabold uppercase tracking-wider">
-          Indian Hospital Operating System • Secure Access Gateway
+        <p className="text-xs text-[#514346] dark:text-[#D5C2C5] font-semibold uppercase tracking-wider">
+          Warm Clinical Enterprise Hospital Operating System
         </p>
       </div>
 
-      <div className="mt-6 sm:mx-auto sm:w-full sm:max-w-lg px-4">
+      {/* Main Auth Card */}
+      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-lg px-4 sm:px-0">
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 shadow-2xl rounded-3xl p-6 sm:p-8 space-y-6"
+          className="bg-white dark:bg-[#241D29] border border-[#E3DFDB] dark:border-[#3B3041] rounded-lg p-6 sm:p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)] space-y-6"
         >
           
-          {/* Dual Portal Switcher Tabs */}
-          <div className="grid grid-cols-2 p-1.5 rounded-2xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+          {/* Top Switcher: Patient OTP vs Staff Credentials */}
+          <div className="grid grid-cols-2 p-1 rounded-md bg-[#F8F2F2] dark:bg-[#18141C] border border-[#E3DFDB] dark:border-[#3B3041]">
             <button
               type="button"
               onClick={() => {
@@ -253,10 +251,10 @@ export default function LoginPage() {
                 setError("");
                 setSuccess(false);
               }}
-              className={`py-3 rounded-xl text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${
+              className={`py-2 rounded text-xs font-semibold uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${
                 portalMode === "patient"
-                  ? "bg-[#13C5DD] text-[#1D2A4D] shadow-md font-black"
-                  : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
+                  ? "bg-[#4A1F2B] text-white shadow-xs font-bold"
+                  : "text-[#514346] hover:text-[#1D1B1B] dark:hover:text-white"
               }`}
             >
               <User className="w-4 h-4" />
@@ -270,28 +268,28 @@ export default function LoginPage() {
                 setError("");
                 setSuccess(false);
               }}
-              className={`py-3 rounded-xl text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${
+              className={`py-2 rounded text-xs font-semibold uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${
                 portalMode === "staff"
-                  ? "bg-[#13C5DD] text-[#1D2A4D] shadow-md font-black"
-                  : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
+                  ? "bg-[#4A1F2B] text-white shadow-xs font-bold"
+                  : "text-[#514346] hover:text-[#1D1B1B] dark:hover:text-white"
               }`}
             >
               <Stethoscope className="w-4 h-4" />
-              <span>Doctor & Staff Login</span>
+              <span>Doctor &amp; Staff Login</span>
             </button>
           </div>
 
           {/* Alert Messages */}
           {error && (
-            <div className="p-4 rounded-2xl bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-400 text-xs font-bold flex items-center gap-2 animate-in fade-in">
+            <div className="p-3 rounded-md bg-[#FFDAD6] border border-[#BA1A1A]/30 text-[#93000A] text-xs font-semibold flex items-center gap-2 animate-in fade-in">
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{error}</span>
             </div>
           )}
 
           {success && (
-            <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-xs font-bold flex items-center gap-2 animate-in fade-in">
-              <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-500" />
+            <div className="p-3 rounded-md bg-[#EEF4F0] border border-[#3F6B52]/30 text-[#3F6B52] text-xs font-semibold flex items-center gap-2 animate-in fade-in">
+              <CheckCircle2 className="w-4 h-4 shrink-0 text-[#3F6B52]" />
               <span>Authenticated successfully! Redirecting to dashboard...</span>
             </div>
           )}
@@ -305,7 +303,7 @@ export default function LoginPage() {
               {/* Patient Demo One-Click Fill */}
               <div className="space-y-2">
                 <div className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider flex items-center gap-1">
-                  <Sparkles className="w-3.5 h-3.5 text-[#13C5DD]" />
+                  <Sparkles className="w-3.5 h-3.5 text-[#4A1F2B] dark:text-[#C08491]" />
                   <span>Choose Demo Patient or Enter Details</span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
@@ -318,15 +316,15 @@ export default function LoginPage() {
                         setPatientStep("input");
                         setError("");
                       }}
-                      className={`p-2.5 rounded-xl border text-left transition-all ${
+                      className={`p-2 rounded-md border text-left transition-all ${
                         patientIdentifier === p.uhid
-                          ? "bg-[#13C5DD]/15 border-[#13C5DD] text-[#1D2A4D] dark:text-white"
-                          : "bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-slate-300"
+                          ? "bg-[#F3E9EB] dark:bg-[#32293D] border-[#4A1F2B] dark:border-[#C08491] text-[#1D1B1B] dark:text-[#FEF8F7]"
+                          : "bg-[#F8F2F2] dark:bg-[#18141C] border-[#E3DFDB] dark:border-[#3B3041] text-[#514346] dark:text-[#D5C2C5] hover:border-[#837376]"
                       }`}
                     >
-                      <div className="font-extrabold truncate">{p.name}</div>
-                      <div className="text-[10px] text-[#13C5DD] font-mono font-bold">{p.uhid}</div>
-                      <div className="text-[9px] text-slate-400 mt-0.5 truncate">{p.status}</div>
+                      <div className="font-bold truncate">{p.name}</div>
+                      <div className="text-[10px] text-[#4A1F2B] dark:text-[#C08491] font-mono font-bold">{p.uhid}</div>
+                      <div className="text-[9px] text-[#837376] mt-0.5 truncate">{p.status}</div>
                     </button>
                   ))}
                 </div>
@@ -334,23 +332,23 @@ export default function LoginPage() {
 
               {/* STEP 1: ENTER UHID / MOBILE */}
               {patientStep === "input" && (
-                <form onSubmit={handleSendOtp} className="space-y-4">
+                <form onSubmit={handleSendOtp} className="space-y-3.5">
                   <div>
-                    <label className="block text-xs font-extrabold text-slate-700 dark:text-slate-300 uppercase mb-1.5">
+                    <label className="block text-xs font-semibold text-[#514346] dark:text-[#D5C2C5] uppercase mb-1">
                       Hospital UHID or Registered Mobile Number
                     </label>
                     <div className="relative">
-                      <QrCode className="w-4 h-4 absolute left-3.5 top-3.5 text-slate-400" />
+                      <QrCode className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#837376]" />
                       <input
                         type="text"
                         required
                         value={patientIdentifier}
                         onChange={(e) => setPatientIdentifier(e.target.value)}
                         placeholder="e.g. MC-2026-000106 or +91 98250 99881"
-                        className="w-full pl-10 pr-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-bold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#13C5DD]"
+                        className="w-full h-9 pl-9 pr-3 rounded-md bg-[#F8F2F2] dark:bg-[#18141C] border border-[#E3DFDB] dark:border-[#3B3041] text-xs font-semibold text-[#1D1B1B] dark:text-[#FEF8F7] placeholder:text-[#837376] focus:outline-none focus:border-[#4A1F2B] dark:focus:border-[#C08491]"
                       />
                     </div>
-                    <p className="text-[11px] text-slate-400 mt-1 font-medium">
+                    <p className="text-[11px] text-[#837376] mt-1 font-medium">
                       Enter the Unique Hospital ID (UHID) provided during registration or your +91 mobile number.
                     </p>
                   </div>
@@ -358,14 +356,14 @@ export default function LoginPage() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-[#13C5DD] to-[#0F6CBD] text-white font-black text-xs uppercase tracking-wider shadow-lg shadow-[#13C5DD]/25 hover:opacity-95 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                    className="w-full h-9 rounded-md bg-[#4A1F2B] hover:bg-[#70404B] text-white font-semibold text-xs transition-colors flex items-center justify-center gap-2 shadow-xs disabled:opacity-50"
                   >
                     {isSubmitting ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
                     ) : (
                       <>
                         <span>Get 6-Digit Secure OTP</span>
-                        <ArrowRight className="w-4 h-4" />
+                        <ArrowRight className="w-3.5 h-3.5" />
                       </>
                     )}
                   </button>
@@ -374,37 +372,35 @@ export default function LoginPage() {
 
               {/* STEP 2: ENTER OTP */}
               {patientStep === "otp" && (
-                <form onSubmit={handleVerifyOtp} className="space-y-4 animate-in fade-in">
-                  <div className="p-4 rounded-2xl bg-[#13C5DD]/10 border border-[#13C5DD]/30 text-xs space-y-1">
-                    <div className="font-extrabold text-[#13C5DD] flex items-center gap-1.5">
-                      <CheckCircle2 className="w-4 h-4" /> Security Code Sent
+                <form onSubmit={handleVerifyOtp} className="space-y-3.5 animate-in fade-in">
+                  <div className="p-3 rounded-md bg-[#F3E9EB] dark:bg-[#32293D] border border-[#E3DFDB] dark:border-[#4C3C54] text-xs space-y-1">
+                    <div className="font-bold text-[#4A1F2B] dark:text-[#C08491] flex items-center gap-1.5">
+                      <CheckCircle2 className="w-4 h-4 text-[#3F6B52]" /> Security Code Sent
                     </div>
-                    <div className="text-slate-700 dark:text-slate-300">
+                    <div className="text-[#1D1B1B] dark:text-[#FEF8F7]">
                       Patient: <strong>{patientInfo?.name}</strong> ({patientInfo?.uhid})
                     </div>
-                    <div className="text-[11px] text-slate-400">
+                    <div className="text-[11px] text-[#837376]">
                       Sent to: <strong>{patientInfo?.maskedMobile}</strong>
                     </div>
                   </div>
 
                   {/* WhatsApp Automated Server Delivery Card */}
                   {whatsappUrl && (
-                    <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 space-y-2.5">
+                    <div className="p-3 rounded-md bg-[#EEF4F0] dark:bg-[#1C2C22] border border-[#3F6B52]/30 space-y-2 text-xs">
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2 text-xs font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-wide">
+                        <div className="flex items-center gap-1.5 text-xs font-bold text-[#3F6B52] dark:text-[#7ADDB0] uppercase tracking-wide">
                           <MessageSquare className="w-4 h-4" />
                           <span>Automated WhatsApp Dispatch</span>
                         </div>
-                        <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[10px] font-black uppercase flex items-center gap-1">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        <span className="px-2 py-0.5 rounded bg-[#3F6B52]/15 text-[#3F6B52] dark:text-[#7ADDB0] text-[10px] font-bold uppercase flex items-center gap-1">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#3F6B52] animate-pulse" />
                           Delivered via Bot
                         </span>
                       </div>
                       
-                      <div className="text-[11px] text-slate-600 dark:text-slate-300 space-y-1">
-                        <p>
-                          ✅ OTP automatically sent from Hospital WhatsApp Gateway (<strong>+91 79 2658 9000</strong>) to <strong>+{patientInfo?.phone || "91 9328898884"}</strong>.
-                        </p>
+                      <div className="text-[11px] text-[#514346] dark:text-[#D5C2C5]">
+                        OTP automatically dispatched to <strong>+{patientInfo?.phone || "91 9328898884"}</strong> via MedCore HIS Gateway.
                       </div>
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
@@ -412,7 +408,7 @@ export default function LoginPage() {
                           href={whatsappUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-md shadow-emerald-600/20 transition-all hover:scale-[1.01]"
+                          className="py-1.5 px-3 rounded-md bg-[#3F6B52] hover:bg-[#325642] text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors"
                         >
                           <MessageSquare className="w-3.5 h-3.5 fill-white" />
                           <span>View on WhatsApp</span>
@@ -424,7 +420,7 @@ export default function LoginPage() {
                             href={patientInfo.whatsappWebUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-md transition-all hover:scale-[1.01]"
+                            className="py-1.5 px-3 rounded-md bg-[#4A1F2B] hover:bg-[#70404B] text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors"
                           >
                             <span>WhatsApp Web</span>
                             <ExternalLink className="w-3 h-3" />
@@ -435,11 +431,11 @@ export default function LoginPage() {
                   )}
 
                   <div>
-                    <label className="block text-xs font-extrabold text-slate-700 dark:text-slate-300 uppercase mb-1.5">
+                    <label className="block text-xs font-semibold text-[#514346] dark:text-[#D5C2C5] uppercase mb-1">
                       Enter 6-Digit Verification Code
                     </label>
                     <div className="relative">
-                      <KeyRound className="w-4 h-4 absolute left-3.5 top-3.5 text-slate-400" />
+                      <KeyRound className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#837376]" />
                       <input
                         type="text"
                         maxLength={6}
@@ -447,19 +443,19 @@ export default function LoginPage() {
                         value={otpCode}
                         onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ""))}
                         placeholder="• • • • • •"
-                        className="w-full pl-10 pr-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-lg font-black tracking-widest text-center text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#13C5DD] font-mono"
+                        className="w-full h-9 pl-9 pr-3 rounded-md bg-[#F8F2F2] dark:bg-[#18141C] border border-[#E3DFDB] dark:border-[#3B3041] text-base font-bold tracking-widest text-center text-[#1D1B1B] dark:text-[#FEF8F7] focus:outline-none focus:border-[#4A1F2B] dark:focus:border-[#C08491] font-mono tabular-nums"
                       />
                     </div>
 
                     {demoOtp && (
-                      <div className="mt-2 flex items-center justify-between text-xs bg-slate-100 dark:bg-slate-900 p-2 rounded-xl">
-                        <span className="text-[11px] text-slate-500 dark:text-slate-400">
-                          Live Code: <strong className="text-[#13C5DD] font-mono font-black text-xs">{demoOtp}</strong>
+                      <div className="mt-2 flex items-center justify-between text-xs bg-[#F8F2F2] dark:bg-[#18141C] border border-[#E3DFDB] dark:border-[#3B3041] p-2 rounded-md">
+                        <span className="text-[11px] text-[#514346] dark:text-[#D5C2C5]">
+                          Live Code: <strong className="text-[#4A1F2B] dark:text-[#C08491] font-mono font-bold text-xs">{demoOtp}</strong>
                         </span>
                         <button
                           type="button"
                           onClick={() => setOtpCode(demoOtp)}
-                          className="px-2.5 py-1 rounded-lg bg-[#13C5DD] text-[#1D2A4D] text-[10px] font-black uppercase hover:opacity-90 transition-colors shadow-sm"
+                          className="px-2 py-0.5 rounded bg-[#4A1F2B] text-white text-[10px] font-semibold uppercase hover:bg-[#70404B] transition-colors"
                         >
                           Fill Code Now
                         </button>
@@ -470,14 +466,14 @@ export default function LoginPage() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-[#13C5DD] to-[#0F6CBD] text-white font-black text-xs uppercase tracking-wider shadow-lg shadow-[#13C5DD]/25 hover:opacity-95 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                    className="w-full h-9 rounded-md bg-[#4A1F2B] hover:bg-[#70404B] text-white font-semibold text-xs transition-colors flex items-center justify-center gap-2 shadow-xs disabled:opacity-50"
                   >
                     {isSubmitting ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
                     ) : (
                       <>
-                        <ShieldCheck className="w-4 h-4" />
-                        <span>Verify & Open Patient Portal</span>
+                        <ShieldCheck className="w-3.5 h-3.5" />
+                        <span>Verify &amp; Open Patient Portal</span>
                       </>
                     )}
                   </button>
@@ -490,7 +486,7 @@ export default function LoginPage() {
                         setOtpCode("");
                         setError("");
                       }}
-                      className="text-xs font-bold text-slate-400 hover:text-[#13C5DD] transition-colors"
+                      className="text-xs font-semibold text-[#837376] hover:text-[#4A1F2B] dark:hover:text-[#C08491] transition-colors"
                     >
                       ← Change UHID / Mobile Number
                     </button>
@@ -511,10 +507,10 @@ export default function LoginPage() {
               <div className="space-y-2">
                 <div className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider flex items-center justify-between">
                   <span className="flex items-center gap-1">
-                    <Sparkles className="w-3.5 h-3.5 text-[#13C5DD]" />
+                    <Sparkles className="w-3.5 h-3.5 text-[#4A1F2B] dark:text-[#C08491]" />
                     <span>Instant Live Test Accounts</span>
                   </span>
-                  <span className="text-[10px] text-emerald-500 font-black">All Roles Active</span>
+                  <span className="text-[10px] text-[#3F6B52] dark:text-[#7ADDB0] font-bold">All Roles Active</span>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 text-xs">
                   {staffDemoAccounts.map((acc) => (
@@ -540,14 +536,14 @@ export default function LoginPage() {
                           setIsSubmitting(false);
                         }
                       }}
-                      className={`p-2 rounded-xl border text-left transition-all group hover:scale-[1.02] ${
+                      className={`p-2 rounded-md border text-left transition-all group ${
                         email === acc.email
-                          ? "bg-[#13C5DD]/15 border-[#13C5DD] text-[#1D2A4D] dark:text-white shadow-sm"
-                          : "bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-300"
+                          ? "bg-[#F3E9EB] dark:bg-[#32293D] border-[#4A1F2B] dark:border-[#C08491] text-[#1D1B1B] dark:text-[#FEF8F7] shadow-xs"
+                          : "bg-[#F8F2F2] dark:bg-[#18141C] border-[#E3DFDB] dark:border-[#3B3041] text-[#514346] dark:text-[#D5C2C5] hover:border-[#837376]"
                       }`}
                     >
-                      <div className="font-extrabold truncate text-[11px] group-hover:text-[#13C5DD] transition-colors">{acc.label}</div>
-                      <div className="text-[9px] text-[#13C5DD] font-bold truncate flex items-center justify-between mt-0.5">
+                      <div className="font-bold truncate text-[11px] group-hover:text-[#4A1F2B] dark:group-hover:text-[#C08491] transition-colors">{acc.label}</div>
+                      <div className="text-[9px] text-[#4A1F2B] dark:text-[#C08491] font-semibold truncate flex items-center justify-between mt-0.5">
                         <span>{acc.badge}</span>
                         <ArrowRight className="w-2.5 h-2.5 opacity-0 group-hover:opacity-100 transition-opacity" />
                       </div>
@@ -557,50 +553,50 @@ export default function LoginPage() {
               </div>
 
               {/* Staff Form */}
-              <form onSubmit={handleStaffSubmit} className="space-y-4">
+              <form onSubmit={handleStaffSubmit} className="space-y-3.5">
                 <div>
-                  <label className="block text-xs font-extrabold text-slate-700 dark:text-slate-300 uppercase mb-1.5">
+                  <label className="block text-xs font-semibold text-[#514346] dark:text-[#D5C2C5] uppercase mb-1">
                     Official Hospital Email ID
                   </label>
                   <div className="relative">
-                    <Mail className="w-4 h-4 absolute left-3.5 top-3.5 text-slate-400" />
+                    <Mail className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#837376]" />
                     <input
                       type="email"
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="doctor@medcore.in"
-                      className="w-full pl-10 pr-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-bold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#13C5DD]"
+                      className="w-full h-9 pl-9 pr-3 rounded-md bg-[#F8F2F2] dark:bg-[#18141C] border border-[#E3DFDB] dark:border-[#3B3041] text-xs font-semibold text-[#1D1B1B] dark:text-[#FEF8F7] placeholder:text-[#837376] focus:outline-none focus:border-[#4A1F2B] dark:focus:border-[#C08491]"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <div className="flex items-center justify-between mb-1.5">
-                    <label className="text-xs font-extrabold text-slate-700 dark:text-slate-300 uppercase">
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-xs font-semibold text-[#514346] dark:text-[#D5C2C5] uppercase">
                       Password
                     </label>
                     <Link
                       href="/forgot-password"
-                      className="text-[11px] font-bold text-[#13C5DD] hover:underline"
+                      className="text-[11px] font-semibold text-[#4A1F2B] dark:text-[#C08491] hover:underline"
                     >
                       Forgot password?
                     </Link>
                   </div>
                   <div className="relative">
-                    <Lock className="w-4 h-4 absolute left-3.5 top-3.5 text-slate-400" />
+                    <Lock className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#837376]" />
                     <input
                       type={showPassword ? "text" : "password"}
                       required
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full pl-10 pr-10 py-3 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-bold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#13C5DD]"
+                      className="w-full h-9 pl-9 pr-10 rounded-md bg-[#F8F2F2] dark:bg-[#18141C] border border-[#E3DFDB] dark:border-[#3B3041] text-xs font-semibold text-[#1D1B1B] dark:text-[#FEF8F7] placeholder:text-[#837376] focus:outline-none focus:border-[#4A1F2B] dark:focus:border-[#C08491]"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3.5 top-3.5 text-slate-400 hover:text-slate-600"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#837376] hover:text-[#1D1B1B]"
                     >
                       {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
@@ -608,12 +604,12 @@ export default function LoginPage() {
                 </div>
 
                 <div className="flex items-center justify-between text-xs">
-                  <label className="flex items-center gap-2 cursor-pointer text-slate-600 dark:text-slate-400 font-medium">
+                  <label className="flex items-center gap-2 cursor-pointer text-[#514346] dark:text-[#D5C2C5] font-medium">
                     <input
                       type="checkbox"
                       checked={rememberMe}
                       onChange={(e) => setRememberMe(e.target.checked)}
-                      className="w-4 h-4 rounded border-slate-300 text-[#13C5DD] focus:ring-[#13C5DD]"
+                      className="w-4 h-4 rounded border-[#E3DFDB] text-[#4A1F2B] focus:ring-[#4A1F2B]"
                     />
                     <span>Remember this device (7 days)</span>
                   </label>
@@ -622,14 +618,14 @@ export default function LoginPage() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-[#13C5DD] to-[#0F6CBD] text-white font-black text-xs uppercase tracking-wider shadow-lg shadow-[#13C5DD]/25 hover:opacity-95 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                  className="w-full h-9 rounded-md bg-[#4A1F2B] hover:bg-[#70404B] text-white font-semibold text-xs transition-colors flex items-center justify-center gap-2 shadow-xs disabled:opacity-50"
                 >
                   {isSubmitting ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
                   ) : (
                     <>
                       <span>Sign In to Hospital Console</span>
-                      <ArrowRight className="w-4 h-4" />
+                      <ArrowRight className="w-3.5 h-3.5" />
                     </>
                   )}
                 </button>
@@ -639,11 +635,11 @@ export default function LoginPage() {
           )}
 
           {/* Footer Security Badge */}
-          <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[11px] text-slate-400 font-medium">
+          <div className="pt-3 border-t border-[#E3DFDB] dark:border-[#3B3041] flex items-center justify-between text-[11px] text-[#837376] font-medium">
             <span className="flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-emerald-500" /> AES-256 ABDM Verified
+              <ShieldCheck className="w-4 h-4 text-[#3F6B52]" /> AES-256 ABDM Aligned
             </span>
-            <span>Apex MedCore HMS v2.0</span>
+            <span>Apex MedCore HMS</span>
           </div>
 
         </motion.div>

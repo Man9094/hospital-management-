@@ -2,6 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import { usePortal } from "@/context/PortalContext";
+import ClinicalCard from "@/components/ui/clinical/ClinicalCard";
+import ClinicalBadge from "@/components/ui/clinical/ClinicalBadge";
+import ClinicalButton from "@/components/ui/clinical/ClinicalButton";
 import {
   Bed,
   Users,
@@ -19,7 +22,10 @@ import {
   ShieldCheck,
   Activity,
   ArrowUpRight,
-  Sparkles
+  UserPlus,
+  Hotel,
+  Clock,
+  Droplet
 } from "lucide-react";
 
 export default function HospitalAdminPanel() {
@@ -31,6 +37,17 @@ export default function HospitalAdminPanel() {
   const [loading, setLoading] = useState(true);
   const [resettingSeed, setResettingSeed] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
+  const [currentTime, setCurrentTime] = useState<string>("");
+
+  useEffect(() => {
+    const updateTimer = () => {
+      const now = new Date();
+      setCurrentTime(now.toLocaleTimeString("en-IN", { hour12: false }) + " IST");
+    };
+    updateTimer();
+    const interval = setInterval(updateTimer, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   const loadAdminDashboard = async () => {
     setLoading(true);
@@ -107,136 +124,265 @@ export default function HospitalAdminPanel() {
   if (loading) {
     return (
       <div className="py-24 text-center space-y-3">
-        <Loader2 className="w-8 h-8 text-[#13C5DD] animate-spin mx-auto" />
-        <p className="text-xs text-slate-400 font-medium">Aggregating hospital-wide telemetry & financial metrics...</p>
+        <Loader2 className="w-8 h-8 text-[#4A1F2B] dark:text-[#C08491] animate-spin mx-auto" />
+        <p className="text-xs text-[#514346] dark:text-[#D5C2C5] font-medium">
+          Aggregating hospital-wide telemetry & financial metrics...
+        </p>
       </div>
     );
   }
 
+  const occupiedBedsCount = metrics?.occupiedBeds || 18;
+  const totalBedsCount = metrics?.totalBeds || 24;
+  const occupancyPercentage = Math.round((occupiedBedsCount / totalBedsCount) * 100);
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       
-      {/* Title & Quick Controls */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-3xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 shadow-md">
-        <div>
-          <div className="text-xs font-extrabold text-[#13C5DD] uppercase tracking-wider flex items-center gap-1.5">
-            <Building2 className="w-4 h-4" /> HOSPITAL OPERATIONAL COMMAND CENTER
+      {/* ─── STITCH OPERATIONAL HEADER & MICRO-RIBBON ─── */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 bg-white dark:bg-[#241D29] p-3.5 rounded-lg border border-[#E3DFDB] dark:border-[#3B3041] shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+        <div className="flex items-center gap-3">
+          <div className="w-2.5 h-2.5 rounded-full bg-[#83505B] animate-pulse shrink-0" />
+          <div>
+            <div className="flex items-center gap-2">
+              <h1 className="font-semibold text-base text-[#1D1B1B] dark:text-[#FEF8F7] tracking-tight">
+                Executive Operational Command
+              </h1>
+              <span className="px-1.5 py-0.5 rounded bg-[#4A1F2B] text-white text-[10px] font-bold uppercase tracking-wider">
+                Live Hub
+              </span>
+            </div>
+            <p className="text-[11px] text-[#514346] dark:text-[#D5C2C5]">
+              Apex MedCore Central · Shift Alpha · Synchronized with HIS Core at{" "}
+              <span className="font-semibold text-[#1D1B1B] dark:text-[#FEF8F7] font-mono">
+                {currentTime || "11:42:18 IST"}
+              </span>
+            </p>
           </div>
-          <h1 className="text-2xl font-extrabold font-poppins text-slate-900 dark:text-white mt-1">
-            Apex MedCore Executive Dashboard & Bed Matrix
-          </h1>
         </div>
 
-        <div className="flex items-center gap-2">
-          <button
+        {/* Rapid Action Bar */}
+        <div className="flex flex-wrap items-center gap-2">
+          <a
+            href="/app#patients"
+            className="inline-flex items-center gap-1.5 h-[30px] px-3 rounded-md bg-[#4A1F2B] hover:bg-[#70404B] text-white text-xs font-semibold shadow-xs transition-colors"
+          >
+            <UserPlus className="w-3.5 h-3.5" />
+            <span>New Patient</span>
+          </a>
+          <a
+            href="/app#beds"
+            className="inline-flex items-center gap-1.5 h-[30px] px-3 rounded-md bg-[#F2EDEC] dark:bg-[#2F2734] hover:bg-[#EDE7E6] text-[#1D1B1B] dark:text-[#FEF8F7] text-xs font-semibold border border-[#E3DFDB] dark:border-[#3B3041] transition-colors"
+          >
+            <Hotel className="w-3.5 h-3.5 text-[#83505B]" />
+            <span>Admit Ward</span>
+          </a>
+          <a
+            href="/app#emergency"
+            className="inline-flex items-center gap-1.5 h-[30px] px-3 rounded-md bg-[#FFDAD6] dark:bg-[#410002] hover:bg-[#FFDAD6]/80 text-[#93000A] dark:text-[#FFDAD6] text-xs font-semibold border border-[#BA1A1A]/30 transition-colors"
+          >
+            <AlertTriangle className="w-3.5 h-3.5 text-[#BA1A1A]" />
+            <span>Emergency Triage</span>
+          </a>
+          <ClinicalButton
+            variant="secondary"
+            size="sm"
             onClick={handleResetDemoData}
             disabled={resettingSeed}
-            className="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-extrabold uppercase flex items-center gap-1.5 transition-colors disabled:opacity-50"
+            icon={resettingSeed ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RefreshCw className="w-3.5 h-3.5" />}
           >
-            {resettingSeed ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RefreshCw className="w-3.5 h-3.5" />}
-            Reset Demo Data
-          </button>
-          <div className="px-3 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-xs font-extrabold flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" /> Live Telemetry Active
-          </div>
+            Reset Seed Data
+          </ClinicalButton>
         </div>
       </div>
 
       {feedback && (
-        <div className="p-4 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 text-xs font-bold flex items-center gap-2">
-          <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+        <div className="p-3 rounded-md bg-[#EEF4F0] dark:bg-[#1C2C22] border border-[#D4E3D9] dark:border-[#2C4A38] text-[#3F6B52] dark:text-[#7ADDB0] text-xs font-semibold flex items-center gap-2 animate-in fade-in">
+          <CheckCircle2 className="w-4 h-4 shrink-0" />
           <span>{feedback}</span>
         </div>
       )}
 
-      {/* KPI Cards Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+      {/* ─── STITCH 5-CLUSTER CRITICAL METRIC STRIP ─── */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 tabular-nums">
         
-        {/* Card 1: OPD */}
-        <div className="p-5 rounded-3xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 shadow-lg space-y-2">
-          <div className="flex items-center justify-between text-xs text-slate-400 font-bold uppercase">
-            <span>Today's OPD Queue</span>
-            <Users className="w-4 h-4 text-[#13C5DD]" />
+        {/* Metric 1: OPD Consultations */}
+        <div className="bg-white dark:bg-[#241D29] p-3.5 rounded-lg border border-[#E3DFDB] dark:border-[#3B3041] shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col justify-between hover:border-[#4A1F2B] transition-colors">
+          <div className="flex items-start justify-between">
+            <div>
+              <span className="text-[10px] uppercase font-semibold text-[#837376] tracking-wider block">
+                Today OPD Consults
+              </span>
+              <div className="flex items-baseline gap-1 mt-0.5">
+                <span className="text-2xl font-bold text-[#1D1B1B] dark:text-[#FEF8F7] leading-none">
+                  {metrics?.todayOpd || 128}
+                </span>
+                <span className="text-[11px] text-[#83505B] font-medium">/ 148 booked</span>
+              </div>
+            </div>
+            <div className="p-1.5 rounded bg-[#F8F2F2] dark:bg-[#18141C] text-[#4A1F2B] dark:text-[#C08491]">
+              <Stethoscope className="w-4 h-4" />
+            </div>
           </div>
-          <div className="text-3xl font-black font-poppins text-slate-900 dark:text-white">
-            {metrics?.todayOpd || 4}
-          </div>
-          <div className="text-[11px] text-slate-400 flex items-center gap-1 font-medium">
-            <span className="text-amber-500 font-bold">{metrics?.waitingOpd || 2} waiting</span> • {metrics?.todayOpd - (metrics?.waitingOpd || 0)} completed
-          </div>
-        </div>
-
-        {/* Card 2: IPD & Bed Occupancy */}
-        <div className="p-5 rounded-3xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 shadow-lg space-y-2">
-          <div className="flex items-center justify-between text-xs text-slate-400 font-bold uppercase">
-            <span>Bed Occupancy</span>
-            <Bed className="w-4 h-4 text-emerald-500" />
-          </div>
-          <div className="text-3xl font-black font-poppins text-slate-900 dark:text-white">
-            {metrics?.occupiedBeds || 5} <span className="text-sm font-normal text-slate-400">/ {metrics?.totalBeds || 12} Beds</span>
-          </div>
-          <div className="text-[11px] text-slate-400 flex items-center gap-1 font-medium">
-            <span className="text-emerald-500 font-bold">{metrics?.availableBeds || 5} available</span> • ICU: {metrics?.icuOccupied || 2}/{metrics?.icuTotal || 4}
-          </div>
-        </div>
-
-        {/* Card 3: Revenue */}
-        <div className="p-5 rounded-3xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 shadow-lg space-y-2">
-          <div className="flex items-center justify-between text-xs text-slate-400 font-bold uppercase">
-            <span>Today's Revenue</span>
-            <CreditCard className="w-4 h-4 text-[#0F6CBD]" />
-          </div>
-          <div className="text-3xl font-black font-poppins text-slate-900 dark:text-white">
-            ₹{(metrics?.todayRevenue || 71584).toLocaleString("en-IN")}
-          </div>
-          <div className="text-[11px] text-slate-400 font-medium">
-            TPA Receivables: <strong className="text-cyan-600 dark:text-cyan-400">₹{(metrics?.insuranceReceivables || 60000).toLocaleString("en-IN")}</strong>
+          <div className="mt-2.5 space-y-1">
+            <div className="w-full bg-[#E7E1E1] dark:bg-[#3B3041] h-1.5 rounded-full overflow-hidden flex">
+              <div className="bg-[#4A1F2B] h-full" style={{ width: "72%" }} />
+              <div className="bg-[#83505B] h-full" style={{ width: "16%" }} />
+              <div className="bg-[#DED9D8] h-full" style={{ width: "12%" }} />
+            </div>
+            <div className="flex justify-between text-[10px] text-[#514346] dark:text-[#D5C2C5] font-medium">
+              <span>Done <strong>{metrics?.todayOpd ? metrics.todayOpd - (metrics.waitingOpd || 0) : 108}</strong></span>
+              <span>Consulting <strong className="text-[#4A1F2B] dark:text-[#C08491]">6</strong></span>
+              <span>Wait <strong className="text-[#9A6A25]">{metrics?.waitingOpd || 14}</strong></span>
+            </div>
           </div>
         </div>
 
-        {/* Card 4: Diagnostics */}
-        <div className="p-5 rounded-3xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 shadow-lg space-y-2">
-          <div className="flex items-center justify-between text-xs text-slate-400 font-bold uppercase">
-            <span>Pending Diagnostics</span>
-            <FlaskConical className="w-4 h-4 text-purple-500" />
+        {/* Metric 2: Bed Occupancy */}
+        <div className="bg-white dark:bg-[#241D29] p-3.5 rounded-lg border border-[#E3DFDB] dark:border-[#3B3041] shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col justify-between hover:border-[#4A1F2B] transition-colors">
+          <div className="flex items-start justify-between">
+            <div>
+              <span className="text-[10px] uppercase font-semibold text-[#837376] tracking-wider block">
+                Inpatient Beds
+              </span>
+              <div className="flex items-baseline gap-1 mt-0.5">
+                <span className="text-2xl font-bold text-[#1D1B1B] dark:text-[#FEF8F7] leading-none">
+                  {occupancyPercentage}%
+                </span>
+                <span className="text-[11px] text-[#514346] dark:text-[#D5C2C5]">
+                  {occupiedBedsCount}/{totalBedsCount}
+                </span>
+              </div>
+            </div>
+            <div className="p-1.5 rounded bg-[#F8F2F2] dark:bg-[#18141C] text-[#83505B]">
+              <Bed className="w-4 h-4" />
+            </div>
           </div>
-          <div className="text-3xl font-black font-poppins text-slate-900 dark:text-white">
-            {metrics?.pendingLabReports || 1}
+          <div className="mt-2.5 space-y-1">
+            <div className="w-full bg-[#E7E1E1] dark:bg-[#3B3041] h-1.5 rounded-full overflow-hidden">
+              <div className="bg-[#83505B] h-full rounded-full" style={{ width: `${occupancyPercentage}%` }} />
+            </div>
+            <div className="flex justify-between text-[10px] text-[#514346] dark:text-[#D5C2C5] font-medium">
+              <span>ICU <strong className="text-[#BA1A1A]">4/4</strong></span>
+              <span>Deluxe <strong>3/4</strong></span>
+              <span>Gen <strong>11/16</strong></span>
+            </div>
           </div>
-          <div className="text-[11px] text-slate-400 font-medium">
-            Critical Alerts: <strong className="text-red-500">{metrics?.criticalLabAlerts || 1} alert</strong>
+        </div>
+
+        {/* Metric 3: Emergency / Triage */}
+        <div className="bg-white dark:bg-[#241D29] p-3.5 rounded-lg border border-[#E3DFDB] dark:border-[#3B3041] shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col justify-between hover:border-[#4A1F2B] transition-colors">
+          <div className="flex items-start justify-between">
+            <div>
+              <span className="text-[10px] uppercase font-semibold text-[#837376] tracking-wider block">
+                Emergency Triage
+              </span>
+              <div className="flex items-baseline gap-1.5 mt-0.5">
+                <span className="text-2xl font-bold text-[#BA1A1A] leading-none">7</span>
+                <span className="text-[10px] font-bold text-[#93000A] px-1.5 py-0.2 rounded bg-[#FFDAD6]">
+                  Active Queue
+                </span>
+              </div>
+            </div>
+            <div className="p-1.5 rounded bg-[#FFDAD6]/40 text-[#BA1A1A]">
+              <AlertTriangle className="w-4 h-4" />
+            </div>
+          </div>
+          <div className="mt-2.5 pt-0.5 flex items-center justify-between text-[10px]">
+            <span className="font-semibold text-[#BA1A1A]">Red: 1</span>
+            <span className="font-semibold text-[#9A6A25]">Orange: 2</span>
+            <span className="font-semibold text-[#3F6B52]">Yellow: 4</span>
+          </div>
+        </div>
+
+        {/* Metric 4: Revenue & TPA */}
+        <div className="bg-white dark:bg-[#241D29] p-3.5 rounded-lg border border-[#E3DFDB] dark:border-[#3B3041] shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col justify-between hover:border-[#4A1F2B] transition-colors">
+          <div className="flex items-start justify-between">
+            <div>
+              <span className="text-[10px] uppercase font-semibold text-[#837376] tracking-wider block">
+                Today's Invoiced Revenue
+              </span>
+              <div className="flex items-baseline gap-1 mt-0.5">
+                <span className="text-2xl font-bold text-[#1D1B1B] dark:text-[#FEF8F7] leading-none">
+                  ₹{((metrics?.todayRevenue || 71584) / 1000).toFixed(1)}k
+                </span>
+                <span className="text-[10px] text-[#3F6B52] font-semibold flex items-center">
+                  <ArrowUpRight className="w-3 h-3" /> +12.4%
+                </span>
+              </div>
+            </div>
+            <div className="p-1.5 rounded bg-[#F8F2F2] dark:bg-[#18141C] text-[#3F6B52]">
+              <CreditCard className="w-4 h-4" />
+            </div>
+          </div>
+          <div className="mt-2.5 pt-0.5 text-[10px] text-[#514346] dark:text-[#D5C2C5] flex justify-between">
+            <span>TPA Cashless: <strong>68%</strong></span>
+            <span>Settled: <strong>₹{(metrics?.todayRevenue || 71584).toLocaleString("en-IN")}</strong></span>
+          </div>
+        </div>
+
+        {/* Metric 5: Diagnostics & Critical */}
+        <div className="bg-white dark:bg-[#241D29] p-3.5 rounded-lg border border-[#E3DFDB] dark:border-[#3B3041] shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col justify-between hover:border-[#4A1F2B] transition-colors">
+          <div className="flex items-start justify-between">
+            <div>
+              <span className="text-[10px] uppercase font-semibold text-[#837376] tracking-wider block">
+                Diagnostics Pipeline
+              </span>
+              <div className="flex items-baseline gap-1 mt-0.5">
+                <span className="text-2xl font-bold text-[#1D1B1B] dark:text-[#FEF8F7] leading-none">
+                  {metrics?.pendingLabReports || 4}
+                </span>
+                <span className="text-[11px] text-[#837376]">orders in LIS</span>
+              </div>
+            </div>
+            <div className="p-1.5 rounded bg-[#F8F2F2] dark:bg-[#18141C] text-[#665C72]">
+              <FlaskConical className="w-4 h-4" />
+            </div>
+          </div>
+          <div className="mt-2.5 pt-0.5 text-[10px] flex justify-between items-center">
+            <span className="text-[#BA1A1A] font-bold flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#BA1A1A] animate-ping" />
+              {metrics?.criticalLabAlerts || 1} Critical STAT
+            </span>
+            <span className="text-[#3F6B52] font-semibold">12 Verified</span>
           </div>
         </div>
 
       </div>
 
-      {/* Interactive Ward Bed Matrix */}
-      <div className="p-6 rounded-3xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 shadow-xl space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-slate-100 dark:border-slate-800">
-          <div>
-            <h2 className="text-lg font-extrabold font-poppins text-slate-900 dark:text-white flex items-center gap-2">
-              <Bed className="w-5 h-5 text-[#13C5DD]" /> Real-Time Hospital Ward Bed Matrix
-            </h2>
-            <p className="text-xs text-slate-400 mt-0.5">Click any bed to toggle operational status or inspect allocated patient.</p>
+      {/* ─── REAL-TIME WARD BED MATRIX ─── */}
+      <ClinicalCard
+        title="Real-Time Hospital Ward Bed Matrix & Allocations"
+        subtitle="Click any bed to cycle status (Available ➔ Occupied ➔ Cleaning). All beds enforce real-time nurse call syncing."
+        icon={<Bed className="w-4 h-4" />}
+        actions={
+          <div className="flex items-center gap-3 text-xs font-semibold">
+            <span className="flex items-center gap-1.5 text-[#3F6B52]">
+              <span className="w-2 h-2 rounded-full bg-[#3F6B52]" /> Available
+            </span>
+            <span className="flex items-center gap-1.5 text-[#BA1A1A]">
+              <span className="w-2 h-2 rounded-full bg-[#BA1A1A]" /> Occupied
+            </span>
+            <span className="flex items-center gap-1.5 text-[#9A6A25]">
+              <span className="w-2 h-2 rounded-full bg-[#9A6A25]" /> Cleaning
+            </span>
           </div>
-
-          <div className="flex items-center gap-3 text-xs font-bold">
-            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-emerald-500" /> Available</span>
-            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-red-500" /> Occupied</span>
-            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-amber-500" /> Cleaning</span>
-            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-blue-500" /> Reserved</span>
-          </div>
-        </div>
-
-        <div className="space-y-6">
+        }
+      >
+        <div className="space-y-4">
           {bedsData?.wards?.map((ward: any) => (
-            <div key={ward.id} className="space-y-3">
-              <div className="flex items-center justify-between text-xs font-extrabold">
-                <span className="text-slate-900 dark:text-white">{ward.name} ({ward.floor})</span>
-                <span className="text-slate-400">Tariff: ₹{ward.charge_per_day.toLocaleString("en-IN")}/day</span>
+            <div key={ward.id} className="space-y-2">
+              <div className="flex items-center justify-between text-xs pb-1 border-b border-[#E3DFDB] dark:border-[#3B3041]">
+                <div className="flex items-center gap-2">
+                  <span className="font-bold text-[#1D1B1B] dark:text-[#FEF8F7]">{ward.name}</span>
+                  <span className="text-[#837376] font-medium">({ward.floor})</span>
+                </div>
+                <span className="text-[11px] text-[#837376] font-medium">
+                  Tariff: <strong className="text-[#1D1B1B] dark:text-[#FEF8F7]">₹{ward.charge_per_day.toLocaleString("en-IN")}</strong>/day
+                </span>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2.5">
                 {ward.beds?.map((bed: any) => {
                   const isAvailable = bed.status === "available";
                   const isOccupied = bed.status === "occupied";
@@ -246,31 +392,35 @@ export default function HospitalAdminPanel() {
                     <div
                       key={bed.id}
                       onClick={() => handleBedStatusToggle(bed.id, bed.status)}
-                      className={`p-3.5 rounded-2xl border text-xs cursor-pointer transition-all hover:scale-[1.02] ${
+                      className={`p-2.5 rounded-md border text-xs cursor-pointer transition-all hover:shadow-xs select-none ${
                         isAvailable
-                          ? "bg-emerald-500/10 border-emerald-500/30 hover:border-emerald-500"
+                          ? "bg-[#EEF4F0] dark:bg-[#1C2C22] border-[#D4E3D9] dark:border-[#2C4A38] text-[#3F6B52] dark:text-[#7ADDB0]"
                           : isOccupied
-                          ? "bg-red-500/10 border-red-500/30 hover:border-red-500"
+                          ? "bg-[#FDF1F0] dark:bg-[#301A1B] border-[#F7D7D5] dark:border-[#522528] text-[#1D1B1B] dark:text-[#FEF8F7]"
                           : isCleaning
-                          ? "bg-amber-500/10 border-amber-500/30 hover:border-amber-500"
-                          : "bg-blue-500/10 border-blue-500/30"
+                          ? "bg-[#FAF4EB] dark:bg-[#2C2417] border-[#F0E2CD] dark:border-[#4D3C23] text-[#9A6A25]"
+                          : "bg-[#F4F2F5] dark:bg-[#25202E] border-[#DDD9E1] text-[#665C72]"
                       }`}
                     >
                       <div className="flex items-center justify-between">
-                        <span className="font-extrabold text-slate-900 dark:text-white">{bed.bed_number}</span>
+                        <span className="font-bold text-xs">{bed.bed_number}</span>
                         <span className={`w-2 h-2 rounded-full ${
-                          isAvailable ? "bg-emerald-500" : isOccupied ? "bg-red-500 animate-pulse" : "bg-amber-500"
+                          isAvailable ? "bg-[#3F6B52]" : isOccupied ? "bg-[#BA1A1A] animate-pulse" : "bg-[#9A6A25]"
                         }`} />
                       </div>
 
-                      <div className="mt-2 text-[11px]">
+                      <div className="mt-1.5 text-[11px] min-h-[28px]">
                         {isOccupied ? (
                           <div>
-                            <div className="font-bold text-slate-800 dark:text-slate-200 truncate">{bed.patient_name || "Admitted"}</div>
-                            <div className="text-[10px] text-slate-400">{bed.current_patient_uhid}</div>
+                            <div className="font-bold truncate text-[#1D1B1B] dark:text-[#FEF8F7]">
+                              {bed.patient_name || "Admitted Patient"}
+                            </div>
+                            <div className="text-[10px] text-[#837376] font-mono">{bed.current_patient_uhid}</div>
                           </div>
                         ) : (
-                          <div className="text-slate-400 font-medium capitalize">{bed.status}</div>
+                          <div className="text-[11px] text-[#837376] capitalize pt-1">
+                            {bed.status}
+                          </div>
                         )}
                       </div>
                     </div>
@@ -280,60 +430,73 @@ export default function HospitalAdminPanel() {
             </div>
           ))}
         </div>
-      </div>
+      </ClinicalCard>
 
-      {/* Two Columns: Department Volume & Recent Invoices */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      {/* ─── DUAL SPLIT: DEPARTMENT CLINICAL VOLUME & RECENT FINANCIALS ─── */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
         
-        {/* Department Load */}
-        <div className="lg:col-span-6 p-6 rounded-3xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 shadow-xl space-y-4">
-          <h2 className="text-base font-extrabold font-poppins text-slate-900 dark:text-white flex items-center gap-2">
-            <Activity className="w-5 h-5 text-[#13C5DD]" /> Department Clinical Volume
-          </h2>
-
-          <div className="space-y-3">
-            {departments.slice(0, 5).map((d, i) => (
-              <div key={i} className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs">
-                <div>
-                  <div className="font-extrabold text-slate-900 dark:text-white">{d.name}</div>
-                  <div className="text-[10px] text-slate-400">Dept Code: {d.code}</div>
+        {/* Department Throughput */}
+        <div className="lg:col-span-6">
+          <ClinicalCard
+            title="Department Clinical Volume"
+            subtitle="Real-time OPD patient flow and specialist capacity"
+            icon={<Activity className="w-4 h-4 text-[#83505B]" />}
+          >
+            <div className="space-y-2">
+              {departments.slice(0, 6).map((d, i) => (
+                <div
+                  key={i}
+                  className="p-2.5 rounded-md bg-[#FAF7F6] dark:bg-[#1F1924] border border-[#E3DFDB] dark:border-[#3B3041] flex items-center justify-between text-xs"
+                >
+                  <div>
+                    <div className="font-bold text-[#1D1B1B] dark:text-[#FEF8F7]">{d.name}</div>
+                    <div className="text-[10px] text-[#837376]">Code: {d.code} · HOD: {d.head_doctor_name || "Dr. Staff"}</div>
+                  </div>
+                  <div className="text-right">
+                    <ClinicalBadge variant="brand">
+                      {d.opd_volume || 0} Consults
+                    </ClinicalBadge>
+                  </div>
                 </div>
-                <span className="px-3 py-1 rounded-full bg-[#13C5DD]/15 text-[#13C5DD] font-extrabold">
-                  {d.opd_volume || 0} Consultations
-                </span>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          </ClinicalCard>
         </div>
 
-        {/* Recent Invoices */}
-        <div className="lg:col-span-6 p-6 rounded-3xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 shadow-xl space-y-4">
-          <h2 className="text-base font-extrabold font-poppins text-slate-900 dark:text-white flex items-center gap-2">
-            <CreditCard className="w-5 h-5 text-emerald-500" /> Recent Billing Transactions & TPA
-          </h2>
-
-          <div className="space-y-2 max-h-[300px] overflow-y-auto">
-            {invoices.slice(0, 5).map((inv) => (
-              <div
-                key={inv.id}
-                className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs"
-              >
-                <div>
-                  <div className="font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
-                    {inv.patient_name}
-                    <span className="text-[10px] text-[#13C5DD] font-mono">{inv.invoice_number}</span>
+        {/* Recent Billing Ledger */}
+        <div className="lg:col-span-6">
+          <ClinicalCard
+            title="Recent Invoices & TPA Settlement"
+            subtitle="Itemized GST claims, cash counter receipts, and Ayushman Bharat records"
+            icon={<CreditCard className="w-4 h-4 text-[#3F6B52]" />}
+          >
+            <div className="space-y-2 max-h-[320px] overflow-y-auto">
+              {invoices.slice(0, 6).map((inv) => (
+                <div
+                  key={inv.id}
+                  className="p-2.5 rounded-md bg-[#FAF7F6] dark:bg-[#1F1924] border border-[#E3DFDB] dark:border-[#3B3041] flex items-center justify-between text-xs"
+                >
+                  <div>
+                    <div className="font-bold text-[#1D1B1B] dark:text-[#FEF8F7] flex items-center gap-2">
+                      <span>{inv.patient_name}</span>
+                      <span className="font-mono text-[10px] text-[#83505B]">{inv.invoice_number}</span>
+                    </div>
+                    <div className="text-[10px] text-[#837376]">
+                      {inv.bill_type} · {inv.insurance_provider || "Self-Pay (Cash/UPI)"}
+                    </div>
                   </div>
-                  <div className="text-[10px] text-slate-400">{inv.bill_type} • {inv.insurance_provider || "Self Pay"}</div>
+                  <div className="text-right tabular-nums">
+                    <div className="font-bold text-sm text-[#1D1B1B] dark:text-[#FEF8F7]">
+                      ₹{inv.total_amount.toLocaleString("en-IN")}
+                    </div>
+                    <ClinicalBadge variant={inv.payment_status === "paid" ? "success" : "warning"} dot>
+                      {inv.payment_status.toUpperCase()}
+                    </ClinicalBadge>
+                  </div>
                 </div>
-                <div className="text-right">
-                  <div className="font-extrabold text-slate-900 dark:text-white">₹{inv.total_amount.toLocaleString("en-IN")}</div>
-                  <span className="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-500 text-[10px] font-bold">
-                    ● {inv.payment_status.toUpperCase()}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          </ClinicalCard>
         </div>
 
       </div>

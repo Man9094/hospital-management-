@@ -1,75 +1,196 @@
 @import "tailwindcss";
 
+@theme {
+  /* Stitch Warm Clinical Enterprise Palette */
+  --color-primary: #310A17;
+  --color-primary-container: #4A1F2B;
+  --color-on-primary: #FFFFFF;
+  --color-on-primary-container: #C08491;
+  --color-primary-fixed: #FFD9E0;
+  --color-primary-fixed-dim: #F7B5C3;
+
+  --color-secondary: #83505B;
+  --color-secondary-container: #FFBECA;
+  --color-on-secondary-container: #7B4955;
+  --color-secondary-fixed: #FFD9DF;
+  --color-secondary-fixed-dim: #F6B5C2;
+
+  --color-tertiary: #1C1527;
+  --color-tertiary-container: #32293D;
+  --color-on-tertiary-container: #9B90A8;
+
+  --color-surface: #FEF8F7;
+  --color-surface-dim: #DED9D8;
+  --color-surface-bright: #FEF8F7;
+  --color-surface-container-lowest: #FFFFFF;
+  --color-surface-container-low: #F8F2F2;
+  --color-surface-container: #F2EDEC;
+  --color-surface-container-high: #EDE7E6;
+  --color-surface-container-highest: #E7E1E1;
+
+  --color-on-surface: #1D1B1B;
+  --color-on-surface-variant: #514346;
+  --color-outline: #837376;
+  --color-outline-variant: #D5C2C5;
+
+  --color-error: #BA1A1A;
+  --color-error-container: #FFDAD6;
+  --color-on-error: #FFFFFF;
+  --color-on-error-container: #93000A;
+
+  --color-clinical-success: #3F6B52;
+  --color-clinical-success-bg: #EEF4F0;
+  --color-clinical-success-border: #D4E3D9;
+
+  --color-clinical-warning: #9A6A25;
+  --color-clinical-warning-bg: #FAF4EB;
+  --color-clinical-warning-border: #F0E2CD;
+
+  --color-clinical-danger: #A33A35;
+  --color-clinical-danger-bg: #FDF1F0;
+  --color-clinical-danger-border: #F7D7D5;
+
+  --color-clinical-info: #665C72;
+  --color-clinical-info-bg: #F4F2F5;
+  --color-clinical-info-border: #DDD9E1;
+
+  --font-source: var(--font-source-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
 @layer base {
   :root {
-    --bg-main: #F3F6F9;
+    --bg-main: #F7F6F3;
     --card-bg: #FFFFFF;
-    --text-primary: #1D2A4D;
-    --text-secondary: #555555;
-    --border-color: #DEE2E6;
-    --primary: #13C5DD;
-    --secondary: #1D2A4D;
-    --accent: #13C5DD;
-    --danger: #E63946;
+    --text-primary: #1D1B1B;
+    --text-secondary: #514346;
+    --text-muted: #837376;
+    --border-color: #E3DFDB;
+    --primary: #4A1F2B;
+    --primary-hover: #70404B;
+    --secondary: #83505B;
+    --accent-tint: #F3E9EB;
+    --hover-bg: #F3E9EB;
+    --success: #3F6B52;
+    --warning: #9A6A25;
+    --danger: #A33A35;
+    --info: #665C72;
   }
 
   .dark {
-    --bg-main: #0B0F17;
-    --card-bg: #1D2A4D;
-    --text-primary: #F8FAFC;
-    --text-secondary: #A0AEC0;
-    --border-color: #2D3748;
-    --primary: #13C5DD;
-    --secondary: #1D2A4D;
-    --accent: #13C5DD;
-    --danger: #E63946;
+    --bg-main: #18141C;
+    --card-bg: #241D29;
+    --text-primary: #FEF8F7;
+    --text-secondary: #D5C2C5;
+    --text-muted: #9B90A8;
+    --border-color: #3B3041;
+    --primary: #C08491;
+    --primary-hover: #D89AA7;
+    --secondary: #83505B;
+    --accent-tint: #32293D;
+    --hover-bg: #32293D;
+    --success: #67B28B;
+    --warning: #E8B96F;
+    --danger: #E06D67;
+    --info: #C5BED1;
   }
 }
 
 body {
   background-color: var(--bg-main);
   color: var(--text-primary);
-  font-family: var(--font-mukta), var(--font-inter), Roboto, system-ui, sans-serif;
+  font-family: var(--font-source-sans), var(--font-inter), system-ui, sans-serif;
   overflow-x: hidden;
   transition: background-color 0.2s ease, color 0.2s ease;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+/* Enforce tabular figures globally for clinical data */
+.tabular-nums,
+table,
+.clinical-stat,
+.vital-value,
+.price-value,
+.token-badge {
+  font-variant-numeric: tabular-nums;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-poppins), var(--font-mukta), 'Roboto Condensed', sans-serif;
+  font-family: var(--font-source-sans), var(--font-poppins), sans-serif;
+  letter-spacing: -0.015em;
 }
 
-/* Medinova Section Header Accent Line */
-.medinova-subheading {
+/* Clinical Subheading */
+.clinical-subheading {
   display: inline-block;
-  color: #13C5DD;
+  color: #4A1F2B;
   text-transform: uppercase;
   font-weight: 700;
-  letter-spacing: 1px;
-  border-bottom: 4px solid #13C5DD;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  border-bottom: 2px solid #4A1F2B;
   padding-bottom: 2px;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
-/* Marquee Animation */
-@keyframes marquee {
-  0% { transform: translateX(0%); }
-  100% { transform: translateX(-50%); }
+.dark .clinical-subheading {
+  color: #C08491;
+  border-bottom-color: #C08491;
 }
 
-.animate-marquee {
-  display: flex;
-  width: 200%;
-  animation: marquee 35s linear infinite;
+/* Clinical Standardized Table */
+.clinical-table-container {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  background-color: var(--card-bg);
 }
 
-.animate-marquee:hover {
-  animation-play-state: paused;
+.clinical-table {
+  width: 100%;
+  text-align: left;
+  font-size: 0.8125rem;
+  border-collapse: collapse;
 }
 
-/* Custom Scrollbar */
+.clinical-table thead {
+  background-color: #F8F2F2;
+  border-bottom: 1px solid #E3DFDB;
+}
+
+.dark .clinical-table thead {
+  background-color: #1F1924;
+  border-bottom: 1px solid #3B3041;
+}
+
+.clinical-table th {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+}
+
+.clinical-table td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.clinical-table tbody tr:hover {
+  background-color: rgba(243, 233, 235, 0.4);
+}
+
+.dark .clinical-table tbody tr:hover {
+  background-color: rgba(50, 41, 61, 0.5);
+}
+
+/* Custom Scrollbar - Warm Clinical Theme */
 ::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -77,16 +198,18 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #13C5DD;
+  background: #A0828A;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #1D2A4D;
+  background: #4A1F2B;
 }
 
-/* ECG Heartbeat Animation for ECGPulse component */
-@keyframes ecgBeat {
-  0% { stroke-dashoffset: 1000; }
-  100% { stroke-dashoffset: 0; }
+.dark ::-webkit-scrollbar-thumb {
+  background: #4C3C54;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #C08491;
 }

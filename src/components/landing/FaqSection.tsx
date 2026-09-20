@@ -35,13 +35,13 @@ export default function FaqSection() {
         
         {/* Section Header */}
         <div className="text-center space-y-4">
-          <div className="text-xs font-extrabold text-[#13C5DD] uppercase tracking-wider">
+          <div className="text-xs font-bold text-[#4A1F2B] dark:text-[#E2838E] uppercase tracking-wider">
             FREQUENTLY ASKED QUESTIONS
           </div>
-          <h2 className="text-3xl sm:text-5xl font-black font-poppins text-slate-900 dark:text-white tracking-tight">
+          <h2 className="text-3xl sm:text-5xl font-bold font-sans text-[#292727] dark:text-[#FEF8F7] tracking-tight">
             Hospital OS Architecture FAQs
           </h2>
-          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400">
+          <p className="text-sm sm:text-base text-[#686563] dark:text-[#D5C2C5]">
             Answers for hospital administrators, medical directors, and IT officers.
           </p>
         </div>
@@ -53,24 +53,24 @@ export default function FaqSection() {
             return (
               <div
                 key={idx}
-                className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] shadow-sm overflow-hidden transition-colors"
+                className="rounded-lg border border-[#E5E0E2] dark:border-[#3E3842] bg-white dark:bg-[#242026] shadow-[0_1px_3px_rgba(41,39,39,0.06)] overflow-hidden transition-colors"
               >
                 <button
                   onClick={() => setOpenIdx(isOpen ? null : idx)}
                   className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4"
                 >
-                  <span className="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white">
+                  <span className="font-bold font-sans text-sm sm:text-base text-[#292727] dark:text-[#FEF8F7]">
                     {faq.q}
                   </span>
                   <ChevronDown
                     className={`w-5 h-5 text-slate-400 shrink-0 transition-transform duration-200 ${
-                      isOpen ? "rotate-180 text-[#13C5DD]" : ""
+                      isOpen ? "rotate-180 text-[#4A1F2B] dark:text-[#E2838E]" : ""
                     }`}
                   />
                 </button>
 
                 {isOpen && (
-                  <div className="px-5 pb-5 sm:px-6 sm:pb-6 text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-800/80 pt-4 animate-in fade-in duration-200">
+                  <div className="px-5 pb-5 sm:px-6 sm:pb-6 text-xs sm:text-sm text-[#686563] dark:text-[#D5C2C5] leading-relaxed border-t border-[#E5E0E2] dark:border-[#3E3842] pt-4 animate-in fade-in duration-200">
                     {faq.a}
                   </div>
                 )}

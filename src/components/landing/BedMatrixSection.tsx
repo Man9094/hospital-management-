@@ -121,78 +121,78 @@ export default function BedMatrixSection() {
         </div>
 
         {/* Legend Bar */}
-        <div className="max-w-4xl mx-auto mb-10 p-4 rounded-2xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 shadow-md flex flex-wrap items-center justify-around gap-4 text-xs font-extrabold">
+        <div className="max-w-4xl mx-auto mb-10 p-4 rounded-md bg-white dark:bg-[#242026] border border-[#E5E0E2] dark:border-[#3E3842] shadow-[0_1px_3px_rgba(41,39,39,0.06)] flex flex-wrap items-center justify-around gap-4 text-xs font-semibold">
           <div className="flex items-center gap-2">
-            <div className="w-5 h-5 rounded-lg bg-[#00C896] text-white flex items-center justify-center shadow-sm">
+            <div className="w-5 h-5 rounded-md bg-[#3F6B52] text-white flex items-center justify-center shadow-xs">
               <Bed className="w-3 h-3" />
             </div>
-            <span className="text-slate-800 dark:text-slate-200">🟢 ખાલી બેડ (Available Bed)</span>
+            <span className="text-[#292727] dark:text-[#ECE5E7]">🟢 ખાલી બેડ (Available Bed)</span>
           </div>
 
           <div className="flex items-center gap-2">
-            <div className="w-5 h-5 rounded-lg bg-red-500 text-white flex items-center justify-center opacity-70">
+            <div className="w-5 h-5 rounded-md bg-[#8C3A45] text-white flex items-center justify-center">
               <Bed className="w-3 h-3" />
             </div>
-            <span className="text-slate-800 dark:text-slate-200">🔴 દર્દી એડમિટ (Occupied)</span>
+            <span className="text-[#292727] dark:text-[#ECE5E7]">🔴 દર્દી એડમિટ (Occupied)</span>
           </div>
 
           <div className="flex items-center gap-2">
-            <div className="w-5 h-5 rounded-lg bg-amber-400 text-white flex items-center justify-center">
+            <div className="w-5 h-5 rounded-md bg-[#C07830] text-white flex items-center justify-center">
               <Bed className="w-3 h-3" />
             </div>
-            <span className="text-slate-800 dark:text-slate-200">🟡 સફાઈ હેઠળ (Sanitizing)</span>
+            <span className="text-[#292727] dark:text-[#ECE5E7]">🟡 સફાઈ હેઠળ (Sanitizing)</span>
           </div>
 
           <div className="flex items-center gap-2">
-            <div className="w-5 h-5 rounded-lg bg-[#13C5DD] text-white flex items-center justify-center ring-4 ring-[#13C5DD]/30">
+            <div className="w-5 h-5 rounded-md bg-[#4A1F2B] text-white flex items-center justify-center ring-2 ring-[#E2838E]/50">
               <Bed className="w-3 h-3" />
             </div>
-            <span className="text-slate-800 dark:text-slate-200">🔵 તમારો પસંદ કરેલ (Selected)</span>
+            <span className="text-[#292727] dark:text-[#ECE5E7]">🔵 તમારો પસંદ કરેલ (Selected)</span>
           </div>
         </div>
 
         {/* Architectural Hospital Drawing Container */}
-        <div className="max-w-6xl mx-auto p-6 sm:p-10 rounded-3xl bg-[#1D2A4D] text-white shadow-2xl border-4 border-slate-700 relative overflow-hidden space-y-8">
+        <div className="max-w-6xl mx-auto p-6 sm:p-8 rounded-lg bg-[#18141C] text-[#ECE5E7] shadow-[0_4px_16px_rgba(41,39,39,0.08)] border border-[#3E3842] relative overflow-hidden space-y-8">
           
           {/* Blueprint Grid Lines Pattern Overlay */}
-          <div className="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#13C5DD_1px,transparent_1px),linear-gradient(to_bottom,#13C5DD_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none" />
+          <div className="absolute inset-0 opacity-15 bg-[linear-gradient(to_right,#3E3842_1px,transparent_1px),linear-gradient(to_bottom,#3E3842_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none" />
 
           {/* Blueprint Top Header & Nurse Station */}
-          <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-white/10 border border-white/15 backdrop-blur-md">
+          <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-md bg-[#242026] border border-[#3E3842]">
             <div className="flex items-center gap-3">
-              <Building className="w-6 h-6 text-[#13C5DD]" />
+              <Building className="w-6 h-6 text-[#E2838E]" />
               <div>
-                <div className="text-xs font-bold text-[#13C5DD] uppercase tracking-wider">
+                <div className="text-xs font-bold text-[#E2838E] uppercase tracking-wider">
                   હોસ્પિટલ ફ્લોર પ્લાન (FLOOR SCHEMATIC 1ST & 2ND LEVEL)
                 </div>
-                <div className="text-sm font-extrabold">
+                <div className="text-sm font-semibold text-[#ECE5E7]">
                   મેડિનોવા મલ્ટીસ્પેસિઆલિટી કેર હોસ્પિટલ
                 </div>
               </div>
             </div>
 
-            <div className="px-4 py-2 rounded-full bg-[#13C5DD]/20 border border-[#13C5DD]/40 text-[#13C5DD] text-xs font-bold flex items-center gap-2">
+            <div className="px-4 py-2 rounded-md bg-[#242026] border border-[#3E3842] text-[#E2838E] text-xs font-bold flex items-center gap-2">
               <HeartPulse className="w-4 h-4 animate-pulse" />
               <span>સેન્ટ્રલ ઓક્સિજન & વેન્ટિલેટર ગ્રીડ સક્રિય</span>
             </div>
           </div>
 
           {/* Rooms Architectural Grid Drawing */}
-          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-3 gap-6">
             {BLUEPRINT_ROOMS.map((roomGroup, idx) => (
               <div
                 key={idx}
-                className="p-5 rounded-2xl bg-slate-900/80 border-2 border-slate-700 shadow-inner flex flex-col justify-between space-y-4"
+                className="p-5 rounded-md bg-[#242026] border border-[#3E3842] space-y-4"
               >
                 {/* Room Enclosure Header */}
-                <div className="flex items-center justify-between pb-3 border-b border-slate-700">
+                <div className="flex items-center justify-between pb-3 border-b border-[#3E3842]">
                   <div className="flex items-center gap-2">
-                    <DoorOpen className="w-4 h-4 text-[#13C5DD]" />
-                    <span className="text-xs font-extrabold font-poppins text-white uppercase">
+                    <DoorOpen className="w-4 h-4 text-[#E2838E]" />
+                    <span className="text-xs font-bold font-sans text-white uppercase">
                       {roomGroup.titleGu}
                     </span>
                   </div>
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-mono font-bold">
+                  <span className="text-[10px] px-2 py-0.5 rounded-md bg-[#1C1820] text-[#9B8E92] font-mono font-medium border border-[#3E3842]">
                     DOOR #10{idx + 1}
                   </span>
                 </div>
@@ -202,26 +202,26 @@ export default function BedMatrixSection() {
                   {roomGroup.beds.map((bed) => {
                     const isSelected = selectedBed?.id === bed.id;
 
-                    let bedCardStyle = "bg-[#00C896] hover:bg-[#00b084] text-white cursor-pointer shadow-md"; // Available
+                    let bedCardStyle = "bg-[#3F6B52] hover:bg-[#4C7E61] text-white cursor-pointer shadow-xs"; // Available
                     if (bed.status === "occupied") {
-                      bedCardStyle = "bg-red-500/70 text-white cursor-not-allowed opacity-60";
+                      bedCardStyle = "bg-[#5C2329]/80 text-[#F497A4] border border-[#8C3A45]/50 cursor-not-allowed";
                     } else if (bed.status === "sanitizing") {
-                      bedCardStyle = "bg-amber-400 text-slate-900 cursor-not-allowed opacity-80";
+                      bedCardStyle = "bg-[#5A3F20]/80 text-[#FAD79E] border border-[#C07830]/50 cursor-not-allowed";
                     }
 
                     if (isSelected) {
-                      bedCardStyle = "bg-[#13C5DD] text-white ring-4 ring-[#13C5DD]/50 scale-105 shadow-2xl";
+                      bedCardStyle = "bg-[#4A1F2B] text-white ring-2 ring-[#E2838E] scale-102 shadow-md";
                     }
 
                     return (
                       <div
                         key={bed.id}
                         onClick={() => handleBedClick(bed)}
-                        className={`p-3.5 rounded-xl border border-white/10 transition-all flex flex-col items-center justify-center text-center ${bedCardStyle}`}
+                        className={`p-3 rounded-md border border-white/10 transition-all flex flex-col items-center justify-center text-center ${bedCardStyle}`}
                       >
-                        <Bed className="w-6 h-6 mb-1" />
-                        <div className="text-xs font-extrabold font-poppins">{bed.code}</div>
-                        <div className="text-[9px] opacity-90 font-bold mt-0.5">
+                        <Bed className="w-5 h-5 mb-1" />
+                        <div className="text-xs font-bold font-sans">{bed.code}</div>
+                        <div className="text-[9px] opacity-90 font-medium mt-0.5">
                           {bed.status === "occupied"
                             ? "એડમિટ દર્દી"
                             : bed.status === "sanitizing"
@@ -234,12 +234,12 @@ export default function BedMatrixSection() {
                 </div>
 
                 {/* Room Amenities Drawing */}
-                <div className="pt-2 border-t border-slate-800 flex items-center justify-between text-[10px] text-slate-400 font-medium">
+                <div className="pt-2 border-t border-[#3E3842] flex items-center justify-between text-[10px] text-[#9B8E92] font-medium">
                   <span className="flex items-center gap-1">
-                    <Wind className="w-3 h-3 text-[#13C5DD]" /> AC સપોર્ટ
+                    <Wind className="w-3 h-3 text-[#E2838E]" /> AC સપોર્ટ
                   </span>
                   <span className="flex items-center gap-1">
-                    <Activity className="w-3 h-3 text-[#00C896]" /> ઓક્સિજન
+                    <Activity className="w-3 h-3 text-[#85B599]" /> ઓક્સિજન
                   </span>
                 </div>
               </div>
@@ -250,23 +250,23 @@ export default function BedMatrixSection() {
           <AnimatePresence>
             {selectedBed && (
               <motion.div
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 15 }}
-                className="relative z-10 p-5 rounded-2xl bg-white text-slate-900 shadow-2xl border-2 border-[#13C5DD] flex flex-col sm:flex-row items-center justify-between gap-4"
+                exit={{ opacity: 0, y: 12 }}
+                className="relative z-10 p-4 rounded-md bg-white dark:bg-[#242026] text-[#292727] dark:text-[#ECE5E7] shadow-[0_4px_16px_rgba(41,39,39,0.08)] border border-[#4A1F2B] dark:border-[#8C3A45] flex flex-col sm:flex-row items-center justify-between gap-4"
               >
                 <div className="flex items-center gap-4 text-left">
-                  <div className="w-12 h-12 rounded-2xl bg-[#13C5DD] text-white flex items-center justify-center font-bold shadow-md">
-                    <Bed className="w-7 h-7" />
+                  <div className="w-10 h-10 rounded-md bg-[#4A1F2B] text-white flex items-center justify-center font-bold shadow-xs">
+                    <Bed className="w-5 h-5" />
                   </div>
                   <div>
-                    <div className="text-xs text-[#13C5DD] font-extrabold uppercase tracking-wider">
+                    <div className="text-xs text-[#4A1F2B] dark:text-[#E2838E] font-bold uppercase tracking-wider">
                       નકશામાંથી પસંદ કરેલ રૂમ અને બેડ (Selected Bed Drawing)
                     </div>
-                    <div className="text-base font-extrabold font-poppins text-[#1D2A4D]">
+                    <div className="text-base font-bold font-sans text-[#292727] dark:text-[#ECE5E7]">
                       રૂમ: {selectedBed.roomNameGu} • બેડ નંબર: {selectedBed.code}
                     </div>
-                    <div className="text-xs text-slate-500 font-bold mt-0.5 flex flex-wrap items-center gap-3">
+                    <div className="text-xs text-[#686563] dark:text-[#9B8E92] font-medium mt-0.5 flex flex-wrap items-center gap-3">
                       <span>ઓક્સિજન સપોર્ટ: {selectedBed.hasOxygen ? "હાં" : "ના"}</span>
                       <span>• વેન્ટિલેટર: {selectedBed.hasVentilator ? "હાં" : "ના"}</span>
                       <span>• ચાર્જ: {selectedBed.dailyCharge}</span>
@@ -276,9 +276,9 @@ export default function BedMatrixSection() {
 
                 <button
                   onClick={() => setIsModalOpen(true)}
-                  className="w-full sm:w-auto px-6 py-3.5 rounded-full bg-[#13C5DD] hover:bg-[#10b1c7] text-white font-extrabold text-xs uppercase tracking-wider shadow-lg flex items-center justify-center gap-2"
+                  className="w-full sm:w-auto px-5 py-2.5 rounded-md bg-[#4A1F2B] hover:bg-[#5E2737] text-white font-medium text-xs uppercase tracking-wider shadow-xs flex items-center justify-center gap-2 transition-colors"
                 >
-                  <Sparkles className="w-4 h-4 text-yellow-300" />
+                  <Sparkles className="w-4 h-4 text-amber-300" />
                   આ બેડ ₹199 માં કન્ફર્મ કરો
                 </button>
               </motion.div>

@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base { html, body { margin: 0; padding: 0; } body { overscroll-behavior: none; } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; }</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "on-secondary-fixed": "#340f19", "surface-container-highest": "#e7e1e1", "on-error-container": "#93000a", "on-tertiary-container": "#9b90a8", "surface-variant": "#e7e1e1", "surface-tint": "#844f5c", "surface-container-high": "#ede7e6", "tertiary-container": "#32293d", "surface-dim": "#ded9d8", "on-tertiary-fixed-variant": "#4c4358", "surface": "#fef8f7", "on-secondary": "#ffffff", "secondary-fixed": "#ffd9df", "inverse-surface": "#323030", "secondary-fixed-dim": "#f6b5c2", "tertiary": "#1c1527", "outline": "#837376", "secondary": "#83505b", "surface-bright": "#fef8f7", "on-error": "#ffffff", "primary-fixed-dim": "#f7b5c3", "on-primary-fixed-variant": "#683845", "primary-container": "#4a1f2b", "on-surface": "#1d1b1b", "on-primary-container": "#c08491", "inverse-on-surface": "#f5efef", "on-primary": "#ffffff", "error-container": "#ffdad6", "on-primary-fixed": "#350e1a", "secondary-container": "#ffbeca", "on-secondary-container": "#7b4955", "surface-container-lowest": "#ffffff", "primary": "#310a17", "outline-variant": "#d5c2c5", "primary-fixed": "#ffd9e0", "on-background": "#1d1b1b", "on-tertiary": "#ffffff", "tertiary-fixed-dim": "#cfc2db", "surface-container-low": "#f8f2f2", "tertiary-fixed": "#ebddf8", "on-tertiary-fixed": "#20182b", "on-secondary-fixed-variant": "#673944", "inverse-primary": "#f7b5c3", "error": "#ba1a1a", "surface-container": "#f2edec", "background": "#fef8f7", "on-surface-variant": "#514346" }, "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, "spacing": { "gutter": "1rem", "space-xl": "1.5rem", "space-xs": "0.25rem", "space-md": "0.625rem", "margin-mobile": "0.75rem", "space-sm": "0.375rem", "gutter-mobile": "0.75rem", "margin": "1.5rem", "space-lg": "1rem" }, "fontFamily": { "display": ["\"Source Sans 3\""], "label-sm": ["\"Source Sans 3\""], "body-sm": ["\"Source Sans 3\""], "body-lg": ["\"Source Sans 3\""], "headline-lg": ["\"Source Sans 3\""], "body-md": ["\"Source Sans 3\""], "caption": ["\"Source Sans 3\""], "headline-md": ["\"Source Sans 3\""], "headline-sm": ["\"Source Sans 3\""], "label-md": ["\"Source Sans 3\""], "body": ["\"Source Sans 3\""], "headline": ["\"Source Sans 3\""], "label": ["\"Source Sans 3\""] }, "fontSize": { "display": ["1.75rem", { "lineHeight": "2.25rem", "letterSpacing": "-0.02em", "fontWeight": "600" }], "label-sm": ["0.75rem", { "lineHeight": "0.875rem", "letterSpacing": "0.025em", "fontWeight": "600" }], "body-sm": ["0.8125rem", { "lineHeight": "1.125rem", "letterSpacing": "0em", "fontWeight": "400" }], "body-lg": ["0.9375rem", { "lineHeight": "1.375rem", "letterSpacing": "0em", "fontWeight": "400" }], "headline-lg": ["1.375rem", { "lineHeight": "1.75rem", "letterSpacing": "-0.015em", "fontWeight": "600" }], "body-md": ["0.875rem", { "lineHeight": "1.25rem", "letterSpacing": "0em", "fontWeight": "400" }], "caption": ["0.6875rem", { "lineHeight": "0.875rem", "letterSpacing": "0.02em", "fontWeight": "500" }], "headline-md": ["1.125rem", { "lineHeight": "1.5rem", "letterSpacing": "-0.01em", "fontWeight": "600" }], "headline-sm": ["1rem", { "lineHeight": "1.375rem", "letterSpacing": "0em", "fontWeight": "600" }], "label-md": ["0.8125rem", { "lineHeight": "1rem", "letterSpacing": "0.01em", "fontWeight": "600" }] } } } };</script></head><body class="bg-surface-container-low font-body text-on-surface antialiased"><aside class="fixed left-0 top-0 h-screen w-64 bg-primary-container text-surface flex flex-col z-50 shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-14 px-margin flex items-center gap-space-md border-b border-primary/20 shrink-0"><img alt="MedCore Hospital Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1WPAnvO1qs78ytVQcC0yx8oMSqrl8EfwtHzVjvbNtzwNYXBy_MvGeT-4C8oCTKcKhkl6ttWWIFuM0ZqsPzB0-6rML2NFqC206SfOK6xm-noXz8XijIcrxz3sYEAQeVzJ9KoI7XEcpoSLRTkP6X-4vLjnfP4tyVTcfEshrw-EzWtTfQQ-BNZO3pznOPUkOmxVEYugbOIeUm_IjBz4V2UymFNnG7dpIoexMa7OQypNyN95g-M-8Ib3tmRBWcE"/><div class="flex flex-col min-w-0"><span class="font-headline-sm text-headline-sm text-surface truncate font-semibold leading-tight">MedCore HOS</span><span class="font-caption text-caption text-on-primary-container tracking-wider uppercase font-medium">Apex Healthcare</span></div></div><div class="flex-1 overflow-y-auto px-space-md py-space-md space-y-space-md"><nav class="space-y-space-xs" data-active-classes="bg-surface-container-lowest text-primary-container font-semibold rounded-lg shadow-sm"><div class="px-space-md pt-space-xs pb-space-xs font-caption text-caption uppercase tracking-wider text-on-primary-container font-semibold">OPERATIONS</div><a class="flex items-center gap-space-md px-space-md py-1.5 rounded-lg font-label-md text-label-md text-surface/80 hover:bg-surface-container-highest/10 hover:text-surface transition-colors" data-path="dashboard" href="#"><span class="material-symbols-outlined text-[1.125rem]">grid_view</span><span class="truncate">Dashboard</span></a><a class="flex items-center gap-space-md px-space-md py-1.5 rounded-lg font-label-md text-label-md text-surface/80 hover:bg-surface-container-highest/10 hover:text-surface transition-colors" data-path="patients" href="#"><span class="material-symbols-outlined text-[1.125rem]">personal_injury</span><span class="truncate">Patients</span></a><a class="flex items-center gap-space-md px-space-md py-1.5 rounded-lg font-label-md text-label-md text-surface/80 hover:bg-surface-container-highest/10 hover:text-surface transition-colors" data-path="appointments" href="#"><span class="material-symbols-outlined text-[1.125rem]">calendar_month</span><span class="truncate">Appointments</span></a><a class="flex items-center gap-space-md px-space-md py-1.5 rounded-lg font-label-md text-label-md text-surface/80 hover:bg-surface-container-highest/10 hover:text-surface transition-colors" data-path="opd" href="#"><span class="material-symbols-outlined text-[1.125rem]">clinical_notes</span><span class="truncate">OPD</span></a><a class="flex items-center gap-space-md px-space-md py-1.5 rounded-lg font-label-md text-label-md text-surface/80 hover:bg-surface-container-highest/10 hover:text-surface transition-colors" data-path="digital-token-board" href="#"><span class="material-symbols-outlined text-[1.125rem]">confirmation_number</span><span class="truncate">Digital Token Board</span></a></nav><div class="h-[1px] bg-primary/20 mx-space-sm"></div><nav class="space-y-space-xs" data-active-classes="bg-surface-container-lowest text-primary-container font-semibold rounded-lg shadow-sm"><div class="px-space-md pt-space-xs pb-space-xs font-caption text-caption uppercase tracking-wider text-on-primary-container font-semibold">CLINICAL</div><a aria-current="page" class="flex items-center gap-space-md px-space-md py-1.5 transition-colors bg-surface-container-lowest text-primary-container font-semibold rounded-lg shadow-sm" data-path="clinical-emr" href="#"><span class="material-symbols-outlined text-[1.125rem]">vital_signs</span><span class="truncate">Clinical EMR</span></a><a class="flex items-center gap-space-md px-space-md py-1.5 rounded-lg font-label-md text-label-md text-surface/80 hover:bg-surface-container-highest/10 hover:text-surface transition-colors" data-path="nursing-station" href="#"><span class="material-symbols-outlined text-[1.125rem]">vaccines</span><span class="truncate">Nursing Station</span></a><a class="flex items-center gap-space-md px-space-md py-1.5 rounded-lg font-label-md text-label-md text-surface/80 hover:bg-surface-container-highest/10 hover:text-surface transition-colors" data-path="inpatient-beds" href="#"><span class="material-symbols-outlined text-[1.125rem]">single_bed</span><span class="truncate">Inpatient / Beds</span></a><a class="flex items-center gap-space-md px-space-md py-1.5 rounded-lg font-label-md text-label-md text-surface/80 hover:bg-surface-container-highest/10 hover:text-surface transition-colors" data-path="ot-module" href="#"><span class="material-symbols-outlined text-[1.125rem]">medical_services</span><span class="truncate">OT Module</span></a></nav><div class="h-[1px] bg-primary/20 mx-space-sm"></div><nav class="space-y-space-xs" data-active-classes="bg-surface-container-lowest text-primary-container font-semibold rounded-lg shadow-sm"><div class="px-space-md pt-space-xs pb-space-xs font-caption text-caption uppercase tracking-wider text-on-primary-container font-semibold">DIAGNOSTICS</div><a class="flex items-center gap-space-md px-space-md py-1.5 rounded-lg font-label-md text-label-md text-surface/80 hover:bg-surface-container-highest/10 hover:text-surface transition-colors" data-path="laboratory-lis" href="#"><span class="material-symbols-outlined text-[1.125rem]">biotech</span><span class="truncate">Laboratory (LIS)</span></a><a class="flex items-center gap-space-md px-space-md py-1.5 rounded-lg font-label-md text-label-md text-surface/80 hover:bg-surface-container-highest/10 hover:text-surface transition-colors" data-path="radiology-ris" href="#"><span class="material-symbols-outlined text-[1.125rem]">radiology</span><span class="truncate">Radiology (RIS)</span></a></nav><div class="h-[1px] bg-primary/20 mx-space-sm"></div><nav class="space-y-space-xs" data-active-classes="bg-surface-container-lowest text-primary-container font-semibold rounded-lg shadow-sm"><div class="px-space-md pt-space-xs pb-space-xs font-caption text-caption uppercase tracking-wider text-on-primary-container font-semibold">SUPPORT</div><a class="flex items-center gap-space-md px-space-md py-1.5 rounded-lg font-label-md text-label-md text-surface/80 hover:bg-surface-container-highest/10 hover:text-surface transition-colors" data-path="pharmacy-fefo" href="#"><span class="material-symbols-outlined text-[1.125rem]">prescriptions</span><span class="truncate">Pharmacy (FEFO)</span></a><a class="flex items-center gap-space-md px-space-md py-1.5 rounded-lg font-label-md text-label-md text-surface/80 hover:bg-surface-container-highest/10 hover:text-surface transition-colors" data-path="billing-invoices" href="#"><span class="material-symbols-outlined text-[1.125rem]">receipt_long</span><span class="truncate">Billing &amp; Invoices</span></a><a class="flex items-center gap-space-md px-space-md py-1.5 rounded-lg font-label-md text-label-md text-surface/80 hover:bg-surface-container-highest/10 hover:text-surface transition-colors" data-path="insurance-tpa" href="#"><span class="material-symbols-outlined text-[1.125rem]">health_and_safety</span><span class="truncate">Insurance / TPA</span></a></nav><div class="h-[1px] bg-primary/20 mx-space-sm"></div><nav class="space-y-space-xs" data-active-classes="bg-surface-container-lowest text-primary-container font-semibold rounded-lg shadow-sm"><div class="px-space-md pt-space-xs pb-space-xs font-caption text-caption uppercase tracking-wider text-on-primary-container font-semibold">ADMINISTRATION</div><a class="flex items-center gap-space-md px-space-md py-1.5 rounded-lg font-label-md text-label-md text-surface/80 hover:bg-surface-container-highest/10 hover:text-surface transition-colors" data-path="emergency-triage" href="#"><span class="material-symbols-outlined text-[1.125rem]">emergency</span><span class="truncate">Emergency Triage</span></a><a class="flex items-center gap-space-md px-space-md py-1.5 rounded-lg font-label-md text-label-md text-surface/80 hover:bg-surface-container-highest/10 hover:text-surface transition-colors" data-path="reports" href="#"><span class="material-symbols-outlined text-[1.125rem]">analytics</span><span class="truncate">Reports</span></a><a class="flex items-center gap-space-md px-space-md py-1.5 rounded-lg font-label-md text-label-md text-surface/80 hover:bg-surface-container-highest/10 hover:text-surface transition-colors" data-path="staff-rbac" href="#"><span class="material-symbols-outlined text-[1.125rem]">badge</span><span class="truncate">Staff &amp; RBAC</span></a><a class="flex items-center gap-space-md px-space-md py-1.5 rounded-lg font-label-md text-label-md text-surface/80 hover:bg-surface-container-highest/10 hover:text-surface transition-colors" data-path="audit-logs" href="#"><span class="material-symbols-outlined text-[1.125rem]">shield_with_heart</span><span class="truncate">Audit Logs</span></a></nav></div><div class="p-space-md border-t border-primary/20 bg-primary/40 shrink-0"><div class="flex items-center gap-space-sm"><div class="w-2 h-2 rounded-full bg-surface-container-lowest animate-pulse"></div><span class="font-caption text-caption text-on-primary-container uppercase tracking-wider font-semibold">System Online · Shift A</span></div></div></aside><div class="pl-64"><header class="fixed top-0 left-64 right-0 h-14 bg-surface-container-lowest border-b border-outline-variant/40 z-40 flex items-center justify-between px-space-xl"><div class="flex items-center gap-space-md min-w-0"><div class="hidden xl:flex items-center gap-space-xs font-label-sm text-label-sm text-on-surface-variant shrink-0"><span>MedCore</span><span class="text-outline-variant">/</span><span class="text-on-surface font-semibold truncate">Clinical Operations</span></div><div class="h-4 w-[1px] bg-outline-variant/60 hidden xl:block"></div><div class="flex items-center gap-space-xs px-space-sm py-1 rounded bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm hover:bg-surface-container transition-colors cursor-pointer"><span class="material-symbols-outlined text-[1rem] text-secondary">apartment</span><span class="font-medium text-on-surface truncate max-w-[200px] 2xl:max-w-none">Main Campus — General Hospital &amp; Trauma Wing</span><span class="material-symbols-outlined text-[1rem]">arrow_drop_down</span></div></div><div class="flex items-center gap-space-md shrink-0"><div class="relative w-80 hidden md:block"><span class="material-symbols-outlined absolute left-space-sm top-1/2 -translate-y-1/2 text-outline text-[1.125rem]">search</span><input class="w-full h-8 pl-8 pr-14 rounded-lg bg-surface-container-low border border-outline-variant/60 font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:border-primary-container focus:bg-surface-container-lowest transition-all" placeholder="Universal UHID / Patient search..." type="text"/><kbd class="absolute right-space-sm top-1/2 -translate-y-1/2 font-caption text-caption px-1.5 py-0.5 rounded bg-surface-container border border-outline-variant/60 text-on-surface-variant font-mono">Ctrl+K</kbd></div><div class="inline-flex items-center gap-1.5 px-space-sm py-1 rounded border border-error/30 bg-error-container/40 text-on-error-container font-label-sm text-label-sm font-semibold"><span class="w-1.5 h-1.5 rounded-full bg-error animate-ping"></span><span>TRIAGE L1 ACTIVE</span></div><button class="relative p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined text-[1.25rem]">notifications</span><span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-error ring-2 ring-surface-container-lowest"></span></button><div class="h-6 w-[1px] bg-outline-variant/60"></div><div class="flex items-center gap-space-sm pl-space-xs"><div class="flex flex-col text-right hidden sm:flex"><span class="font-label-md text-label-md text-on-surface font-semibold leading-tight">Dr. Vikram Rao, MD</span><span class="font-caption text-caption text-on-surface-variant">Superadmin / Clinical Admin</span></div><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-1 ring-outline-variant/60" src="https://lh3.googleusercontent.com/aida-public/AB6AXuATfgZHGMnojN3zkJSHOZuOB6yHcKKqH6iOm66uz2apxPkPPdBLAAqmJiZseb8E1PcunCXG6OjXk4uY6KhVFkaCQYni6Rv7i3epnIktTMKmvzax8W7SB6T8PmJEYkUtpbwB8eeFsFxl3Z4eiS0DMv1hoIzH_w8kMX_2qoC-g70t-dSRklEr-e5mNqeKTAGigdtCSMYCptZgcdLb-wv1MwgTTVJJyo7wGOLumkyXQMzBDK5U8JWCMx2U0A"/></div></div></header><main class="w-full pt-14 px-margin py-margin bg-surface-container-low min-h-screen"><div class="flex flex-col w-full gap-space-md">
+<!-- CLINICAL DEMOGRAPHIC & SAFETY BANNER -->
+<section class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col">
+<!-- Top Primary Ribbon: Identity, Critical Identifiers, Emergency Info -->
+<div class="px-space-lg py-space-md bg-surface-container flex flex-wrap items-center justify-between gap-y-space-xs gap-x-space-lg">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="relative shrink-0">
+<div class="w-11 h-11 rounded-lg bg-primary-container text-surface flex items-center justify-center font-headline-md text-headline-md">
+            RP
+          </div>
+<span class="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-surface-container-lowest flex items-center justify-center">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-sm flex-wrap">
+<h1 class="font-headline-md text-headline-md text-on-surface tracking-tight truncate">Rahul Patel</h1>
+<span class="font-label-sm text-label-sm px-space-xs py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-medium">48 Yrs • Male</span>
+<span class="font-caption text-caption px-space-xs py-0.5 rounded bg-secondary-container text-on-secondary-container font-semibold tracking-wide">OPD TOKEN #A-104</span>
+</div>
+<div class="flex items-center gap-space-md font-caption text-caption text-on-surface-variant mt-0.5">
+<span><strong class="text-on-surface font-semibold">UHID:</strong> MC-2026-000101</span>
+<span>•</span>
+<span><strong class="text-on-surface font-semibold">Attending:</strong> Dr. Vikram Rao, MD</span>
+<span>•</span>
+<span class="inline-flex items-center gap-1 text-on-surface">
+<span class="material-symbols-outlined text-[0.875rem] text-secondary">support_agent</span>
+              Emergency: Sunita Patel (Wife) +91 98201 44321
+            </span>
+</div>
+</div>
+</div>
+<!-- Quick Actions / Queue Control -->
+<div class="flex items-center gap-space-xs shrink-0">
+<div class="flex items-center gap-1.5 px-space-sm py-1 rounded bg-surface-container-lowest text-on-surface font-label-sm text-label-sm shadow-sm">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="text-on-surface-variant">Status:</span>
+<span class="font-semibold">In Consultation</span>
+</div>
+<button class="h-8 px-space-sm rounded bg-surface-container-highest text-on-surface font-label-sm text-label-sm hover:bg-surface-container-high transition-colors flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[1rem]">swap_horiz</span>
+          Transfer
+        </button>
+<button class="h-8 px-space-sm rounded bg-surface-container-highest text-on-surface font-label-sm text-label-sm hover:bg-surface-container-high transition-colors flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[1rem]">history</span>
+          Queue: #4 of 18
+        </button>
+</div>
+</div>
+<!-- Secondary Demographic Bar: Physical Metrics & Critical Red Allergies Alert -->
+<div class="px-space-lg py-space-sm flex flex-wrap items-center justify-between gap-space-md">
+<!-- Physiological Baselines -->
+<div class="flex flex-wrap items-center gap-x-space-lg gap-y-1 font-body-sm text-body-sm">
+<div class="flex items-baseline gap-1">
+<span class="font-caption text-caption uppercase text-on-surface-variant font-semibold">Blood Group:</span>
+<span class="font-label-md text-label-md font-bold text-primary-container">B+ve</span>
+</div>
+<div class="flex items-baseline gap-1">
+<span class="font-caption text-caption uppercase text-on-surface-variant font-semibold">Weight:</span>
+<span class="font-label-md text-label-md font-semibold text-on-surface">74</span>
+<span class="font-caption text-caption text-outline">kg</span>
+</div>
+<div class="flex items-baseline gap-1">
+<span class="font-caption text-caption uppercase text-on-surface-variant font-semibold">Height:</span>
+<span class="font-label-md text-label-md font-semibold text-on-surface">172</span>
+<span class="font-caption text-caption text-outline">cm</span>
+</div>
+<div class="flex items-baseline gap-1">
+<span class="font-caption text-caption uppercase text-on-surface-variant font-semibold">BMI:</span>
+<span class="font-label-md text-label-md font-bold text-on-surface">25.0</span>
+<span class="font-caption text-caption px-1 rounded bg-secondary-fixed text-on-secondary-fixed font-semibold">Borderline</span>
+</div>
+<div class="flex items-baseline gap-1">
+<span class="font-caption text-caption uppercase text-on-surface-variant font-semibold">Primary Payer:</span>
+<span class="font-label-sm text-label-sm text-on-surface font-medium">Star Health Gold (TPA Authorized)</span>
+</div>
+</div>
+<!-- CRITICAL ALLERGY SHIELD (Burgundy / High-visibility Safety Alert) -->
+<div class="flex items-center gap-space-sm px-space-md py-1 rounded-lg bg-error-container text-on-error-container shadow-sm">
+<div class="flex items-center gap-1 shrink-0">
+<span class="material-symbols-outlined text-[1.125rem] text-error font-bold">warning</span>
+<span class="font-label-sm text-label-sm uppercase font-bold tracking-wider text-error">CRITICAL ALLERGIES:</span>
+</div>
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="px-2 py-0.5 rounded bg-surface-container-lowest text-error font-label-sm text-label-sm font-bold shadow-xs">
+            Penicillin (Anaphylaxis Risk)
+          </span>
+<span class="px-2 py-0.5 rounded bg-surface-container-lowest text-on-error-container font-label-sm text-label-sm font-semibold">
+            NSAIDs (Gastric Bleed / Gastritis)
+          </span>
+</div>
+</div>
+</div>
+</section>
+<!-- TABBED CLINICAL WORKSPACE NAVIGATION -->
+<nav class="flex items-center justify-between bg-surface-container-lowest px-space-md py-1 rounded-xl shadow-sm overflow-x-auto">
+<div class="flex items-center gap-1 min-w-max">
+<button class="flex items-center gap-space-xs px-space-md py-2 rounded-lg bg-primary-container text-surface font-label-md text-label-md shadow-xs transition-all" type="button">
+<span class="material-symbols-outlined text-[1.125rem]">edit_note</span>
+<span>Clinical Notes &amp; Consultation</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface font-label-md text-label-md transition-colors" type="button">
+<span class="material-symbols-outlined text-[1.125rem]">history_edu</span>
+<span>Visits (6)</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface font-label-md text-label-md transition-colors" type="button">
+<span class="material-symbols-outlined text-[1.125rem]">prescriptions</span>
+<span>Past Prescriptions</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface font-label-md text-label-md transition-colors" type="button">
+<span class="material-symbols-outlined text-[1.125rem]">biotech</span>
+<span>Laboratory (LIS)</span>
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+</button>
+<button class="flex items-center gap-space-xs px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface font-label-md text-label-md transition-colors" type="button">
+<span class="material-symbols-outlined text-[1.125rem]">radiology</span>
+<span>Radiology (RIS)</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface font-label-md text-label-md transition-colors" type="button">
+<span class="material-symbols-outlined text-[1.125rem]">payments</span>
+<span>Billing &amp; Insurance</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface font-label-md text-label-md transition-colors" type="button">
+<span class="material-symbols-outlined text-[1.125rem]">folder_open</span>
+<span>Documents</span>
+</button>
+</div>
+<!-- Clinical Mode Utility Switcher -->
+<div class="hidden lg:flex items-center gap-2 pl-space-md shrink-0">
+<span class="font-caption text-caption text-outline font-mono">EMR v4.19</span>
+<button class="p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface" title="Clinical Calculator" type="button">
+<span class="material-symbols-outlined text-[1.125rem]">calculate</span>
+</button>
+<button class="p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface" title="Expand Dual Screen" type="button">
+<span class="material-symbols-outlined text-[1.125rem]">splitscreen</span>
+</button>
+</div>
+</nav>
+<!-- 2-COLUMN CLINICAL CONSULTATION WORKSPACE -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-space-md items-start">
+<!-- LEFT COLUMN: Clinical Notes, Vitals, Differential Diagnosis, SOAP (7 Cols) -->
+<div class="xl:col-span-7 flex flex-col gap-space-md">
+<!-- VITALS MATRIX RIBBON -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-md flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-secondary text-[1.125rem]">vital_signs</span>
+<span class="font-label-md text-label-md text-on-surface uppercase tracking-wider font-semibold">Triage Vitals Matrix</span>
+</div>
+<span class="font-caption text-caption text-outline">Recorded 10:14 AM by Nurse Priya K.</span>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-5 gap-space-xs">
+<!-- BP Tile -->
+<div class="bg-surface-container-low rounded-lg p-space-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-caption text-caption uppercase text-on-surface-variant font-semibold">Blood Pressure</span>
+<span class="material-symbols-outlined text-[0.875rem] text-secondary">monitor_heart</span>
+</div>
+<div class="flex items-baseline gap-1 mt-1">
+<span class="font-headline-md text-headline-md font-bold text-on-surface tracking-tight">128/82</span>
+<span class="font-caption text-caption text-outline">mmHg</span>
+</div>
+<div class="flex items-center gap-1 mt-1 font-caption text-caption text-on-surface-variant">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+              Controlled
+            </div>
+</div>
+<!-- Pulse Tile -->
+<div class="bg-surface-container-low rounded-lg p-space-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-caption text-caption uppercase text-on-surface-variant font-semibold">Pulse Rate</span>
+<span class="material-symbols-outlined text-[0.875rem] text-secondary">favorite</span>
+</div>
+<div class="flex items-baseline gap-1 mt-1">
+<span class="font-headline-md text-headline-md font-bold text-on-surface tracking-tight">76</span>
+<span class="font-caption text-caption text-outline">bpm</span>
+</div>
+<div class="flex items-center gap-1 mt-1 font-caption text-caption text-on-surface-variant">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+              Regular Sinus
+            </div>
+</div>
+<!-- Temp Tile -->
+<div class="bg-surface-container-low rounded-lg p-space-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-caption text-caption uppercase text-on-surface-variant font-semibold">Temperature</span>
+<span class="material-symbols-outlined text-[0.875rem] text-secondary">device_thermostat</span>
+</div>
+<div class="flex items-baseline gap-1 mt-1">
+<span class="font-headline-md text-headline-md font-bold text-on-surface tracking-tight">98.4</span>
+<span class="font-caption text-caption text-outline">°F</span>
+</div>
+<div class="flex items-center gap-1 mt-1 font-caption text-caption text-on-surface-variant">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+              Afebrile
+            </div>
+</div>
+<!-- SpO2 Tile -->
+<div class="bg-surface-container-low rounded-lg p-space-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-caption text-caption uppercase text-on-surface-variant font-semibold">SpO2 (Room Air)</span>
+<span class="material-symbols-outlined text-[0.875rem] text-secondary">air</span>
+</div>
+<div class="flex items-baseline gap-1 mt-1">
+<span class="font-headline-md text-headline-md font-bold text-on-surface tracking-tight">99</span>
+<span class="font-caption text-caption text-outline">%</span>
+</div>
+<div class="flex items-center gap-1 mt-1 font-caption text-caption text-on-surface-variant">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+              Adequate
+            </div>
+</div>
+<!-- RBS Tile -->
+<div class="bg-surface-container-low rounded-lg p-space-sm flex flex-col justify-between col-span-2 sm:col-span-1">
+<div class="flex items-center justify-between">
+<span class="font-caption text-caption uppercase text-on-surface-variant font-semibold">Random Glucose</span>
+<span class="material-symbols-outlined text-[0.875rem] text-secondary">water_drop</span>
+</div>
+<div class="flex items-baseline gap-1 mt-1">
+<span class="font-headline-md text-headline-md font-bold text-secondary tracking-tight">142</span>
+<span class="font-caption text-caption text-outline">mg/dL</span>
+</div>
+<div class="flex items-center gap-1 mt-1 font-caption text-caption text-secondary">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+              Elevated Post-meal
+            </div>
+</div>
+</div>
+</div>
+<!-- CHIEF COMPLAINT & MEDICAL HISTORY MODULE -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-md flex flex-col gap-space-md">
+<!-- Chief Complaint Callout -->
+<div class="bg-surface-container-low rounded-lg p-space-md flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase font-bold text-primary-container tracking-wider flex items-center gap-1">
+<span class="material-symbols-outlined text-[1rem]">record_voice_over</span>
+              Chief Presenting Complaint
+            </span>
+<span class="font-caption text-caption text-outline">Duration: 3 Weeks</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface font-medium leading-relaxed">
+            Severe burning epigastric discomfort radiating retrosternally for 3 weeks, aggravated post-prandial (especially after spicy or oily meals), accompanied by intermittent morning nausea and acid regurgitation.
+          </p>
+</div>
+<!-- Past Medical & Comorbidity Profile -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-sm">
+<div class="bg-surface-container-low rounded-lg p-space-sm flex flex-col gap-1">
+<span class="font-caption text-caption uppercase text-on-surface-variant font-semibold">Active Comorbidities</span>
+<ul class="font-body-sm text-body-sm text-on-surface space-y-1">
+<li class="flex items-start gap-1.5">
+<span class="material-symbols-outlined text-[1rem] text-secondary shrink-0 mt-0.5">check_circle</span>
+<span><strong>Type 2 Diabetes Mellitus:</strong> 6 years (Latest HbA1c 7.1% on 12-Jan-2026).</span>
+</li>
+<li class="flex items-start gap-1.5">
+<span class="material-symbols-outlined text-[1rem] text-secondary shrink-0 mt-0.5">check_circle</span>
+<span><strong>Essential Hypertension:</strong> Controlled on Telmisartan 40mg OD.</span>
+</li>
+</ul>
+</div>
+<div class="bg-surface-container-low rounded-lg p-space-sm flex flex-col gap-1">
+<span class="font-caption text-caption uppercase text-on-surface-variant font-semibold">Social &amp; Family History</span>
+<ul class="font-body-sm text-body-sm text-on-surface space-y-1">
+<li class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[1rem] text-outline shrink-0">smoke_free</span>
+<span>Non-smoker; Occasional alcohol (social, suspended).</span>
+</li>
+<li class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[1rem] text-outline shrink-0">family_restroom</span>
+<span>Father had CAD at age 62; Mother has Osteoarthritis.</span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- PROVISIONAL & CODIFIED DIAGNOSES (ICD-10) -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-md flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-secondary text-[1.125rem]">diagnosis</span>
+<span class="font-label-md text-label-md text-on-surface uppercase tracking-wider font-semibold">Assessment &amp; ICD-10 Coding</span>
+</div>
+<button class="text-primary-container hover:text-secondary font-label-sm text-label-sm font-semibold flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[1rem]">add_circle</span>
+            Add ICD-10 Code
+          </button>
+</div>
+<!-- Codified List -->
+<div class="space-y-space-xs">
+<!-- Diagnosis 1 -->
+<div class="flex items-center justify-between p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-space-sm min-w-0">
+<span class="font-caption text-caption px-2 py-0.5 rounded bg-primary-container text-surface font-mono font-bold shrink-0">K21.9</span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface font-semibold truncate">Gastro-esophageal reflux disease without esophagitis</span>
+<span class="font-caption text-caption text-on-surface-variant">Upper GI / Digestive Disorders • Clinical Rule Confirmed</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<span class="px-2 py-0.5 rounded bg-secondary-container text-on-secondary-container font-caption text-caption font-bold">PRIMARY</span>
+<button class="text-outline hover:text-error p-1" type="button">
+<span class="material-symbols-outlined text-[1.125rem]">close</span>
+</button>
+</div>
+</div>
+<!-- Diagnosis 2 -->
+<div class="flex items-center justify-between p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-space-sm min-w-0">
+<span class="font-caption text-caption px-2 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-mono font-bold shrink-0">E11.9</span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface font-semibold truncate">Type 2 diabetes mellitus without complications</span>
+<span class="font-caption text-caption text-on-surface-variant">Endocrine, Nutritional and Metabolic Diseases • Ongoing Regimen</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<span class="px-2 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-caption text-caption font-semibold">CHRONIC</span>
+<button class="text-outline hover:text-error p-1" type="button">
+<span class="material-symbols-outlined text-[1.125rem]">close</span>
+</button>
+</div>
+</div>
+</div>
+<!-- ICD Search Bar -->
+<div class="relative mt-1">
+<span class="material-symbols-outlined absolute left-space-sm top-1/2 -translate-y-1/2 text-outline text-[1.125rem]">search</span>
+<input class="w-full h-8 pl-8 pr- space-md rounded-lg bg-surface-container-low text-on-surface font-body-sm text-body-sm placeholder:text-outline focus:outline-none focus:bg-surface-container-lowest transition-all" placeholder="Search SNOMED CT or ICD-10 code (e.g. Gastritis, Dyspepsia, K29.7)..." type="text"/>
+</div>
+</div>
+<!-- STRUCTURED SOAP CLINICAL NOTES -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-md flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-secondary text-[1.125rem]">clinical_notes</span>
+<span class="font-label-md text-label-md text-on-surface uppercase tracking-wider font-semibold">SOAP Clinical Documentation</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-caption text-caption text-outline">Auto-saved at 10:21 AM</span>
+<button class="h-6 px-2 rounded bg-surface-container text-on-surface-variant hover:bg-surface-container-high font-caption text-caption font-semibold flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[0.875rem]">mic</span> Dictate
+            </button>
+</div>
+</div>
+<!-- Soap Editor Area with Structured Tabs/Blocks -->
+<div class="space-y-space-xs font-body-sm text-body-sm">
+<!-- S: Subjective -->
+<div class="bg-surface-container-low rounded-lg p-space-sm flex flex-col gap-0.5">
+<span class="font-label-sm text-label-sm font-bold text-primary-container uppercase tracking-wider">[S] SUBJECTIVE:</span>
+<p class="text-on-surface text-body-sm leading-relaxed">
+              Patient reports persistent burning chest sensation behind sternum for 20+ days. No true dysphagia, odynophagia, hematemesis, or melena noted. Relieved transiently by commercial antacid gel. Sleep interrupted twice weekly due to nocturnal reflux.
+            </p>
+</div>
+<!-- O: Objective -->
+<div class="bg-surface-container-low rounded-lg p-space-sm flex flex-col gap-0.5">
+<span class="font-label-sm text-label-sm font-bold text-primary-container uppercase tracking-wider">[O] OBJECTIVE:</span>
+<p class="text-on-surface text-body-sm leading-relaxed">
+              Abdomen: Soft, mild tenderness on deep palpation at epigastrium. No guarding, rigidity, or rebound tenderness. No organomegaly. Bowel sounds present and active in all 4 quadrants. Chest clear to auscultation bilaterally, S1/S2 heard normal.
+            </p>
+</div>
+<!-- A: Assessment -->
+<div class="bg-surface-container-low rounded-lg p-space-sm flex flex-col gap-0.5">
+<span class="font-label-sm text-label-sm font-bold text-primary-container uppercase tracking-wider">[A] ASSESSMENT:</span>
+<p class="text-on-surface text-body-sm leading-relaxed">
+              GERD (uncomplicated, grade provisional), exacerbated by dietary factors and sedentary desk routine. Comorbid Type 2 DM remains reasonably regulated; continue metabolic oversight. Rule out H. pylori and active mucosal erosion.
+            </p>
+</div>
+<!-- P: Plan -->
+<div class="bg-surface-container-low rounded-lg p-space-sm flex flex-col gap-0.5">
+<span class="font-label-sm text-label-sm font-bold text-primary-container uppercase tracking-wider">[P] PLAN &amp; CLINICAL INSTRUCTIONS:</span>
+<p class="text-on-surface text-body-sm leading-relaxed">
+              Initiate 14-day high-potency PPI therapy with prokinetic support. Advise 2-hour post-prandial upright position, head-of-bed elevation (15-20cm), avoid late dinners and high-fat intake. Schedule routine Upper GI Endoscopy for diagnostic clearance.
+            </p>
+</div>
+</div>
+</div>
+</div>
+<!-- RIGHT COLUMN: Active Prescriptions (Rx) & CPOE Diagnostic Orders (5 Cols) -->
+<div class="xl:col-span-5 flex flex-col gap-space-md">
+<!-- PRESCRIPTIONS (Rx) MANAGER -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm flex flex-col overflow-hidden">
+<!-- Header -->
+<div class="p-space-md flex items-center justify-between bg-surface-container">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-secondary text-[1.25rem]">medication</span>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-semibold leading-none">Prescription Management (Rx)</h2>
+<span class="font-caption text-caption text-on-surface-variant">3 Active Medications Prescribed Today</span>
+</div>
+</div>
+<button class="h-7 px-space-sm rounded bg-primary-container text-surface font-label-sm text-label-sm font-semibold hover:bg-secondary transition-colors flex items-center gap-1 shadow-xs" type="button">
+<span class="material-symbols-outlined text-[1rem]">add</span>
+            Add Drug
+          </button>
+</div>
+<!-- Drug Interaction / Safety Check Banner -->
+<div class="px-space-md py-1 bg-surface-container-low flex items-center justify-between text-on-surface">
+<div class="flex items-center gap-1.5 font-caption text-caption">
+<span class="material-symbols-outlined text-[1rem] text-secondary">verified_user</span>
+<span class="text-on-surface-variant">CDSS Safety Check:</span>
+<span class="font-semibold text-secondary">0 Severe Cross-Reactions Detected</span>
+</div>
+<span class="font-caption text-caption text-outline">FEFO Stock Validated</span>
+</div>
+<!-- Prescribed Items List (Dense, Highly Functional Medical Rows) -->
+<div class="p-space-md space-y-space-sm">
+<!-- Drug Item 1: Pantoprazole -->
+<div class="bg-surface-container-low rounded-lg p-space-sm flex flex-col gap-1.5 hover:bg-surface-container transition-colors">
+<div class="flex items-start justify-between gap-2">
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-2">
+<span class="font-label-md text-label-md text-on-surface font-bold truncate">Tab. Pantoprazole 40mg</span>
+<span class="font-caption text-caption px-1.5 py-0.2 rounded bg-surface-container-highest text-on-surface-variant font-mono">Oral</span>
+</div>
+<span class="font-caption text-caption text-outline">Proton Pump Inhibitor (Generic: Pantoprazole Sodium)</span>
+</div>
+<div class="text-right shrink-0">
+<span class="font-label-md text-label-md font-bold text-primary-container">14 Days</span>
+<div class="font-caption text-caption text-on-surface-variant">Qty: 14 Tabs</div>
+</div>
+</div>
+<!-- Regimen Metadata Badges -->
+<div class="flex flex-wrap items-center gap-1 font-caption text-caption">
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface font-medium">1 tab • Once daily (1 - 0 - 0)</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface font-medium">Before breakfast</span>
+</div>
+<!-- Specific Patient Directions -->
+<div class="bg-surface-container-lowest rounded p-1.5 flex items-center justify-between text-on-surface-variant">
+<div class="flex items-center gap-1 font-caption text-caption italic">
+<span class="material-symbols-outlined text-[0.875rem] text-secondary">info</span>
+<span>Instructions: Take on empty stomach 30 mins prior to morning food.</span>
+</div>
+<div class="flex items-center gap-1 shrink-0">
+<button class="text-outline hover:text-on-surface p-0.5" title="Edit Regimen" type="button">
+<span class="material-symbols-outlined text-[1rem]">edit</span>
+</button>
+<button class="text-outline hover:text-error p-0.5" title="Remove" type="button">
+<span class="material-symbols-outlined text-[1rem]">delete</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Drug Item 2: Domperidone -->
+<div class="bg-surface-container-low rounded-lg p-space-sm flex flex-col gap-1.5 hover:bg-surface-container transition-colors">
+<div class="flex items-start justify-between gap-2">
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-2">
+<span class="font-label-md text-label-md text-on-surface font-bold truncate">Tab. Domperidone 10mg</span>
+<span class="font-caption text-caption px-1.5 py-0.2 rounded bg-surface-container-highest text-on-surface-variant font-mono">Oral</span>
+</div>
+<span class="font-caption text-caption text-outline">Prokinetic • Antiemetic</span>
+</div>
+<div class="text-right shrink-0">
+<span class="font-label-md text-label-md font-bold text-primary-container">10 Days</span>
+<div class="font-caption text-caption text-on-surface-variant">Qty: 20 Tabs</div>
+</div>
+</div>
+<!-- Regimen Metadata Badges -->
+<div class="flex flex-wrap items-center gap-1 font-caption text-caption">
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface font-medium">1 tab • Twice daily (1 - 0 - 1)</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface font-medium">Before meals</span>
+</div>
+<!-- Specific Patient Directions -->
+<div class="bg-surface-container-lowest rounded p-1.5 flex items-center justify-between text-on-surface-variant">
+<div class="flex items-center gap-1 font-caption text-caption italic">
+<span class="material-symbols-outlined text-[0.875rem] text-secondary">info</span>
+<span>Instructions: Take SOS if nausea or post-prandial fullness recurs.</span>
+</div>
+<div class="flex items-center gap-1 shrink-0">
+<button class="text-outline hover:text-on-surface p-0.5" title="Edit Regimen" type="button">
+<span class="material-symbols-outlined text-[1rem]">edit</span>
+</button>
+<button class="text-outline hover:text-error p-0.5" title="Remove" type="button">
+<span class="material-symbols-outlined text-[1rem]">delete</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Drug Item 3: Metformin (Chronic Regular) -->
+<div class="bg-surface-container-low rounded-lg p-space-sm flex flex-col gap-1.5 hover:bg-surface-container transition-colors">
+<div class="flex items-start justify-between gap-2">
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-2">
+<span class="font-label-md text-label-md text-on-surface font-bold truncate">Tab. Metformin 500mg</span>
+<span class="font-caption text-caption px-1.5 py-0.2 rounded bg-surface-container-highest text-on-surface-variant font-mono">Oral</span>
+<span class="font-caption text-caption px-1.5 py-0.2 rounded bg-secondary-fixed text-on-secondary-fixed font-semibold">Chronic Refill</span>
+</div>
+<span class="font-caption text-caption text-outline">Biguanide • Blood Glucose Regulator</span>
+</div>
+<div class="text-right shrink-0">
+<span class="font-label-md text-label-md font-bold text-primary-container">30 Days</span>
+<div class="font-caption text-caption text-on-surface-variant">Qty: 60 Tabs</div>
+</div>
+</div>
+<!-- Regimen Metadata Badges -->
+<div class="flex flex-wrap items-center gap-1 font-caption text-caption">
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface font-medium">1 tab • Twice daily (1 - 0 - 1)</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface font-medium">Post meals</span>
+</div>
+<!-- Specific Patient Directions -->
+<div class="bg-surface-container-lowest rounded p-1.5 flex items-center justify-between text-on-surface-variant">
+<div class="flex items-center gap-1 font-caption text-caption italic">
+<span class="material-symbols-outlined text-[0.875rem] text-secondary">info</span>
+<span>Instructions: Continue regular antidiabetic regimen; monitor fasting FBS.</span>
+</div>
+<div class="flex items-center gap-1 shrink-0">
+<button class="text-outline hover:text-on-surface p-0.5" title="Edit Regimen" type="button">
+<span class="material-symbols-outlined text-[1rem]">edit</span>
+</button>
+<button class="text-outline hover:text-error p-0.5" title="Remove" type="button">
+<span class="material-symbols-outlined text-[1rem]">delete</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- DIAGNOSTIC REQUISITIONS (CPOE: LAB & RADIOLOGY) -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm flex flex-col overflow-hidden">
+<!-- Header -->
+<div class="p-space-md flex items-center justify-between bg-surface-container">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-secondary text-[1.25rem]">biotech</span>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-semibold leading-none">Diagnostic Orders (CPOE)</h2>
+<span class="font-caption text-caption text-on-surface-variant">Lab &amp; Endoscopy Requisitions</span>
+</div>
+</div>
+<!-- Order Priority Toggle -->
+<div class="flex items-center bg-surface-container-lowest p-0.5 rounded-lg shadow-xs">
+<button class="px-2 py-1 rounded font-caption text-caption font-bold bg-primary-container text-surface" type="button">ROUTINE</button>
+<button class="px-2 py-1 rounded font-caption text-caption font-semibold text-on-surface-variant hover:text-error" type="button">STAT / URGENT</button>
+</div>
+</div>
+<!-- Orders Checklist -->
+<div class="p-space-md space-y-space-xs">
+<!-- Item 1: Endoscopy -->
+<div class="p-space-sm rounded-lg bg-surface-container-low flex items-center justify-between">
+<div class="flex items-center gap-space-sm min-w-0">
+<span class="material-symbols-outlined text-secondary text-[1.25rem]">radiology</span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface font-bold truncate">Upper GI Endoscopy (Diagnostic OGD)</span>
+<span class="font-caption text-caption text-on-surface-variant">Procedure Suite • Rule out Esophagitis / Hiatus Hernia</span>
+</div>
+</div>
+<div class="flex items-center gap-2 shrink-0">
+<span class="px-2 py-0.5 rounded bg-surface-container-highest text-on-surface font-caption text-caption font-semibold">Pre-scheduled</span>
+<button class="text-outline hover:text-error p-1" type="button">
+<span class="material-symbols-outlined text-[1.125rem]">cancel</span>
+</button>
+</div>
+</div>
+<!-- Item 2: Fasting Blood Glucose -->
+<div class="p-space-sm rounded-lg bg-surface-container-low flex items-center justify-between">
+<div class="flex items-center gap-space-sm min-w-0">
+<span class="material-symbols-outlined text-secondary text-[1.25rem]">science</span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface font-semibold truncate">Fasting Blood Glucose (FBS) + HbA1c</span>
+<span class="font-caption text-caption text-on-surface-variant">Biochemistry • Specimen: Fluoride / EDTA Blood</span>
+</div>
+</div>
+<div class="flex items-center gap-2 shrink-0">
+<span class="px-2 py-0.5 rounded bg-surface-container-highest text-on-surface font-caption text-caption font-semibold">Laboratory</span>
+<button class="text-outline hover:text-error p-1" type="button">
+<span class="material-symbols-outlined text-[1.125rem]">cancel</span>
+</button>
+</div>
+</div>
+<!-- Item 3: LFT & Electrolytes -->
+<div class="p-space-sm rounded-lg bg-surface-container-low flex items-center justify-between">
+<div class="flex items-center gap-space-sm min-w-0">
+<span class="material-symbols-outlined text-secondary text-[1.25rem]">science</span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface font-semibold truncate">Liver Function Test (LFT) + Serum Electrolytes</span>
+<span class="font-caption text-caption text-on-surface-variant">Biochemistry • Baseline profile prior to long-term PPI</span>
+</div>
+</div>
+<div class="flex items-center gap-2 shrink-0">
+<span class="px-2 py-0.5 rounded bg-surface-container-highest text-on-surface font-caption text-caption font-semibold">Laboratory</span>
+<button class="text-outline hover:text-error p-1" type="button">
+<span class="material-symbols-outlined text-[1.125rem]">cancel</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Quick Add Diagnostics Input -->
+<div class="px-space-md pb-space-md">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-space-sm top-1/2 -translate-y-1/2 text-outline text-[1.125rem]">add_task</span>
+<input class="w-full h-8 pl-8 pr- space-md rounded-lg bg-surface-container-low text-on-surface font-body-sm text-body-sm placeholder:text-outline focus:outline-none focus:bg-surface-container-lowest transition-all" placeholder="Add Lab test, X-Ray, USG, or Culture..." type="text"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- STICKY CLINICAL ACTION FOOTER / SIGN-OFF BAR -->
+<footer class="sticky bottom-0 z-30 bg-surface-container-lowest rounded-xl shadow-md p-space-md flex flex-wrap items-center justify-between gap-space-md">
+<!-- Left Status Meta -->
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">Encounter Active: 14m 22s</span>
+</div>
+<div class="h-4 w-[1px] bg-outline-variant hidden sm:block"></div>
+<span class="font-caption text-caption text-on-surface-variant hidden md:inline">
+        Signature Hash: <span class="font-mono text-outline">MD-VR-89241-AUTH</span>
+</span>
+</div>
+<!-- Operational Buttons -->
+<div class="flex items-center gap-space-xs flex-wrap">
+<button class="h-8 px-space-md rounded-lg bg-surface-container-highest text-on-surface hover:bg-surface-container-high font-label-md text-label-md transition-colors flex items-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[1.125rem]">person_add</span>
+        Refer to Gastroenterology
+      </button>
+<button class="h-8 px-space-md rounded-lg bg-surface-container-highest text-on-surface hover:bg-surface-container-high font-label-md text-label-md transition-colors flex items-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[1.125rem]">print</span>
+        Print Rx Summary
+      </button>
+<button class="h-8 px-space-md rounded-lg bg-surface-container text-on-surface hover:bg-surface-container-highest font-label-md text-label-md transition-colors flex items-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[1.125rem]">save</span>
+        Save Draft
+      </button>
+<!-- Primary Burgundy Action -->
+<button class="h-8 px-space-lg rounded-lg bg-primary-container text-surface hover:bg-primary transition-all font-label-md text-label-md font-semibold flex items-center gap-1.5 shadow-sm" id="signAndFinalizeBtn" type="button">
+<span class="material-symbols-outlined text-[1.125rem]">draw</span>
+        Sign &amp; Finalize Prescription
+      </button>
+</div>
+</footer>
+<!-- MINIMAL CLINICAL CONFIRMATION TOAST (Initially Hidden) -->
+<div class="fixed bottom-20 right-8 bg-inverse-surface text-inverse-on-surface px-space-lg py-space-sm rounded-lg shadow-lg flex items-center gap-space-sm transform translate-y-12 opacity-0 pointer-events-none transition-all duration-300 z-50 font-body-sm text-body-sm" id="clinicalToast">
+<span class="material-symbols-outlined text-[1.25rem] text-secondary-fixed">check_circle</span>
+<div class="flex flex-col">
+<span class="font-semibold text-inverse-on-surface">Consultation Signed &amp; Dispatched</span>
+<span class="text-caption text-inverse-on-surface/80">Prescription queued to MedCore FEFO Pharmacy • CPOE orders sent to Lab</span>
+</div>
+</div>
+</div>
+<script>
+  // Simple interactive handling for finalization simulation
+  const signBtn = document.getElementById('signAndFinalizeBtn');
+  const toast = document.getElementById('clinicalToast');
+
+  if (signBtn && toast) {
+    signBtn.addEventListener('click', () => {
+      // Visual feedback on button
+      signBtn.disabled = true;
+      const originalText = signBtn.innerHTML;
+      signBtn.innerHTML = '<span class="material-symbols-outlined text-[1.125rem] animate-spin">refresh</span> Signing EMR...';
+
+      setTimeout(() => {
+        signBtn.innerHTML = '<span class="material-symbols-outlined text-[1.125rem]">verified</span> Signed &amp; Dispatched';
+        signBtn.classList.remove('bg-primary-container');
+        signBtn.classList.add('bg-secondary');
+
+        // Show toast
+        toast.classList.remove('translate-y-12', 'opacity-0', 'pointer-events-none');
+        toast.classList.add('translate-y-0', 'opacity-100');
+
+        setTimeout(() => {
+          toast.classList.add('translate-y-12', 'opacity-0', 'pointer-events-none');
+          toast.classList.remove('translate-y-0', 'opacity-100');
+          signBtn.disabled = false;
+          signBtn.innerHTML = originalText;
+          signBtn.classList.remove('bg-secondary');
+          signBtn.classList.add('bg-primary-container');
+        }, 4000);
+      }, 700);
+    });
+  }
+</script></main></div></body></html>

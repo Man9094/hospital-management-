@@ -340,11 +340,11 @@ export default function AIAssistantWidget() {
           whileHover={{ scale: 1.08 }}
           whileTap={{ scale: 0.92 }}
           onClick={() => setIsOpen(!isOpen)}
-          className="relative flex items-center gap-2 px-4 py-3.5 rounded-full bg-[#13C5DD] text-white font-extrabold text-xs uppercase tracking-wider shadow-2xl border-2 border-white"
+          className="relative flex items-center gap-2 px-4 py-3 rounded-full bg-[#4A1F2B] text-white font-bold text-xs uppercase tracking-wider shadow-lg border border-[#E3DFDB]/30"
         >
           <Bot className="w-5 h-5" />
           <span className="hidden sm:inline">AI દર્દી સહાયક</span>
-          <span className="w-2.5 h-2.5 rounded-full bg-[#00C896] animate-ping" />
+          <span className="w-2.5 h-2.5 rounded-full bg-[#3F6B52] animate-ping" />
         </motion.button>
       </div>
 
@@ -356,19 +356,19 @@ export default function AIAssistantWidget() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 30, scale: 0.95 }}
             transition={{ duration: 0.3 }}
-            className="fixed bottom-20 right-4 sm:right-6 z-50 w-[92vw] sm:w-[440px] h-[600px] rounded-3xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 shadow-2xl flex flex-col overflow-hidden"
+            className="fixed bottom-20 right-4 sm:right-6 z-50 w-[92vw] sm:w-[440px] h-[600px] rounded-lg bg-white dark:bg-[#241D29] border border-[#E3DFDB] dark:border-[#3B3041] shadow-[0_4px_16px_rgba(41,39,39,0.08)] flex flex-col overflow-hidden"
           >
             {/* Header */}
-            <div className="p-4 bg-[#1D2A4D] text-white flex items-center justify-between border-b border-slate-700">
+            <div className="p-4 bg-[#4A1F2B] text-white flex items-center justify-between border-b border-[#310A17]">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#13C5DD] text-white flex items-center justify-center font-bold shadow-md">
+                <div className="w-10 h-10 rounded-md bg-white/10 text-white flex items-center justify-center font-bold shadow-xs">
                   <Bot className="w-6 h-6" />
                 </div>
                 <div>
-                  <div className="text-sm font-extrabold font-poppins flex items-center gap-1.5">
-                    મેડકોર AI ક્લિનિકલ ગાઇડ <Sparkles className="w-3.5 h-3.5 text-yellow-300" />
+                  <div className="text-sm font-bold flex items-center gap-1.5">
+                    મેડકોર AI ક્લિનિકલ ગાઇડ <Sparkles className="w-3.5 h-3.5 text-[#F7B5C3]" />
                   </div>
-                  <div className="text-[10px] text-[#13C5DD] font-bold">
+                  <div className="text-[10px] text-[#F7B5C3] font-semibold">
                     દર્દીની તકલીફ મુજબ સચોટ ડોક્ટર સલાહ
                   </div>
                 </div>
@@ -378,7 +378,7 @@ export default function AIAssistantWidget() {
                 {isSpeaking && (
                   <button
                     onClick={stopSpeaking}
-                    className="p-2 rounded-full bg-red-500/20 text-red-400 hover:bg-red-500/30"
+                    className="p-1.5 rounded-md bg-white/15 text-white hover:bg-white/25"
                     title="Stop Voice"
                   >
                     <VolumeX className="w-4 h-4 animate-bounce" />
@@ -386,7 +386,7 @@ export default function AIAssistantWidget() {
                 )}
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="p-2 rounded-full text-slate-300 hover:text-white"
+                  className="p-1.5 rounded-md text-white/70 hover:text-white"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -394,44 +394,44 @@ export default function AIAssistantWidget() {
             </div>
 
             {/* 3 Tabs: Problems Guide, Chat, Voice */}
-            <div className="grid grid-cols-3 p-1.5 bg-slate-100 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 text-xs font-bold text-center">
+            <div className="grid grid-cols-3 p-1 bg-[#F8F2F2] dark:bg-[#18141C] border-b border-[#E3DFDB] dark:border-[#3B3041] text-xs font-semibold text-center">
               <button
                 onClick={() => setActiveTab("problems")}
-                className={`py-2 rounded-xl flex items-center justify-center gap-1 transition-all ${
+                className={`py-1.5 rounded-md flex items-center justify-center gap-1 transition-all ${
                   activeTab === "problems"
-                    ? "bg-[#13C5DD] text-white shadow-sm"
-                    : "text-slate-600 dark:text-slate-400"
+                    ? "bg-[#4A1F2B] text-white shadow-xs"
+                    : "text-[#514346] dark:text-[#D5C2C5]"
                 }`}
               >
-                <Stethoscope className="w-3.5 h-3.5" /> તકલીફ પસંદ કરો
+                <Stethoscope className="w-3.5 h-3.5" /> તકલીફ
               </button>
               <button
                 onClick={() => setActiveTab("chat")}
-                className={`py-2 rounded-xl flex items-center justify-center gap-1 transition-all ${
+                className={`py-1.5 rounded-md flex items-center justify-center gap-1 transition-all ${
                   activeTab === "chat"
-                    ? "bg-[#13C5DD] text-white shadow-sm"
-                    : "text-slate-600 dark:text-slate-400"
+                    ? "bg-[#4A1F2B] text-white shadow-xs"
+                    : "text-[#514346] dark:text-[#D5C2C5]"
                 }`}
               >
                 <MessageSquare className="w-3.5 h-3.5" /> ચેટ (Chat)
               </button>
               <button
                 onClick={() => setActiveTab("voice")}
-                className={`py-2 rounded-xl flex items-center justify-center gap-1 transition-all ${
+                className={`py-1.5 rounded-md flex items-center justify-center gap-1 transition-all ${
                   activeTab === "voice"
-                    ? "bg-[#13C5DD] text-white shadow-sm"
-                    : "text-slate-600 dark:text-slate-400"
+                    ? "bg-[#4A1F2B] text-white shadow-xs"
+                    : "text-[#514346] dark:text-[#D5C2C5]"
                 }`}
               >
-                <Mic className="w-3.5 h-3.5" /> વોઇસ વાતચીત
+                <Mic className="w-3.5 h-3.5" /> વોઇસ
               </button>
             </div>
 
             {/* Tab 1: Patient Problems Selector */}
             {activeTab === "problems" && (
-              <div className="flex-1 p-4 overflow-y-auto space-y-2.5 bg-slate-50 dark:bg-slate-900/40">
-                <div className="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2">
-                  તમારે કયા પ્રકારની સ્વાસ્થ્ય તકલીફ છે? (Select Patient Requirement)
+              <div className="flex-1 p-3.5 overflow-y-auto space-y-2 bg-[#F7F6F3] dark:bg-[#18141C]">
+                <div className="text-[11px] font-bold text-[#837376] uppercase tracking-wider mb-2">
+                  તમારે કયા પ્રકારની સ્વાસ્થ્ય તકલીફ છે?
                 </div>
                 {PATIENT_PROBLEMS.map((prob) => {
                   const Icon = prob.icon;
@@ -442,22 +442,22 @@ export default function AIAssistantWidget() {
                     <button
                       key={prob.id}
                       onClick={() => handleSelectProblem(prob)}
-                      className="w-full p-3.5 rounded-2xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 shadow-sm hover:border-[#13C5DD] hover:shadow-md text-left transition-all flex items-center justify-between group"
+                      className="w-full p-3 rounded-lg bg-white dark:bg-[#241D29] border border-[#E3DFDB] dark:border-[#3B3041] shadow-xs hover:border-[#4A1F2B] dark:hover:border-[#C08491] text-left transition-all flex items-center justify-between group"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-xl bg-[#13C5DD]/10 text-[#13C5DD] flex items-center justify-center font-bold">
-                          <Icon className="w-5 h-5" />
+                        <div className="w-8 h-8 rounded-md bg-[#F3E9EB] dark:bg-[#32293D] text-[#4A1F2B] dark:text-[#C08491] flex items-center justify-center font-bold shrink-0">
+                          <Icon className="w-4 h-4" />
                         </div>
                         <div>
-                          <div className="font-bold text-xs text-slate-900 dark:text-white group-hover:text-[#13C5DD]">
+                          <div className="font-bold text-xs text-[#1D1B1B] dark:text-[#FEF8F7] group-hover:text-[#4A1F2B] dark:group-hover:text-[#C08491]">
                             {title}
                           </div>
-                          <div className="text-[10px] text-slate-400 mt-0.5">
-                            સૂચવેલ: <strong className="text-slate-700 dark:text-slate-300">{doctor}</strong>
+                          <div className="text-[10px] text-[#837376] mt-0.5">
+                            સૂચવેલ: <strong className="text-[#514346] dark:text-[#D5C2C5]">{doctor}</strong>
                           </div>
                         </div>
                       </div>
-                      <span className="text-[10px] font-bold px-2 py-1 rounded bg-[#00C896]/15 text-[#00C896]">
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#EEF4F0] text-[#3F6B52] dark:bg-[#1C2C22] dark:text-[#7ADDB0] border border-[#D4E3D9] dark:border-[#2C4A38]">
                         {prob.fee}
                       </span>
                     </button>
@@ -468,7 +468,7 @@ export default function AIAssistantWidget() {
 
             {/* Tab 2: Chat View */}
             {activeTab === "chat" && (
-              <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-slate-50 dark:bg-slate-900/40">
+              <div className="flex-1 p-3.5 overflow-y-auto space-y-2.5 bg-[#F7F6F3] dark:bg-[#18141C]">
                 {messages.map((msg) => (
                   <div
                     key={msg.id}
@@ -477,16 +477,16 @@ export default function AIAssistantWidget() {
                     }`}
                   >
                     <div
-                      className={`max-w-[90%] p-3.5 rounded-2xl text-xs leading-relaxed ${
+                      className={`max-w-[90%] p-3 rounded-lg text-xs leading-relaxed ${
                         msg.sender === "user"
-                          ? "bg-[#13C5DD] text-white rounded-br-none shadow-md font-medium"
-                          : "bg-white dark:bg-[#1D2A4D] text-[#1D2A4D] dark:text-slate-100 border border-slate-200 dark:border-slate-800 rounded-bl-none shadow-sm font-medium whitespace-pre-line"
+                          ? "bg-[#4A1F2B] text-white rounded-br-none shadow-xs font-medium"
+                          : "bg-white dark:bg-[#241D29] text-[#1D1B1B] dark:text-[#FEF8F7] border border-[#E3DFDB] dark:border-[#3B3041] rounded-bl-none shadow-xs font-medium whitespace-pre-line"
                       }`}
                     >
                       {msg.text}
 
                       {msg.actionButton && (
-                        <div className="pt-2.5 mt-2 border-t border-slate-100 dark:border-slate-800">
+                        <div className="pt-2 mt-2 border-t border-[#E3DFDB] dark:border-[#3B3041]">
                           <button
                             onClick={() => {
                               if (msg.actionButton?.action === "call") {
@@ -495,7 +495,7 @@ export default function AIAssistantWidget() {
                                 setIsAdmissionModalOpen(true);
                               }
                             }}
-                            className="w-full py-2 px-3 rounded-xl bg-[#00C896] hover:bg-[#00a87d] text-white font-extrabold text-[11px] flex items-center justify-center gap-1.5 shadow-sm"
+                            className="w-full py-1.5 px-3 rounded-md bg-[#4A1F2B] hover:bg-[#70404B] text-white font-semibold text-xs flex items-center justify-center gap-1.5 shadow-xs"
                           >
                             <Bed className="w-3.5 h-3.5" />
                             {msg.actionButton.label}
@@ -503,7 +503,7 @@ export default function AIAssistantWidget() {
                         </div>
                       )}
                     </div>
-                    <span className="text-[9px] text-slate-400 mt-1 px-1">{msg.time}</span>
+                    <span className="text-[9px] text-[#837376] mt-0.5 px-1">{msg.time}</span>
                   </div>
                 ))}
                 <div ref={messagesEndRef} />
@@ -518,7 +518,7 @@ export default function AIAssistantWidget() {
                   className={`w-24 h-24 rounded-full flex items-center justify-center shadow-2xl transition-transform ${
                     isListening
                       ? "bg-red-500 text-white scale-110 animate-pulse border-4 border-red-300"
-                      : "bg-[#13C5DD] text-white hover:scale-105"
+                      : "bg-[#4A1F2B] text-white hover:scale-105"
                   }`}
                 >
                   {isListening ? <Mic className="w-10 h-10" /> : <MicOff className="w-10 h-10" />}
@@ -541,18 +541,18 @@ export default function AIAssistantWidget() {
                   e.preventDefault();
                   handleSendMessage();
                 }}
-                className="p-3 bg-white dark:bg-[#1D2A4D] border-t border-slate-200 dark:border-slate-800 flex items-center gap-2"
+                className="p-3 bg-white dark:bg-[#241D29] border-t border-[#E3DFDB] dark:border-[#3B3041] flex items-center gap-2"
               >
                 <input
                   type="text"
                   placeholder="તમારો પ્રશ્ન લખો (તાવ, ફ્રેક્ચર, એડમિશન)..."
                   value={inputQuery}
                   onChange={(e) => setInputQuery(e.target.value)}
-                  className="flex-1 px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#13C5DD]"
+                  className="flex-1 px-3 py-2 rounded-md bg-[#F8F2F2] dark:bg-[#18141C] border border-[#E3DFDB] dark:border-[#3B3041] text-xs text-[#1D1B1B] dark:text-[#FEF8F7] placeholder:text-[#837376] focus:outline-none focus:border-[#4A1F2B] dark:focus:border-[#C08491]"
                 />
                 <button
                   type="submit"
-                  className="p-2.5 rounded-xl bg-[#13C5DD] hover:bg-[#10b1c7] text-white font-bold shadow-md"
+                  className="p-2 rounded-md bg-[#4A1F2B] hover:bg-[#70404B] text-white font-semibold shadow-xs"
                 >
                   <Send className="w-4 h-4" />
                 </button>

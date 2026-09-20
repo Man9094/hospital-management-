@@ -36,44 +36,44 @@ export default function TestimonialsSection() {
   const current = TESTIMONIALS[active];
 
   return (
-    <section className="py-20 bg-slate-50 dark:bg-slate-900/40">
+    <section className="py-20 bg-[#FBF9F9] dark:bg-[#18141C]/60 border-y border-[#E5E0E2] dark:border-[#3E3842]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3 mb-14">
           <div>
-            <span className="medinova-subheading text-xs">
+            <span className="text-xs font-bold text-[#4A1F2B] dark:text-[#E2838E] uppercase tracking-wider">
               TESTIMONIALS
             </span>
           </div>
-          <h2 className="text-2xl sm:text-4xl font-extrabold font-poppins text-[#1D2A4D] dark:text-white uppercase">
+          <h2 className="text-2xl sm:text-4xl font-bold font-sans text-[#292727] dark:text-[#FEF8F7] uppercase">
             PATIENTS & DOCTORS FEEDBACK
           </h2>
         </div>
 
         {/* Carousel Box */}
         <div className="max-w-4xl mx-auto text-center space-y-6">
-          <div className="p-8 sm:p-12 rounded-3xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 shadow-xl relative">
-            <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-[#13C5DD] text-white flex items-center justify-center shadow-md">
-              <Quote className="w-8 h-8 fill-current" />
+          <div className="p-8 sm:p-12 rounded-lg bg-white dark:bg-[#242026] border border-[#E5E0E2] dark:border-[#3E3842] shadow-[0_4px_16px_rgba(41,39,39,0.08)] relative">
+            <div className="w-14 h-14 mx-auto mb-6 rounded-md bg-[#F3E9EB] text-[#4A1F2B] dark:bg-[#32293D] dark:text-[#E2838E] flex items-center justify-center shadow-xs">
+              <Quote className="w-7 h-7 fill-current" />
             </div>
 
-            <p className="text-base sm:text-lg text-[#1D2A4D] dark:text-slate-100 font-medium leading-relaxed mb-6 italic">
+            <p className="text-base sm:text-lg text-[#292727] dark:text-[#ECE5E7] font-normal leading-relaxed mb-6 italic">
               "{current.quote}"
             </p>
 
-            <div className="flex items-center justify-center gap-1 mb-4 text-amber-400">
+            <div className="flex items-center justify-center gap-1 mb-4 text-amber-500">
               {[...Array(current.rating)].map((_, i) => (
                 <Star key={i} className="w-4 h-4 fill-current" />
               ))}
             </div>
 
             <div className="space-y-1">
-              <div className="font-extrabold font-poppins text-slate-900 dark:text-white text-base">
+              <div className="font-bold font-sans text-[#292727] dark:text-[#FEF8F7] text-base">
                 {current.author}
               </div>
-              <div className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-                {current.role} • <span className="text-[#13C5DD] font-bold">{current.hospital}</span>
+              <div className="text-xs text-[#686563] dark:text-[#9B8E92] font-medium">
+                {current.role} • <span className="text-[#4A1F2B] dark:text-[#E2838E] font-semibold">{current.hospital}</span>
               </div>
             </div>
           </div>
@@ -82,13 +82,13 @@ export default function TestimonialsSection() {
           <div className="flex justify-center items-center gap-4">
             <button
               onClick={prev}
-              className="p-3 rounded-full bg-[#13C5DD] text-white hover:bg-[#10b1c7] shadow-md transition-colors"
+              className="p-2.5 rounded-md bg-[#4A1F2B] text-white hover:bg-[#5E2737] shadow-xs transition-colors"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
             <button
               onClick={next}
-              className="p-3 rounded-full bg-[#13C5DD] text-white hover:bg-[#10b1c7] shadow-md transition-colors"
+              className="p-2.5 rounded-md bg-[#4A1F2B] text-white hover:bg-[#5E2737] shadow-xs transition-colors"
             >
               <ChevronRight className="w-5 h-5" />
             </button>

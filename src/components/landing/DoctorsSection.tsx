@@ -202,10 +202,10 @@ export default function DoctorsSection() {
             <button
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
-              className={`px-4 py-2 rounded-full text-xs font-extrabold uppercase tracking-wider transition-all ${
+              className={`px-3.5 py-1.5 rounded-md text-xs font-semibold uppercase tracking-wider transition-all ${
                 activeCategory === cat.id
-                  ? "bg-[#13C5DD] text-white shadow-md"
-                  : "bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-[#13C5DD]"
+                  ? "bg-[#4A1F2B] text-white shadow-xs"
+                  : "bg-white dark:bg-[#242026] text-[#292727] dark:text-[#ECE5E7] border border-[#E5E0E2] dark:border-[#3E3842] hover:border-[#4A1F2B] dark:hover:border-[#E2838E]"
               }`}
             >
               {cat.label}
@@ -222,11 +222,11 @@ export default function DoctorsSection() {
             return (
               <motion.div
                 key={doc.id}
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4 }}
+                transition={{ duration: 0.3 }}
                 viewport={{ once: true }}
-                className="p-6 rounded-3xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl hover:border-[#13C5DD] transition-all flex flex-col justify-between group"
+                className="p-6 rounded-lg bg-white dark:bg-[#242026] border border-[#E5E0E2] dark:border-[#3E3842] shadow-[0_1px_3px_rgba(41,39,39,0.06)] hover:shadow-[0_4px_16px_rgba(41,39,39,0.08)] hover:border-[#4A1F2B] dark:hover:border-[#8C3A45] transition-all flex flex-col justify-between group"
               >
                 <div>
                   {/* Doctor Image & Rating Header */}
@@ -234,55 +234,55 @@ export default function DoctorsSection() {
                     <img
                       src={doc.image}
                       alt={name}
-                      className="w-20 h-20 rounded-2xl object-cover border-2 border-[#13C5DD] shadow-md group-hover:scale-105 transition-transform"
+                      className="w-20 h-20 rounded-md object-cover border border-[#E5E0E2] dark:border-[#3E3842] shadow-xs group-hover:scale-102 transition-transform"
                     />
                     <div>
-                      <div className="flex items-center gap-1 text-amber-400 text-xs font-bold mb-1">
+                      <div className="flex items-center gap-1 text-amber-500 text-xs font-semibold mb-1">
                         <Star className="w-4 h-4 fill-current" />
                         <span>{doc.rating}</span>
-                        <span className="text-slate-400 font-normal">({doc.patientsCount}+ દર્દીઓ)</span>
+                        <span className="text-[#686563] dark:text-[#9B8E92] font-normal">({doc.patientsCount}+ દર્દીઓ)</span>
                       </div>
-                      <h3 className="text-lg font-extrabold font-poppins text-[#1D2A4D] dark:text-white">
+                      <h3 className="text-base font-bold font-sans text-[#292727] dark:text-[#FEF8F7]">
                         {name}
                       </h3>
-                      <div className="text-xs text-[#13C5DD] font-bold mt-0.5">
+                      <div className="text-xs text-[#4A1F2B] dark:text-[#E2838E] font-medium mt-0.5">
                         {doc.degree}
                       </div>
                     </div>
                   </div>
 
                   {/* Specialty Badge */}
-                  <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-800 dark:text-slate-200 mb-4">
+                  <div className="p-2.5 rounded-md bg-[#F7F6F3] dark:bg-[#2D2732] border border-[#E5E0E2] dark:border-[#3E3842] text-xs font-semibold text-[#292727] dark:text-[#ECE5E7] mb-4">
                     {specialty}
                   </div>
 
                   {/* Doctor Details List */}
-                  <div className="space-y-2 text-xs text-slate-600 dark:text-slate-300 mb-6">
+                  <div className="space-y-2 text-xs text-[#686563] dark:text-[#9B8E92] mb-6">
                     <div className="flex items-center gap-2">
-                      <Award className="w-4 h-4 text-[#00C896] shrink-0" />
-                      <span>અનુભવ: <strong className="text-slate-900 dark:text-white">{doc.expYears}+ વર્ષ</strong></span>
+                      <Award className="w-4 h-4 text-[#3F6B52] dark:text-[#85B599] shrink-0" />
+                      <span>અનુભવ: <strong className="text-[#292727] dark:text-[#ECE5E7]">{doc.expYears}+ વર્ષ</strong></span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Clock className="w-4 h-4 text-[#13C5DD] shrink-0" />
-                      <span className="truncate">સમય: <strong className="text-slate-900 dark:text-white">{doc.timing}</strong></span>
+                      <Clock className="w-4 h-4 text-[#4A1F2B] dark:text-[#E2838E] shrink-0" />
+                      <span className="truncate">સમય: <strong className="text-[#292727] dark:text-[#ECE5E7]">{doc.timing}</strong></span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Globe className="w-4 h-4 text-purple-500 shrink-0" />
+                      <Globe className="w-4 h-4 text-[#83505B] dark:text-[#D5AAB4] shrink-0" />
                       <span>ભાષાઓ: {doc.languages.join(", ")}</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Booking Button */}
-                <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                <div className="pt-4 border-t border-[#E5E0E2] dark:border-[#3E3842] flex items-center justify-between">
                   <div>
-                    <div className="text-[10px] text-slate-400 font-bold uppercase">કન્સલ્ટેશન ફી</div>
-                    <div className="text-sm font-extrabold text-[#00C896]">{doc.fee}</div>
+                    <div className="text-[10px] text-[#686563] dark:text-[#9B8E92] font-semibold uppercase">કન્સલ્ટેશન ફી</div>
+                    <div className="text-sm font-bold text-[#3F6B52] dark:text-[#85B599]">{doc.fee}</div>
                   </div>
 
                   <button
                     onClick={() => handleBookDoctor(doc)}
-                    className="px-5 py-2.5 rounded-full bg-[#13C5DD] hover:bg-[#10b1c7] text-white text-xs font-extrabold uppercase tracking-wider shadow-md flex items-center gap-1.5 transition-all"
+                    className="px-4 py-2 rounded-md bg-[#4A1F2B] hover:bg-[#5E2737] text-white text-xs font-medium uppercase tracking-wider shadow-xs flex items-center gap-1.5 transition-colors"
                   >
                     <Calendar className="w-3.5 h-3.5" />
                     આ ડોક્ટર પસંદ કરો

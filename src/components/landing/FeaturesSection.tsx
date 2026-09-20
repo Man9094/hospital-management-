@@ -75,20 +75,20 @@ export default function FeaturesSection() {
   const filtered = activeCategory === "all" ? FEATURES : FEATURES.filter(f => f.category === activeCategory);
 
   return (
-    <section id="features" className="py-20">
+    <section id="features" className="py-20 bg-[#FBF9F9] dark:bg-[#18141C]/60 border-y border-[#E5E0E2] dark:border-[#3E3842]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Medinova Style Centered Subheading */}
         <div className="text-center max-w-3xl mx-auto space-y-3 mb-10">
           <div>
-            <span className="medinova-subheading text-xs">
+            <span className="text-xs font-bold text-[#4A1F2B] dark:text-[#E2838E] uppercase tracking-wider">
               {t.featuresBadge}
             </span>
           </div>
-          <h2 className="text-2xl sm:text-4xl font-extrabold font-poppins text-[#1D2A4D] dark:text-white uppercase">
+          <h2 className="text-2xl sm:text-4xl font-bold font-sans text-[#292727] dark:text-[#FEF8F7] uppercase">
             {t.featuresTitle}
           </h2>
-          <p className="text-slate-600 dark:text-slate-400 text-sm">
+          <p className="text-[#686563] dark:text-[#D5C2C5] text-sm">
             {t.featuresSub}
           </p>
         </div>
@@ -99,10 +99,10 @@ export default function FeaturesSection() {
             <button
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
-              className={`px-5 py-2 rounded-full text-xs font-extrabold uppercase tracking-wider transition-all ${
+              className={`px-4 py-1.5 rounded-md text-xs font-semibold uppercase tracking-wider transition-all ${
                 activeCategory === cat.id
-                  ? "bg-[#13C5DD] text-white shadow-md"
-                  : "bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-[#13C5DD]"
+                  ? "bg-[#4A1F2B] text-white shadow-xs"
+                  : "bg-white dark:bg-[#242026] text-[#292727] dark:text-[#ECE5E7] border border-[#E5E0E2] dark:border-[#3E3842] hover:border-[#4A1F2B] dark:hover:border-[#E2838E]"
               }`}
             >
               {cat.label}
@@ -117,20 +117,20 @@ export default function FeaturesSection() {
             return (
               <div
                 key={item.title}
-                className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl hover:border-[#13C5DD] transition-all text-center flex flex-col items-center justify-between group"
+                className="p-6 rounded-lg bg-white dark:bg-[#242026] border border-[#E5E0E2] dark:border-[#3E3842] shadow-[0_1px_3px_rgba(41,39,39,0.06)] hover:shadow-[0_4px_16px_rgba(41,39,39,0.08)] hover:border-[#4A1F2B] dark:hover:border-[#8C3A45] transition-all text-center flex flex-col items-center justify-between group"
               >
-                <div className="w-16 h-16 rounded-full bg-[#13C5DD] text-white flex items-center justify-center mb-4 shadow-md group-hover:scale-110 transition-transform">
-                  <Icon className="w-8 h-8" />
+                <div className="w-14 h-14 rounded-md bg-[#F3E9EB] text-[#4A1F2B] dark:bg-[#32293D] dark:text-[#E2838E] flex items-center justify-center mb-4 shadow-xs group-hover:scale-105 transition-transform">
+                  <Icon className="w-7 h-7" />
                 </div>
                 <div>
-                  <h3 className="text-base font-extrabold font-poppins text-[#1D2A4D] dark:text-white mb-2">
+                  <h3 className="text-base font-bold font-sans text-[#292727] dark:text-[#FEF8F7] mb-2">
                     {item.title}
                   </h3>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-4">
+                  <p className="text-xs text-[#686563] dark:text-[#D5C2C5] leading-relaxed mb-4">
                     {item.desc}
                   </p>
                 </div>
-                <button className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 text-[#13C5DD] flex items-center justify-center group-hover:bg-[#13C5DD] group-hover:text-white transition-colors">
+                <button className="w-8 h-8 rounded-md bg-[#F7F6F3] dark:bg-[#2D2732] text-[#4A1F2B] dark:text-[#E2838E] flex items-center justify-center group-hover:bg-[#4A1F2B] group-hover:text-white transition-colors">
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>

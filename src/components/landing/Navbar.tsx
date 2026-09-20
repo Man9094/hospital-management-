@@ -33,31 +33,31 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="sticky top-0 z-40 w-full backdrop-blur-md bg-white/90 dark:bg-[#0B0F17]/90 border-b border-slate-200 dark:border-slate-800 transition-colors">
+    <header className="sticky top-0 z-40 w-full backdrop-blur-md bg-[#F7F6F3]/90 dark:bg-[#18141C]/90 border-b border-[#E3DFDB] dark:border-[#3B3041] transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         
         {/* Brand Logo */}
         <Link href="/" className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#0F6CBD] to-[#13C5DD] flex items-center justify-center text-white shadow-lg shadow-[#13C5DD]/20">
-            <Cross className="w-6 h-6 stroke-[2.5]" />
+          <div className="w-10 h-10 rounded-xl bg-[#4A1F2B] flex items-center justify-center text-white shadow-md shadow-[#4A1F2B]/20">
+            <Cross className="w-5 h-5 stroke-[2.5]" />
           </div>
           <div>
-            <span className="font-poppins font-black text-xl tracking-tight text-slate-900 dark:text-white uppercase flex items-center gap-1.5">
-              MEDCORE <span className="text-[#13C5DD] text-xs font-black px-1.5 py-0.5 rounded-md bg-[#13C5DD]/10 lowercase">hms</span>
+            <span className="font-sans font-bold text-xl tracking-tight text-[#292727] dark:text-[#FEF8F7] uppercase flex items-center gap-1.5">
+              MEDCORE <span className="text-[#4A1F2B] dark:text-[#C08491] text-xs font-black px-1.5 py-0.5 rounded-md bg-[#F3E9EB] dark:bg-[#32293D] lowercase">hms</span>
             </span>
-            <span className="text-[10px] text-slate-400 font-bold block uppercase tracking-wider">
-              Indian Hospital Operating System
+            <span className="text-[10px] text-[#686563] dark:text-[#D5C2C5] font-semibold block uppercase tracking-wider">
+              Warm Clinical Enterprise Hospital OS
             </span>
           </div>
         </Link>
 
         {/* Desktop Nav Links */}
-        <nav className="hidden lg:flex items-center gap-8 text-xs font-extrabold tracking-wider uppercase text-slate-600 dark:text-slate-300">
+        <nav className="hidden lg:flex items-center gap-8 text-xs font-bold tracking-wider uppercase text-[#686563] dark:text-[#D5C2C5]">
           {navLinks.map((link) => (
             <a
               key={link.label}
               href={link.href}
-              className="hover:text-[#13C5DD] transition-colors"
+              className="hover:text-[#4A1F2B] dark:hover:text-[#C08491] transition-colors"
             >
               {link.label}
             </a>
@@ -71,7 +71,7 @@ export default function Navbar() {
           {isAuthenticated ? (
             <Link
               href="/app"
-              className="px-5 py-2.5 rounded-2xl bg-[#13C5DD] text-[#1D2A4D] font-black text-xs uppercase tracking-wider shadow-lg shadow-[#13C5DD]/25 hover:shadow-[#13C5DD]/40 hover:scale-[1.02] transition-all flex items-center gap-2"
+              className="px-5 py-2.5 rounded-lg bg-[#4A1F2B] hover:bg-[#70404B] text-white font-bold text-xs uppercase tracking-wider shadow-md shadow-[#4A1F2B]/20 hover:scale-[1.02] transition-all flex items-center gap-2"
             >
               <span>Hospital Console</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -80,13 +80,13 @@ export default function Navbar() {
             <>
               <Link
                 href="/login?mode=patient"
-                className="px-4 py-2.5 rounded-2xl text-xs font-black uppercase text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex items-center gap-1.5"
+                className="px-4 py-2.5 rounded-lg text-xs font-bold uppercase text-[#4A1F2B] dark:text-[#C08491] bg-[#F3E9EB] dark:bg-[#32293D] hover:opacity-90 transition-colors flex items-center gap-1.5"
               >
-                <Sparkles className="w-3.5 h-3.5 text-[#13C5DD]" /> Patient Portal (OTP)
+                <Sparkles className="w-3.5 h-3.5 text-[#4A1F2B] dark:text-[#C08491]" /> Patient Portal (OTP)
               </Link>
               <Link
                 href="/login?mode=staff"
-                className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-[#13C5DD] to-[#0F6CBD] text-white font-black text-xs uppercase tracking-wider shadow-lg shadow-[#13C5DD]/25 hover:opacity-95 hover:scale-[1.02] transition-all flex items-center gap-2"
+                className="px-5 py-2.5 rounded-lg bg-[#4A1F2B] hover:bg-[#70404B] text-white font-bold text-xs uppercase tracking-wider shadow-md shadow-[#4A1F2B]/20 hover:scale-[1.02] transition-all flex items-center gap-2"
               >
                 <Lock className="w-3.5 h-3.5" />
                 <span>Staff & Doctor Login</span>
@@ -107,32 +107,32 @@ export default function Navbar() {
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="lg:hidden p-6 bg-white dark:bg-[#111827] border-b border-slate-200 dark:border-slate-800 space-y-4 animate-in slide-in-from-top-2">
-          <div className="flex flex-col space-y-3 text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+        <div className="lg:hidden p-6 bg-[#F7F6F3] dark:bg-[#18141C] border-b border-[#E3DFDB] dark:border-[#3B3041] space-y-4 animate-in slide-in-from-top-2">
+          <div className="flex flex-col space-y-3 text-xs font-bold uppercase tracking-wider text-[#686563] dark:text-[#D5C2C5]">
             {navLinks.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="py-2 hover:text-[#13C5DD]"
+                className="py-2 hover:text-[#4A1F2B] dark:hover:text-[#C08491]"
               >
                 {link.label}
               </a>
             ))}
           </div>
 
-          <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex flex-col gap-2">
+          <div className="pt-4 border-t border-[#E3DFDB] dark:border-[#3B3041] flex flex-col gap-2">
             <Link
               href="/login?mode=patient"
               onClick={() => setMobileMenuOpen(false)}
-              className="w-full py-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white font-black text-xs uppercase text-center shadow-sm"
+              className="w-full py-3 rounded-lg bg-[#F3E9EB] dark:bg-[#32293D] text-[#4A1F2B] dark:text-[#C08491] font-bold text-xs uppercase text-center shadow-sm"
             >
               Patient Portal (OTP)
             </Link>
             <Link
               href="/login?mode=staff"
               onClick={() => setMobileMenuOpen(false)}
-              className="w-full py-3 rounded-xl bg-[#13C5DD] text-[#1D2A4D] font-black text-xs uppercase text-center shadow-md"
+              className="w-full py-3 rounded-lg bg-[#4A1F2B] text-white font-bold text-xs uppercase text-center shadow-md"
             >
               Staff & Doctor Login
             </Link>

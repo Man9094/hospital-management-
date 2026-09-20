@@ -1,10 +1,17 @@
 import type { Metadata } from "next";
-import { Poppins, Inter, Mukta } from "next/font/google";
+import { Poppins, Inter, Mukta, Source_Sans_3 } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { PortalProvider } from "@/context/PortalContext";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { AuthProvider } from "@/context/AuthContext";
+
+const sourceSans = Source_Sans_3({
+  weight: ["300", "400", "500", "600", "700", "800"],
+  subsets: ["latin"],
+  variable: "--font-source-sans",
+  display: "swap",
+});
 
 const poppins = Poppins({
   weight: ["400", "500", "600", "700", "800"],
@@ -47,12 +54,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="gu" className={`${poppins.variable} ${inter.variable} ${mukta.variable} dark antialiased`} suppressHydrationWarning>
+    <html lang="gu" className={`${sourceSans.variable} ${poppins.variable} ${inter.variable} ${mukta.variable} dark antialiased`} suppressHydrationWarning>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" href="/favicon.ico" />
       </head>
-      <body className="min-h-screen bg-[#F8FAFC] dark:bg-[#0B0F17] text-[#111827] dark:text-[#F9FAFB] transition-colors duration-300 flex flex-col font-sans" suppressHydrationWarning>
+      <body className="min-h-screen bg-[#F7F6F3] dark:bg-[#18141C] text-[#292727] dark:text-[#FEF8F7] transition-colors duration-300 flex flex-col font-sans" suppressHydrationWarning>
         <ThemeProvider>
           <LanguageProvider>
             <AuthProvider>

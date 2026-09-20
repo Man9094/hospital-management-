@@ -15,7 +15,7 @@ import AIAssistantWidget from "@/components/ui/AIAssistantWidget";
 
 export default function LandingPage() {
   return (
-    <div className="relative min-h-screen selection:bg-[#13C5DD] selection:text-[#1D2A4D] bg-white dark:bg-[#0B0F17] text-slate-900 dark:text-white">
+    <div className="relative min-h-screen selection:bg-[#F3E9EB] selection:text-[#4A1F2B] bg-[#F7F6F3] dark:bg-[#18141C] text-[#292727] dark:text-[#FEF8F7]">
       <Navbar />
       <main>
         <HeroSection />

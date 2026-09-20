@@ -2,6 +2,11 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { usePortal } from "@/context/PortalContext";
+import ClinicalCard from "@/components/ui/clinical/ClinicalCard";
+import ClinicalBadge from "@/components/ui/clinical/ClinicalBadge";
+import ClinicalButton from "@/components/ui/clinical/ClinicalButton";
+import PatientHeaderBanner from "@/components/ui/clinical/PatientHeaderBanner";
+import VitalStrip from "@/components/ui/clinical/VitalStrip";
 import {
   Stethoscope,
   FileText,
@@ -25,7 +30,10 @@ import {
   ArrowRight,
   ShieldCheck,
   Activity,
-  DoorOpen
+  DoorOpen,
+  Trash2,
+  Calendar,
+  Layers
 } from "lucide-react";
 
 export default function DoctorPanel() {
@@ -36,6 +44,7 @@ export default function DoctorPanel() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+  const [activeEmrTab, setActiveEmrTab] = useState<"consultation" | "history">("consultation");
 
   // Doctor status & Delay State
   const [doctorStatus, setDoctorStatus] = useState<string>("in_cabin");
@@ -104,11 +113,9 @@ export default function DoctorPanel() {
       if (aptJson.success && aptJson.appointments) {
         setAppointments(aptJson.appointments);
         
-        // Pick active in_consultation appointment, or first one
         const active = aptJson.appointments.find((a: any) => a.status === "in_consultation");
         if (active) {
           selectPatient(active);
-          // If start time exists, sync elapsed seconds
           if (active.consultation_start_time) {
             const elapsed = Math.max(0, Math.floor((Date.now() - new Date(active.consultation_start_time).getTime()) / 1000));
             setTimerSeconds(elapsed);
@@ -188,7 +195,6 @@ export default function DoctorPanel() {
     }
   };
 
-  // Start Consultation & Timer
   const handleStartConsultation = async () => {
     if (!selectedApt) return;
     try {
@@ -210,7 +216,6 @@ export default function DoctorPanel() {
     }
   };
 
-  // Format Stopwatch
   const formatTime = (secs: number) => {
     const m = Math.floor(secs / 60);
     const s = secs % 60;
@@ -265,7 +270,7 @@ export default function DoctorPanel() {
       const json = await res.json();
       if (json.success) {
         setIsTimerRunning(false);
-        setSuccessMessage(`Consultation recorded (${durationMin} min duration), e-prescription created & lab investigations ordered!`);
+        setSuccessMessage(`Encounter completed (${durationMin} min duration), Rx signed & LIS orders routed!`);
         await loadData();
       } else {
         alert(json.error || "Failed to save consultation");
@@ -278,476 +283,492 @@ export default function DoctorPanel() {
     }
   };
 
-  // Metrics
-  const completedApts = appointments.filter((a) => a.status === "completed" && a.duration_minutes > 0);
-  const avgDuration =
-    completedApts.length > 0
-      ? (completedApts.reduce((acc, curr) => acc + curr.duration_minutes, 0) / completedApts.length).toFixed(1)
-      : "12.0";
-
-  const activeInCabinApt = appointments.find((a) => a.status === "in_consultation");
+  if (loading) {
+    return (
+      <div className="py-24 text-center space-y-3">
+        <Loader2 className="w-8 h-8 text-[#4A1F2B] dark:text-[#C08491] animate-spin mx-auto" />
+        <p className="text-xs text-[#514346] dark:text-[#D5C2C5] font-medium">
+          Loading Clinical EMR and OPD Consultation Queue...
+        </p>
+      </div>
+    );
+  }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       
-      {/* Header & Doctor Cabin Status Bar */}
-      <div className="p-6 rounded-3xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 shadow-xl space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <div className="text-xs font-extrabold text-[#13C5DD] uppercase tracking-wider flex items-center gap-1.5">
-              <Stethoscope className="w-4 h-4" /> CLINICAL EMR CONSOLE • OPD CABIN & QUEUE
-            </div>
-            <h1 className="text-2xl font-extrabold font-poppins text-slate-900 dark:text-white mt-1 flex items-center gap-2">
-              Dr. Rajesh Patel <span className="text-sm font-semibold text-slate-400">({cabinNumber})</span>
-            </h1>
+      {/* ─── DOCTOR CABIN LIVE STATUS & DELAY MANAGEMENT BAR ─── */}
+      <div className="bg-white dark:bg-[#241D29] border border-[#E3DFDB] dark:border-[#3B3041] p-3 rounded-lg shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-md bg-[#4A1F2B] text-white flex items-center justify-center font-bold text-sm">
+            <Stethoscope className="w-4 h-4" />
           </div>
-
-          {selectedApt && (
-            <button
-              onClick={() => setSelectedUhid(selectedApt.patient_uhid)}
-              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#13C5DD] to-[#0F6CBD] text-white text-xs font-extrabold uppercase shadow-md flex items-center gap-2 hover:opacity-95 transition-opacity"
-            >
-              <Eye className="w-4 h-4" /> Dossier ({selectedApt.patient_uhid})
-            </button>
-          )}
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-sm text-[#1D1B1B] dark:text-[#FEF8F7]">
+                Dr. Vikram Rao, MD (Senior Consultant)
+              </span>
+              <ClinicalBadge variant="brand">{cabinNumber}</ClinicalBadge>
+            </div>
+            <div className="flex items-center gap-2 text-xs text-[#514346] dark:text-[#D5C2C5]">
+              <span>Status: <strong className="capitalize text-[#4A1F2B] dark:text-[#C08491]">{doctorStatus.replace("_", " ")}</strong></span>
+              {delayMinutes > 0 && (
+                <span className="text-[#BA1A1A] font-bold">
+                  (Delayed by +{delayMinutes}m · Broadcasted to OPD Display)
+                </span>
+              )}
+            </div>
+          </div>
         </div>
 
-        {/* Doctor Status & Delay Controls */}
-        <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 flex flex-col lg:flex-row lg:items-center justify-between gap-4 text-xs">
-          
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="font-extrabold text-slate-700 dark:text-slate-300">Doctor Presence:</span>
-            {[
-              { key: "in_cabin", label: "In Cabin" },
-              { key: "available", label: "Available" },
-              { key: "running_late", label: "Running Late" },
-              { key: "on_rounds", label: "On Rounds" },
-              { key: "on_break", label: "On Break" }
-            ].map((st) => (
+        {/* Live Stopwatch & Quick Actions */}
+        <div className="flex items-center gap-3 flex-wrap">
+          {/* Active Consultation Stopwatch */}
+          <div className="flex items-center gap-2 px-3 py-1 rounded bg-[#FAF7F6] dark:bg-[#1F1924] border border-[#E3DFDB] dark:border-[#3B3041] tabular-nums">
+            <Clock className={`w-3.5 h-3.5 ${isTimerRunning ? "text-[#3F6B52] animate-pulse" : "text-[#837376]"}`} />
+            <div className="text-xs">
+              <span className="text-[10px] uppercase text-[#837376] font-semibold block leading-tight">Session Time</span>
+              <span className="font-mono font-bold text-sm text-[#1D1B1B] dark:text-[#FEF8F7]">
+                {formatTime(timerSeconds)}
+              </span>
+            </div>
+            {isTimerRunning ? (
               <button
-                key={st.key}
-                type="button"
-                onClick={() => handleUpdateDoctorStatus(st.key)}
-                className={`px-3 py-1.5 rounded-xl font-extrabold transition-all ${
-                  doctorStatus === st.key
-                    ? "bg-[#13C5DD] text-[#1D2A4D] shadow-sm"
-                    : "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-100"
-                }`}
+                onClick={() => setIsTimerRunning(false)}
+                className="p-1 rounded text-[#9A6A25] hover:bg-[#FAF4EB] transition-colors"
+                title="Pause stopwatch"
               >
-                ● {st.label}
+                <Pause className="w-3.5 h-3.5" />
               </button>
-            ))}
+            ) : (
+              <button
+                onClick={() => setIsTimerRunning(true)}
+                className="p-1 rounded text-[#3F6B52] hover:bg-[#EEF4F0] transition-colors"
+                title="Start stopwatch"
+              >
+                <Play className="w-3.5 h-3.5" />
+              </button>
+            )}
           </div>
 
-          {/* Delay Time Selector */}
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="font-extrabold text-slate-700 dark:text-slate-300 flex items-center gap-1">
-              <AlertTriangle className="w-3.5 h-3.5 text-amber-500" /> Delay:
-            </span>
-            {[0, 15, 30, 45, 60].map((mins) => (
+          {/* Quick Delay Controls */}
+          <div className="flex items-center gap-1.5 text-xs">
+            <span className="text-[11px] text-[#837376] font-semibold">Delay:</span>
+            {[0, 15, 30].map((mins) => (
               <button
                 key={mins}
-                type="button"
-                onClick={() => handleUpdateDoctorStatus(mins > 0 ? "running_late" : "in_cabin", mins)}
-                className={`px-2.5 py-1 rounded-xl font-bold ${
+                onClick={() => handleUpdateDoctorStatus(doctorStatus, mins)}
+                className={`h-[26px] px-2 rounded text-[11px] font-semibold transition-colors ${
                   delayMinutes === mins
-                    ? "bg-amber-500 text-slate-900 font-extrabold shadow-sm"
-                    : "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700"
+                    ? "bg-[#4A1F2B] text-white"
+                    : "bg-[#F2EDEC] dark:bg-[#231D27] text-[#514346] hover:bg-[#EDE7E6]"
                 }`}
               >
                 {mins === 0 ? "On Time" : `+${mins}m`}
               </button>
             ))}
-            {savingStatus && <Loader2 className="w-4 h-4 text-[#13C5DD] animate-spin ml-2" />}
           </div>
-
         </div>
-
-        {/* Doctor Delay Alert Banner */}
-        {delayMinutes > 0 && (
-          <div className="p-3.5 rounded-2xl bg-amber-500/15 border border-amber-500/30 text-amber-800 dark:text-amber-200 text-xs font-bold flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0" />
-              <span>
-                Doctor Delay Active: <strong>+{delayMinutes} minutes</strong>. All OPD patient slot times have been dynamically adjusted.
-              </span>
-            </div>
-            <button
-              onClick={() => handleUpdateDoctorStatus("in_cabin", 0)}
-              className="text-[10px] uppercase font-black underline hover:text-amber-900"
-            >
-              Clear Delay
-            </button>
-          </div>
-        )}
       </div>
 
       {successMessage && (
-        <div className="p-4 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 text-xs font-bold flex items-center gap-2">
-          <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+        <div className="p-3 rounded-md bg-[#EEF4F0] dark:bg-[#1C2C22] border border-[#D4E3D9] dark:border-[#2C4A38] text-[#3F6B52] dark:text-[#7ADDB0] text-xs font-semibold flex items-center gap-2 animate-in fade-in">
+          <CheckCircle2 className="w-4 h-4 shrink-0" />
           <span>{successMessage}</span>
         </div>
       )}
 
-      {/* Main Grid: Queue & EMR Console */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      {/* ─── 2-COLUMN CLINICAL EMR WORKSPACE ─── */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
         
-        {/* Left Column: OPD Queue List & Case Slot Numbers */}
-        <div className="lg:col-span-4 p-5 rounded-3xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 shadow-xl space-y-4">
-          
-          <div className="flex items-center justify-between text-xs font-bold pb-2 border-b border-slate-100 dark:border-slate-800">
-            <div>
-              <span className="text-slate-900 dark:text-white font-extrabold">OPD Queue</span>
-              <span className="text-[10px] text-slate-400 block">Avg Time: {avgDuration} min/case</span>
-            </div>
-            <span className="px-2.5 py-1 rounded-full bg-[#13C5DD]/15 text-[#13C5DD] text-[10px] font-black">
-              {appointments.length} Total Cases
-            </span>
-          </div>
-
-          {loading ? (
-            <div className="py-12 text-center">
-              <Loader2 className="w-6 h-6 text-[#13C5DD] animate-spin mx-auto" />
-            </div>
-          ) : appointments.length === 0 ? (
-            <div className="p-6 text-center text-xs text-slate-400">No active appointments in queue.</div>
-          ) : (
-            <div className="space-y-2 max-h-[600px] overflow-y-auto pr-1">
+        {/* LEFT COLUMN: OPD PATIENT QUEUE (4 Cols) */}
+        <div className="lg:col-span-4 space-y-3">
+          <ClinicalCard
+            title={`OPD Queue (${appointments.length})`}
+            subtitle="Today's booked tokens & consulting slots"
+            icon={<Clock className="w-4 h-4 text-[#70404B]" />}
+            noPadding
+          >
+            <div className="divide-y divide-[#E3DFDB] dark:divide-[#3B3041] max-h-[640px] overflow-y-auto">
               {appointments.map((apt) => {
                 const isSelected = selectedApt?.id === apt.id;
-                const isInCabin = apt.status === "in_consultation";
+                const isInConsultation = apt.status === "in_consultation";
+                const isCompleted = apt.status === "completed";
 
                 return (
                   <div
                     key={apt.id}
                     onClick={() => selectPatient(apt)}
-                    className={`p-3.5 rounded-2xl border text-xs cursor-pointer transition-all ${
+                    className={`p-3 cursor-pointer transition-all ${
                       isSelected
-                        ? "bg-[#13C5DD]/10 border-[#13C5DD] shadow-sm ring-1 ring-[#13C5DD]"
-                        : "bg-slate-50 dark:bg-slate-900/60 border-slate-200 dark:border-slate-800 hover:border-slate-300"
+                        ? "bg-[#F3E9EB] dark:bg-[#32293D] border-l-4 border-[#4A1F2B] dark:border-[#C08491]"
+                        : "hover:bg-[#FAF7F6] dark:hover:bg-[#201A25]"
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2.5">
-                        <div className={`w-9 h-9 rounded-xl font-black flex flex-col items-center justify-center text-[10px] shadow-sm ${
-                          isInCabin ? "bg-emerald-500 text-slate-900 animate-pulse" : "bg-[#13C5DD] text-[#1D2A4D]"
-                        }`}>
-                          <span className="text-[8px] uppercase leading-none">CASE</span>
-                          <span className="text-xs leading-none">#{apt.case_number || 1}</span>
-                        </div>
-                        <div>
-                          <div className="font-extrabold text-slate-900 dark:text-white flex items-center gap-1.5">
-                            {apt.patient_name}
-                            <span className="text-[10px] text-[#13C5DD] font-mono">({apt.token_number})</span>
-                          </div>
-                          <div className="text-[10px] text-slate-400">
-                            Slot: {apt.slot_time} {apt.has_delay && <span className="text-amber-500 font-bold">→ {apt.adjusted_slot_time}</span>}
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="text-right">
-                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                          apt.status === "completed" ? "bg-emerald-500/20 text-emerald-500" :
-                          isInCabin ? "bg-emerald-500 text-slate-900 font-black" :
-                          "bg-amber-500/20 text-amber-500"
-                        }`}>
-                          {isInCabin ? "IN CABIN" : apt.status}
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono text-xs font-bold px-1.5 py-0.5 rounded bg-white dark:bg-[#241D29] border border-[#E3DFDB] dark:border-[#3B3041] text-[#4A1F2B] dark:text-[#C08491]">
+                          {apt.token_number}
                         </span>
-                        {apt.duration_minutes > 0 && (
-                          <div className="text-[9px] font-bold text-slate-400 mt-0.5">
-                            ⏱️ {apt.duration_minutes}m
-                          </div>
+                        {apt.case_number && (
+                          <span className="text-[10px] font-bold text-[#837376]">
+                            Case #{apt.case_number}
+                          </span>
                         )}
                       </div>
+                      <ClinicalBadge
+                        variant={
+                          isInConsultation ? "critical" : isCompleted ? "success" : "neutral"
+                        }
+                        dot={isInConsultation}
+                      >
+                        {isInConsultation ? "IN CABIN" : apt.status.toUpperCase()}
+                      </ClinicalBadge>
                     </div>
+
+                    <div className="mt-1.5 flex items-baseline justify-between">
+                      <h4 className="font-bold text-xs text-[#1D1B1B] dark:text-[#FEF8F7] truncate max-w-[170px]">
+                        {apt.patient_name}
+                      </h4>
+                      <span className="text-[10px] text-[#837376] font-mono">{apt.patient_uhid}</span>
+                    </div>
+
+                    <p className="text-[11px] text-[#514346] dark:text-[#D5C2C5] truncate mt-0.5">
+                      {apt.chief_complaint || "Consultation"}
+                    </p>
                   </div>
                 );
               })}
             </div>
-          )}
+          </ClinicalCard>
         </div>
 
-        {/* Right Column: Active EMR Consultation Writer & Live Stopwatch */}
-        <div className="lg:col-span-8 p-6 rounded-3xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 shadow-xl space-y-6">
+        {/* RIGHT COLUMN: CLINICAL EMR CONSULTATION PAD (8 Cols) */}
+        <div className="lg:col-span-8 space-y-4">
           {selectedApt ? (
-            <form onSubmit={handleSaveConsultation} className="space-y-6">
-              
-              {/* Active Patient Card Header with Live Consultation Stopwatch */}
-              <div className="p-4 rounded-2xl bg-gradient-to-r from-slate-50 to-cyan-50/30 dark:from-slate-900 dark:to-slate-800/80 border border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div>
-                  <div className="text-xs font-black text-[#13C5DD] uppercase tracking-wider flex items-center gap-1.5">
-                    <DoorOpen className="w-4 h-4" /> CASE #{selectedApt.case_number || 1} • TOKEN {selectedApt.token_number}
-                  </div>
-                  <div className="text-lg font-extrabold font-poppins text-slate-900 dark:text-white flex items-center gap-2 mt-0.5">
-                    {selectedApt.patient_name}
-                    <span className="text-xs font-bold text-[#13C5DD]">({selectedApt.patient_uhid})</span>
-                  </div>
-                  <div className="text-xs text-slate-400 mt-0.5">
-                    {selectedApt.gender}, {selectedApt.age}y • Blood: <strong>{selectedApt.blood_group || "N/A"}</strong> • Slot: {selectedApt.slot_time}
-                  </div>
-                </div>
+            <>
+              {/* STITCH PATIENT HEADER DEMOGRAPHIC BAR WITH CRITICAL ALLERGY SHIELD */}
+              <PatientHeaderBanner
+                patient={{
+                  uhid: selectedApt.patient_uhid,
+                  full_name: selectedApt.patient_name,
+                  age: selectedApt.age,
+                  gender: selectedApt.gender,
+                  blood_group: selectedApt.blood_group,
+                  allergies: selectedApt.allergies,
+                  mobile: selectedApt.mobile,
+                  cabin_number: selectedApt.cabin_number || cabinNumber,
+                  case_number: selectedApt.case_number,
+                  doctor_name: "Dr. Vikram Rao",
+                }}
+                onViewDossier={() => setSelectedUhid(selectedApt.patient_uhid)}
+              />
 
-                {/* Consultation Timer Control */}
-                <div className="flex items-center gap-3 bg-white dark:bg-slate-950 p-2.5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-                  <div>
-                    <div className="text-[9px] uppercase font-extrabold text-slate-400">Consultation Duration</div>
-                    <div className="text-2xl font-black font-mono text-[#13C5DD]">
-                      {formatTime(timerSeconds)}
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-1">
-                    {!isTimerRunning ? (
-                      <button
-                        type="button"
-                        onClick={handleStartConsultation}
-                        className="px-3 py-2 rounded-xl bg-emerald-500 text-slate-900 font-black text-xs flex items-center gap-1 hover:bg-emerald-400 transition-colors"
-                        title="Admit to Cabin & Start Timer"
-                      >
-                        <Play className="w-3.5 h-3.5 fill-current" /> Admit Case
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => setIsTimerRunning(false)}
-                        className="p-2 rounded-xl bg-amber-500/15 text-amber-500 hover:bg-amber-500/25"
-                        title="Pause Timer"
-                      >
-                        <Pause className="w-4 h-4" />
-                      </button>
-                    )}
-                  </div>
-                </div>
+              {/* TABBED CLINICAL WORKSPACE NAVIGATION */}
+              <div className="flex items-center gap-2 border-b border-[#E3DFDB] dark:border-[#3B3041] pb-2 text-xs">
+                <button
+                  type="button"
+                  onClick={() => setActiveEmrTab("consultation")}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md font-semibold transition-colors ${
+                    activeEmrTab === "consultation"
+                      ? "bg-[#4A1F2B] text-white shadow-xs"
+                      : "text-[#514346] dark:text-[#D5C2C5] hover:bg-[#F2EDEC]"
+                  }`}
+                >
+                  <FileText className="w-3.5 h-3.5" />
+                  <span>Clinical Notes & Prescription</span>
+                </button>
+                {selectedApt.status !== "in_consultation" && selectedApt.status !== "completed" && (
+                  <ClinicalButton
+                    variant="primary"
+                    size="sm"
+                    onClick={handleStartConsultation}
+                    icon={<Play className="w-3 h-3" />}
+                    className="ml-auto"
+                  >
+                    Call Patient In Cabin
+                  </ClinicalButton>
+                )}
               </div>
 
-              {/* Vitals Recording Bar */}
-              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-2">
-                <div className="text-[11px] font-extrabold text-slate-400 uppercase">Consultation Vitals</div>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-                  <div>
-                    <label className="block text-[10px] text-slate-500 mb-0.5 font-bold">BP (Sys/Dia mmHg)</label>
-                    <div className="flex gap-1">
-                      <input
-                        type="number"
-                        value={vitals.bp_systolic}
-                        onChange={(e) => setVitals({ ...vitals, bp_systolic: parseInt(e.target.value) || 0 })}
-                        className="w-full p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold"
-                      />
-                      <input
-                        type="number"
-                        value={vitals.bp_diastolic}
-                        onChange={(e) => setVitals({ ...vitals, bp_diastolic: parseInt(e.target.value) || 0 })}
-                        className="w-full p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold"
-                      />
-                    </div>
+              {/* CONSULTATION FORM PAD */}
+              <form onSubmit={handleSaveConsultation} className="space-y-4">
+                
+                {/* 1. Vital Signs Cluster */}
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-[11px] font-bold uppercase text-[#837376] tracking-wider">
+                      Current Vitals Readout
+                    </span>
+                    <span className="text-[10px] text-[#837376]">Synchronized with triage</span>
                   </div>
-                  <div>
-                    <label className="block text-[10px] text-slate-500 mb-0.5 font-bold">Heart Rate (BPM)</label>
+                  <VitalStrip vitals={vitals} />
+                </div>
+
+                {/* 2. Chief Complaint & History of Present Illness (HPI) */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="space-y-1">
+                    <label className="text-xs font-semibold text-[#514346] dark:text-[#D5C2C5]">
+                      Chief Complaint *
+                    </label>
                     <input
-                      type="number"
-                      value={vitals.heart_rate}
-                      onChange={(e) => setVitals({ ...vitals, heart_rate: parseInt(e.target.value) || 0 })}
-                      className="w-full p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold"
+                      type="text"
+                      required
+                      value={chiefComplaint}
+                      onChange={(e) => setChiefComplaint(e.target.value)}
+                      placeholder="e.g. Acute chest pain, persistent cough x 4 days"
+                      className="w-full h-8 px-3 rounded-md bg-white dark:bg-[#241D29] border border-[#E3DFDB] dark:border-[#3B3041] text-xs text-[#1D1B1B] dark:text-[#FEF8F7] focus:outline-none focus:border-[#4A1F2B]"
                     />
                   </div>
-                  <div>
-                    <label className="block text-[10px] text-slate-500 mb-0.5 font-bold">SpO2 (%)</label>
+
+                  <div className="space-y-1">
+                    <label className="text-xs font-semibold text-[#514346] dark:text-[#D5C2C5]">
+                      History of Present Illness (HPI)
+                    </label>
                     <input
-                      type="number"
-                      value={vitals.spo2}
-                      onChange={(e) => setVitals({ ...vitals, spo2: parseInt(e.target.value) || 0 })}
-                      className="w-full p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[10px] text-slate-500 mb-0.5 font-bold">Temp (°F)</label>
-                    <input
-                      type="number"
-                      step="0.1"
-                      value={vitals.temperature}
-                      onChange={(e) => setVitals({ ...vitals, temperature: parseFloat(e.target.value) || 0 })}
-                      className="w-full p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold"
+                      type="text"
+                      value={hpi}
+                      onChange={(e) => setHpi(e.target.value)}
+                      placeholder="Onset, character, aggravating / relieving factors..."
+                      className="w-full h-8 px-3 rounded-md bg-white dark:bg-[#241D29] border border-[#E3DFDB] dark:border-[#3B3041] text-xs text-[#1D1B1B] dark:text-[#FEF8F7] focus:outline-none focus:border-[#4A1F2B]"
                     />
                   </div>
                 </div>
-              </div>
 
-              {/* SOAP Clinical Notes */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* 3. Clinical Examination Findings */}
                 <div className="space-y-1">
-                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                    Chief Complaints & Duration
+                  <label className="text-xs font-semibold text-[#514346] dark:text-[#D5C2C5]">
+                    Physical & Systemic Examination Findings
                   </label>
                   <textarea
                     rows={2}
-                    value={chiefComplaint}
-                    onChange={(e) => setChiefComplaint(e.target.value)}
-                    className="w-full p-3 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#13C5DD]"
+                    value={examination}
+                    onChange={(e) => setExamination(e.target.value)}
+                    placeholder="Chest clear, S1/S2 heard, no pedal edema, abdomen soft non-tender..."
+                    className="w-full p-2.5 rounded-md bg-white dark:bg-[#241D29] border border-[#E3DFDB] dark:border-[#3B3041] text-xs text-[#1D1B1B] dark:text-[#FEF8F7] focus:outline-none focus:border-[#4A1F2B]"
                   />
                 </div>
-                <div className="space-y-1">
-                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                    Clinical Diagnosis *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. Acute Bronchitis / Type 2 Diabetes"
-                    value={diagnosis}
-                    onChange={(e) => setDiagnosis(e.target.value)}
-                    className="w-full p-3 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#13C5DD] font-bold"
-                  />
-                </div>
-              </div>
 
-              {/* E-Prescriptions Module */}
-              <div className="space-y-3 pt-2 border-t border-slate-100 dark:border-slate-800">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-extrabold text-slate-900 dark:text-white flex items-center gap-1.5">
-                    <Pill className="w-4 h-4 text-[#13C5DD]" /> Electronic Prescription (Rx)
-                  </span>
-                  <button
-                    type="button"
-                    onClick={handleAddRxItem}
-                    className="px-3 py-1.5 rounded-xl bg-[#13C5DD]/15 text-[#13C5DD] text-xs font-extrabold flex items-center gap-1"
-                  >
-                    <Plus className="w-3.5 h-3.5" /> Add Medicine
-                  </button>
+                {/* 4. ICD-10 Clinical Diagnosis */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="sm:col-span-2 space-y-1">
+                    <label className="text-xs font-semibold text-[#514346] dark:text-[#D5C2C5]">
+                      Clinical Diagnosis *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={diagnosis}
+                      onChange={(e) => setDiagnosis(e.target.value)}
+                      placeholder="e.g. Acute Bronchitis / Essential Hypertension"
+                      className="w-full h-8 px-3 rounded-md bg-white dark:bg-[#241D29] border border-[#E3DFDB] dark:border-[#3B3041] text-xs font-semibold text-[#1D1B1B] dark:text-[#FEF8F7] focus:outline-none focus:border-[#4A1F2B]"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-xs font-semibold text-[#514346] dark:text-[#D5C2C5]">
+                      ICD-10 Code
+                    </label>
+                    <input
+                      type="text"
+                      value={icd10}
+                      onChange={(e) => setIcd10(e.target.value)}
+                      placeholder="e.g. J20.9 / I10"
+                      className="w-full h-8 px-3 rounded-md bg-white dark:bg-[#241D29] border border-[#E3DFDB] dark:border-[#3B3041] text-xs font-mono font-bold text-[#4A1F2B] dark:text-[#C08491] focus:outline-none focus:border-[#4A1F2B]"
+                    />
+                  </div>
                 </div>
 
+                {/* 5. Treatment Plan & Rx Items Table */}
                 <div className="space-y-2">
-                  {rxItems.map((item, idx) => (
-                    <div key={idx} className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 grid grid-cols-12 gap-2 text-xs items-center">
-                      <div className="col-span-4">
-                        <input
-                          type="text"
-                          placeholder="Medicine name"
-                          value={item.medicine_name}
-                          onChange={(e) => {
-                            const updated = [...rxItems];
-                            updated[idx].medicine_name = e.target.value;
-                            setRxItems(updated);
-                          }}
-                          className="w-full p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold"
-                        />
-                      </div>
-                      <div className="col-span-2">
-                        <input
-                          type="text"
-                          placeholder="Dosage (500mg)"
-                          value={item.dosage}
-                          onChange={(e) => {
-                            const updated = [...rxItems];
-                            updated[idx].dosage = e.target.value;
-                            setRxItems(updated);
-                          }}
-                          className="w-full p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs"
-                        />
-                      </div>
-                      <div className="col-span-2">
-                        <select
-                          value={item.frequency}
-                          onChange={(e) => {
-                            const updated = [...rxItems];
-                            updated[idx].frequency = e.target.value;
-                            setRxItems(updated);
-                          }}
-                          className="w-full p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs"
-                        >
-                          <option>1-0-1 (Twice)</option>
-                          <option>1-1-1 (Thrice)</option>
-                          <option>1-0-0 (Morning)</option>
-                          <option>0-0-1 (Night)</option>
-                          <option>SOS (As Needed)</option>
-                        </select>
-                      </div>
-                      <div className="col-span-3">
-                        <input
-                          type="text"
-                          placeholder="Duration (5 Days)"
-                          value={item.duration_days}
-                          onChange={(e) => {
-                            const updated = [...rxItems];
-                            updated[idx].duration_days = e.target.value;
-                            setRxItems(updated);
-                          }}
-                          className="w-full p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs"
-                        />
-                      </div>
-                      <div className="col-span-1 text-right">
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveRxItem(idx)}
-                          className="p-1.5 rounded-lg text-red-500 hover:bg-red-500/10"
-                        >
-                          ×
-                        </button>
-                      </div>
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-bold text-xs uppercase text-[#1D1B1B] dark:text-[#FEF8F7] tracking-wider">
+                      Prescribed Medicines (Rx)
+                    </span>
+                    <button
+                      type="button"
+                      onClick={handleAddRxItem}
+                      className="h-[24px] px-2 rounded bg-[#F3E9EB] dark:bg-[#32293D] text-[#4A1F2B] dark:text-[#F7B5C3] font-semibold text-[11px] hover:opacity-90 flex items-center gap-1"
+                    >
+                      <Plus className="w-3 h-3" /> Add Drug
+                    </button>
+                  </div>
+
+                  <div className="border border-[#E3DFDB] dark:border-[#3B3041] rounded-md overflow-hidden bg-white dark:bg-[#241D29]">
+                    <table className="w-full text-left text-xs">
+                      <thead className="bg-[#FAF7F6] dark:bg-[#1F1924] text-[10px] uppercase font-bold text-[#837376] border-b border-[#E3DFDB] dark:border-[#3B3041]">
+                        <tr>
+                          <th className="p-2">Medicine / Brand</th>
+                          <th className="p-2">Dosage</th>
+                          <th className="p-2">Frequency</th>
+                          <th className="p-2">Timing</th>
+                          <th className="p-2 text-center">Days</th>
+                          <th className="p-2 text-center">Qty</th>
+                          <th className="p-2 text-right">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-[#E3DFDB] dark:divide-[#3B3041] font-medium">
+                        {rxItems.map((item, idx) => (
+                          <tr key={idx} className="hover:bg-[#FAF7F6] dark:hover:bg-[#201A25]">
+                            <td className="p-2">
+                              <input
+                                type="text"
+                                value={item.medicine_name}
+                                onChange={(e) => {
+                                  const updated = [...rxItems];
+                                  updated[idx].medicine_name = e.target.value;
+                                  setRxItems(updated);
+                                }}
+                                className="w-full h-7 px-2 rounded border border-[#E3DFDB] dark:border-[#3B3041] bg-transparent text-xs font-semibold focus:outline-none"
+                              />
+                            </td>
+                            <td className="p-2">
+                              <input
+                                type="text"
+                                value={item.dosage}
+                                onChange={(e) => {
+                                  const updated = [...rxItems];
+                                  updated[idx].dosage = e.target.value;
+                                  setRxItems(updated);
+                                }}
+                                className="w-16 h-7 px-2 rounded border border-[#E3DFDB] dark:border-[#3B3041] bg-transparent text-xs focus:outline-none"
+                              />
+                            </td>
+                            <td className="p-2">
+                              <select
+                                value={item.frequency}
+                                onChange={(e) => {
+                                  const updated = [...rxItems];
+                                  updated[idx].frequency = e.target.value;
+                                  setRxItems(updated);
+                                }}
+                                className="h-7 px-1.5 rounded border border-[#E3DFDB] dark:border-[#3B3041] bg-transparent text-xs focus:outline-none"
+                              >
+                                <option value="1-0-1">1-0-1 (BID)</option>
+                                <option value="1-1-1">1-1-1 (TID)</option>
+                                <option value="1-0-0">1-0-0 (Morning)</option>
+                                <option value="0-0-1">0-0-1 (Bedtime)</option>
+                                <option value="SOS">SOS (As needed)</option>
+                              </select>
+                            </td>
+                            <td className="p-2">
+                              <select
+                                value={item.timing}
+                                onChange={(e) => {
+                                  const updated = [...rxItems];
+                                  updated[idx].timing = e.target.value;
+                                  setRxItems(updated);
+                                }}
+                                className="h-7 px-1.5 rounded border border-[#E3DFDB] dark:border-[#3B3041] bg-transparent text-xs focus:outline-none"
+                              >
+                                <option value="After Food">After Food</option>
+                                <option value="Before Food">Before Food</option>
+                                <option value="Bedtime">Bedtime</option>
+                                <option value="With Food">With Food</option>
+                              </select>
+                            </td>
+                            <td className="p-2 text-center">
+                              <input
+                                type="number"
+                                value={item.duration_days}
+                                onChange={(e) => {
+                                  const updated = [...rxItems];
+                                  updated[idx].duration_days = parseInt(e.target.value) || 1;
+                                  setRxItems(updated);
+                                }}
+                                className="w-12 h-7 px-1 text-center rounded border border-[#E3DFDB] dark:border-[#3B3041] bg-transparent text-xs focus:outline-none"
+                              />
+                            </td>
+                            <td className="p-2 text-center">
+                              <input
+                                type="number"
+                                value={item.quantity}
+                                onChange={(e) => {
+                                  const updated = [...rxItems];
+                                  updated[idx].quantity = parseInt(e.target.value) || 1;
+                                  setRxItems(updated);
+                                }}
+                                className="w-12 h-7 px-1 text-center rounded border border-[#E3DFDB] dark:border-[#3B3041] bg-transparent text-xs focus:outline-none"
+                              />
+                            </td>
+                            <td className="p-2 text-right">
+                              <button
+                                type="button"
+                                onClick={() => handleRemoveRxItem(idx)}
+                                className="p-1 rounded text-[#837376] hover:text-[#BA1A1A] transition-colors"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                {/* 6. Diagnostic Orders Requisition */}
+                {labCatalog.length > 0 && (
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-semibold text-[#514346] dark:text-[#D5C2C5] flex items-center gap-1.5">
+                      <FlaskConical className="w-3.5 h-3.5 text-[#70404B]" />
+                      <span>Order Laboratory Diagnostic Investigations (LIS)</span>
+                    </label>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                      {labCatalog.slice(0, 8).map((t) => {
+                        const isChecked = selectedLabs.includes(t.id);
+                        return (
+                          <label
+                            key={t.id}
+                            className={`p-2 rounded-md border text-xs cursor-pointer flex items-center gap-2 transition-all ${
+                              isChecked
+                                ? "bg-[#F3E9EB] dark:bg-[#32293D] border-[#4A1F2B] text-[#4A1F2B] font-bold"
+                                : "bg-white dark:bg-[#241D29] border-[#E3DFDB] dark:border-[#3B3041] text-[#514346]"
+                            }`}
+                          >
+                            <input
+                              type="checkbox"
+                              checked={isChecked}
+                              onChange={(e) => {
+                                if (e.target.value) {
+                                  setSelectedLabs(
+                                    isChecked
+                                      ? selectedLabs.filter((id) => id !== t.id)
+                                      : [...selectedLabs, t.id]
+                                  );
+                                }
+                              }}
+                              className="w-3.5 h-3.5 accent-[#4A1F2B]"
+                            />
+                            <span className="truncate">{t.name}</span>
+                          </label>
+                        );
+                      })}
                     </div>
-                  ))}
+                  </div>
+                )}
+
+                {/* Submit Commits Bar */}
+                <div className="pt-2 flex items-center justify-between border-t border-[#E3DFDB] dark:border-[#3B3041]">
+                  <div className="text-xs text-[#837376]">
+                    Session: <strong className="font-mono text-[#1D1B1B] dark:text-[#FEF8F7]">{formatTime(timerSeconds)}</strong>
+                  </div>
+                  <ClinicalButton
+                    type="submit"
+                    variant="primary"
+                    size="md"
+                    disabled={submitting}
+                    icon={submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+                  >
+                    {submitting ? "Signing Consultation..." : "Finalize & Sign Clinical Encounter"}
+                  </ClinicalButton>
                 </div>
-              </div>
 
-              {/* Lab Investigations */}
-              <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800">
-                <span className="text-xs font-extrabold text-slate-900 dark:text-white flex items-center gap-1.5">
-                  <FlaskConical className="w-4 h-4 text-[#13C5DD]" /> Order Diagnostic Investigations
-                </span>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
-                  {labCatalog.map((test) => {
-                    const isChecked = selectedLabs.includes(test.id);
-                    return (
-                      <label
-                        key={test.id}
-                        className={`p-2.5 rounded-xl border flex items-center gap-2 cursor-pointer transition-all ${
-                          isChecked
-                            ? "bg-[#13C5DD]/15 border-[#13C5DD] text-[#1D2A4D] dark:text-white font-bold"
-                            : "bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400"
-                        }`}
-                      >
-                        <input
-                          type="checkbox"
-                          checked={isChecked}
-                          onChange={(e) => {
-                            if (e.target.checked) {
-                              setSelectedLabs([...selectedLabs, test.id]);
-                            } else {
-                              setSelectedLabs(selectedLabs.filter((id) => id !== test.id));
-                            }
-                          }}
-                          className="accent-[#13C5DD]"
-                        />
-                        <span className="truncate">{test.name}</span>
-                      </label>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Action Submit Button */}
-              <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-end">
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-[#13C5DD] to-[#0F6CBD] text-white font-extrabold text-xs shadow-lg uppercase flex items-center gap-2 disabled:opacity-50 hover:opacity-95 transition-all"
-                >
-                  {submitting ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" /> Saving Consultation...
-                    </>
-                  ) : (
-                    <>
-                      <Save className="w-4 h-4" /> Save Consultation ({formatTime(timerSeconds)}) & Issue Rx
-                    </>
-                  )}
-                </button>
-              </div>
-
-            </form>
+              </form>
+            </>
           ) : (
-            <div className="py-20 text-center text-xs text-slate-400">
-              Select a patient from the OPD queue on the left to begin consultation.
+            <div className="py-24 text-center text-xs text-[#837376] bg-white dark:bg-[#241D29] border border-[#E3DFDB] dark:border-[#3B3041] rounded-lg p-6">
+              Select a patient from the OPD Queue on the left to begin clinical consultation.
             </div>
           )}
         </div>

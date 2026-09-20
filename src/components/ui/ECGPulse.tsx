@@ -7,7 +7,7 @@ interface ECGPulseProps {
   color?: string;
 }
 
-export default function ECGPulse({ className = "h-12 w-full", color = "#00C896" }: ECGPulseProps) {
+export default function ECGPulse({ className = "h-12 w-full", color = "#3F6B52" }: ECGPulseProps) {
   return (
     <div className={`relative overflow-hidden flex items-center ${className}`}>
       <svg
@@ -33,7 +33,7 @@ export default function ECGPulse({ className = "h-12 w-full", color = "#00C896" 
         />
       </svg>
       <div 
-        className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full shadow-[0_0_12px_#00C896] animate-ping"
+        className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full animate-ping"
         style={{ backgroundColor: color }}
       />
     </div>

@@ -16,8 +16,8 @@ export default function StatsSection() {
       suffix: "+",
       label: t.statHospitals,
       desc: t.statHospitalsDesc,
-      color: "text-[#0F6CBD]",
-      bg: "bg-[#0F6CBD]/10"
+      color: "text-[#4A1F2B] dark:text-[#E2838E]",
+      bg: "bg-[#F3E9EB] dark:bg-[#32293D]"
     },
     {
       icon: UserCheck,
@@ -25,8 +25,8 @@ export default function StatsSection() {
       suffix: "+",
       label: t.statDoctors,
       desc: t.statDoctorsDesc,
-      color: "text-[#00C896]",
-      bg: "bg-[#00C896]/10"
+      color: "text-[#3F6B52] dark:text-[#85B599]",
+      bg: "bg-[#E8F0EC] dark:bg-[#23382B]"
     },
     {
       icon: HeartHandshake,
@@ -35,8 +35,8 @@ export default function StatsSection() {
       suffix: "M+",
       label: t.statPatients,
       desc: t.statPatientsDesc,
-      color: "text-[#4CC9F0]",
-      bg: "bg-[#4CC9F0]/10"
+      color: "text-[#83505B] dark:text-[#D5AAB4]",
+      bg: "bg-[#F7EDEF] dark:bg-[#382830]"
     },
     {
       icon: CalendarCheck,
@@ -45,8 +45,8 @@ export default function StatsSection() {
       suffix: "M+",
       label: t.statAppointments,
       desc: t.statAppointmentsDesc,
-      color: "text-purple-500",
-      bg: "bg-purple-500/10"
+      color: "text-[#3E6177] dark:text-[#97B8CC]",
+      bg: "bg-[#EAF0F4] dark:bg-[#25323B]"
     }
   ];
 
@@ -59,22 +59,22 @@ export default function StatsSection() {
             return (
               <motion.div
                 key={idx}
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: idx * 0.08 }}
+                transition={{ duration: 0.3, delay: idx * 0.06 }}
                 viewport={{ once: true }}
-                className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-all"
+                className="p-6 rounded-lg bg-white dark:bg-[#242026] border border-[#E5E0E2] dark:border-[#3E3842] shadow-[0_1px_3px_rgba(41,39,39,0.06)] hover:shadow-[0_4px_16px_rgba(41,39,39,0.08)] transition-all"
               >
-                <div className={`w-10 h-10 rounded-xl ${item.bg} ${item.color} flex items-center justify-center mb-3`}>
+                <div className={`w-10 h-10 rounded-md ${item.bg} ${item.color} flex items-center justify-center mb-3`}>
                   <Icon className="w-5 h-5" />
                 </div>
-                <div className="text-3xl font-extrabold font-poppins text-slate-900 dark:text-white">
+                <div className="text-3xl font-bold font-sans text-[#292727] dark:text-[#FEF8F7]">
                   <Counter end={item.value} suffix={item.suffix} decimals={item.decimals} />
                 </div>
-                <div className="text-sm font-bold text-slate-800 dark:text-slate-200 mt-1">
+                <div className="text-sm font-semibold text-[#292727] dark:text-[#ECE5E7] mt-1">
                   {item.label}
                 </div>
-                <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                <div className="text-xs text-[#686563] dark:text-[#9B8E92] mt-0.5">
                   {item.desc}
                 </div>
               </motion.div>

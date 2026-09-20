@@ -26,7 +26,7 @@ export default function ModulesGrid() {
       desc: "Instant unique hospital ID (MC-2026-XXXXXX) generation, ABHA ID verification, demographics, blood group & allergies linked across all visits.",
       icon: Users,
       badge: "Core Foundation",
-      color: "from-blue-500/20 to-cyan-500/20 text-[#13C5DD]",
+      color: "bg-[#F3E9EB] text-[#4A1F2B] dark:bg-[#32293D] dark:text-[#E2838E]",
     },
     {
       id: "opd",
@@ -34,7 +34,7 @@ export default function ModulesGrid() {
       desc: "Live doctor consultation queues, token dispensing, slot booking, automated triage waiting estimates, and no-show tracking.",
       icon: Calendar,
       badge: "Front Desk",
-      color: "from-indigo-500/20 to-blue-500/20 text-indigo-400",
+      color: "bg-[#EAF0F4] text-[#3E6177] dark:bg-[#25323B] dark:text-[#97B8CC]",
     },
     {
       id: "emr",
@@ -42,7 +42,7 @@ export default function ModulesGrid() {
       desc: "SOAP consultation composer, ICD-10 coded diagnoses, structured e-prescriptions with dosage/frequency, and direct investigation orders.",
       icon: Stethoscope,
       badge: "Clinical Care",
-      color: "from-teal-500/20 to-emerald-500/20 text-emerald-400",
+      color: "bg-[#E8F0EC] text-[#3F6B52] dark:bg-[#23382B] dark:text-[#85B599]",
     },
     {
       id: "ipd",
@@ -50,7 +50,7 @@ export default function ModulesGrid() {
       desc: "Interactive ward layout (ICU, Deluxe, General), real-time occupancy status (Available, Occupied, Cleaning, Reserved), and daily consultant rounds.",
       icon: Bed,
       badge: "Inpatient OS",
-      color: "from-emerald-500/20 to-teal-500/20 text-teal-400",
+      color: "bg-[#E8F0EC] text-[#3F6B52] dark:bg-[#23382B] dark:text-[#85B599]",
     },
     {
       id: "nursing",
@@ -58,7 +58,7 @@ export default function ModulesGrid() {
       desc: "Continuous inpatient vital monitoring with panic thresholds, medication administration charts, IV infusion records, and shift handovers.",
       icon: Heart,
       badge: "Ward Management",
-      color: "from-rose-500/20 to-pink-500/20 text-rose-400",
+      color: "bg-[#F7EDEF] text-[#83505B] dark:bg-[#382830] dark:text-[#D5AAB4]",
     },
     {
       id: "emergency",
@@ -66,7 +66,7 @@ export default function ModulesGrid() {
       desc: "Red, Orange, Yellow, Green triage classification, ambulance intake, crash cart logistics, and rapid disposition to ICU or Emergency OT.",
       icon: AlertTriangle,
       badge: "24/7 Critical",
-      color: "from-red-500/20 to-orange-500/20 text-red-400",
+      color: "bg-[#FAECEF] text-[#8C3A45] dark:bg-[#3D252A] dark:text-[#F497A4]",
     },
     {
       id: "lis",
@@ -74,7 +74,7 @@ export default function ModulesGrid() {
       desc: "Full pathology test catalog, sample collection barcodes, automated normal range validation, critical panic alerts, and pathologist verification.",
       icon: FlaskConical,
       badge: "Diagnostics",
-      color: "from-purple-500/20 to-indigo-500/20 text-purple-400",
+      color: "bg-[#F3E9EB] text-[#4A1F2B] dark:bg-[#32293D] dark:text-[#E2838E]",
     },
     {
       id: "ris",
@@ -82,7 +82,7 @@ export default function ModulesGrid() {
       desc: "X-Ray, CT, MRI, Ultrasound imaging study workflow, PACS-ready reporting templates, and authenticated radiologist sign-offs.",
       icon: Eye,
       badge: "Imaging",
-      color: "from-cyan-500/20 to-blue-500/20 text-cyan-400",
+      color: "bg-[#EAF0F4] text-[#3E6177] dark:bg-[#25323B] dark:text-[#97B8CC]",
     },
     {
       id: "pharmacy",
@@ -90,7 +90,7 @@ export default function ModulesGrid() {
       desc: "Direct doctor prescription dispensing, First-Expiry-First-Out batch tracking, low stock reorder alerts, and 12% GST medical billing.",
       icon: Pill,
       badge: "Store & POS",
-      color: "from-amber-500/20 to-orange-500/20 text-amber-400",
+      color: "bg-[#FDF4E7] text-[#9E651E] dark:bg-[#382C1B] dark:text-[#D6A96C]",
     },
     {
       id: "ot",
@@ -98,7 +98,7 @@ export default function ModulesGrid() {
       desc: "Surgical schedule coordination, surgeon & anesthetist roster, pre-op safety verification checklists, and post-op surgical notes.",
       icon: Scissors,
       badge: "Surgical Complex",
-      color: "from-blue-500/20 to-teal-500/20 text-blue-400",
+      color: "bg-[#EAF0F4] text-[#3E6177] dark:bg-[#25323B] dark:text-[#97B8CC]",
     },
     {
       id: "billing",
@@ -106,7 +106,7 @@ export default function ModulesGrid() {
       desc: "Automatic service charge capture across OPD/IPD/Lab/Pharmacy, itemized GST bills, instant UPI payments, and PM-JAY cashless claims.",
       icon: CreditCard,
       badge: "Financial Operations",
-      color: "from-emerald-500/20 to-green-500/20 text-emerald-400",
+      color: "bg-[#E8F0EC] text-[#3F6B52] dark:bg-[#23382B] dark:text-[#85B599]",
     },
     {
       id: "security",
@@ -114,23 +114,23 @@ export default function ModulesGrid() {
       desc: "Cryptographic tamper-evident audit trail capturing every record view, prescription change, drug dispensing, and billing adjustment.",
       icon: ShieldCheck,
       badge: "ABDM Aligned",
-      color: "from-slate-500/20 to-zinc-500/20 text-slate-300",
+      color: "bg-[#F7F6F3] text-[#554C4F] dark:bg-[#2D2732] dark:text-[#C5B8BB]",
     },
   ];
 
   return (
-    <section id="modules" className="py-20 lg:py-28 bg-slate-50 dark:bg-[#0B0F17]/60 border-y border-slate-200 dark:border-slate-800">
+    <section id="modules" className="py-20 lg:py-28 bg-[#FBF9F9] dark:bg-[#18141C]/60 border-y border-[#E5E0E2] dark:border-[#3E3842]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
-          <div className="text-xs font-extrabold text-[#13C5DD] uppercase tracking-wider">
+          <div className="text-xs font-bold text-[#4A1F2B] dark:text-[#E2838E] uppercase tracking-wider">
             COMPLETE HOSPITAL OS CAPABILITIES
           </div>
-          <h2 className="text-3xl sm:text-5xl font-black font-poppins text-slate-900 dark:text-white tracking-tight">
+          <h2 className="text-3xl sm:text-5xl font-bold font-sans text-[#292727] dark:text-[#FEF8F7] tracking-tight">
             Integrated Hospital Management Modules
           </h2>
-          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400">
+          <p className="text-sm sm:text-base text-[#686563] dark:text-[#D5C2C5]">
             Every clinical, diagnostic, pharmaceutical, financial, and administrative workflow connected to a single unified patient database.
           </p>
         </div>
@@ -142,22 +142,22 @@ export default function ModulesGrid() {
             return (
               <div
                 key={m.id}
-                className="p-6 rounded-3xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 space-y-4 group"
+                className="p-6 rounded-lg bg-white dark:bg-[#242026] border border-[#E5E0E2] dark:border-[#3E3842] shadow-[0_1px_3px_rgba(41,39,39,0.06)] hover:shadow-[0_4px_16px_rgba(41,39,39,0.08)] transition-all duration-200 space-y-4 group"
               >
                 <div className="flex items-center justify-between">
-                  <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${m.color} flex items-center justify-center`}>
-                    <Icon className="w-6 h-6" />
+                  <div className={`w-11 h-11 rounded-md ${m.color} flex items-center justify-center`}>
+                    <Icon className="w-5 h-5" />
                   </div>
-                  <span className="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[10px] font-extrabold uppercase tracking-wider">
+                  <span className="px-2.5 py-0.5 rounded-md bg-[#F7F6F3] dark:bg-[#2D2732] text-[#686563] dark:text-[#9B8E92] text-[10px] font-semibold uppercase tracking-wider">
                     {m.badge}
                   </span>
                 </div>
 
                 <div className="space-y-1">
-                  <h3 className="text-lg font-extrabold font-poppins text-slate-900 dark:text-white group-hover:text-[#13C5DD] transition-colors">
+                  <h3 className="text-base font-bold font-sans text-[#292727] dark:text-[#FEF8F7] group-hover:text-[#4A1F2B] dark:group-hover:text-[#E2838E] transition-colors">
                     {m.title}
                   </h3>
-                  <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                  <p className="text-xs text-[#686563] dark:text-[#D5C2C5] leading-relaxed">
                     {m.desc}
                   </p>
                 </div>
@@ -170,7 +170,7 @@ export default function ModulesGrid() {
         <div className="text-center pt-4">
           <Link
             href="/app"
-            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-[#13C5DD] text-[#1D2A4D] font-black text-xs uppercase tracking-wider shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-md bg-[#4A1F2B] hover:bg-[#5E2737] text-white font-medium text-xs uppercase tracking-wider shadow-[0_1px_3px_rgba(41,39,39,0.06)] transition-colors"
           >
             <span>Launch Live Interactive Hospital Console</span>
             <ArrowRight className="w-4 h-4" />

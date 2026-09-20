@@ -33,17 +33,17 @@ export default function PatientAdmissionModal({ isOpen, onClose }: PatientAdmiss
     phone: "",
     age: "",
     gender: "male",
-    city: "અદાવાદ",
+    city: "Ahmedabad",
     symptoms: ""
   });
 
   const BEDS_LIST = [
     { code: "ICU-102", ward: "ICU (ICU-102)", status: "available" },
     { code: "ICU-104", ward: "ICU (ICU-104)", status: "available" },
-    { code: "GEN-201", ward: "જનરલ વોર્ડ (GEN-201)", status: "available" },
-    { code: "GEN-203", ward: "જનરલ વોર્ડ (GEN-203)", status: "available" },
-    { code: "DEL-301", ward: "ડીલક્સ રુમ (DEL-301)", status: "available" },
-    { code: "DEL-303", ward: "ડીલક્સ રુમ (DEL-303)", status: "available" }
+    { code: "GEN-201", ward: "General Ward (GEN-201)", status: "available" },
+    { code: "GEN-203", ward: "General Ward (GEN-203)", status: "available" },
+    { code: "DEL-301", ward: "Deluxe Room (DEL-301)", status: "available" },
+    { code: "DEL-303", ward: "Deluxe Room (DEL-303)", status: "available" }
   ];
 
   if (!isOpen) return null;
@@ -54,74 +54,73 @@ export default function PatientAdmissionModal({ isOpen, onClose }: PatientAdmiss
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60">
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
-        className="w-full max-w-lg rounded-3xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+        className="w-full max-w-lg rounded-lg bg-white dark:bg-[#241D29] border border-[#E3DFDB] dark:border-[#3B3041] shadow-[0_4px_16px_rgba(41,39,39,0.08)] overflow-hidden flex flex-col max-h-[90vh]"
       >
         {/* Header */}
-        <div className="p-6 bg-[#1D2A4D] text-white flex items-center justify-between border-b border-slate-700">
+        <div className="p-4 bg-[#4A1F2B] text-white flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-[#13C5DD] text-white flex items-center justify-center font-bold shadow-md">
-              <Bed className="w-6 h-6" />
+            <div className="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center font-bold shadow-xs">
+              <Bed className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-lg font-extrabold font-poppins">
+              <h3 className="text-base font-bold">
                 {language === "gu"
                   ? "ઘરેથી દર્દી એડમિશન & બુકિંગ"
                   : language === "hi"
                   ? "घर से मरीज एडमिशन बुकिंग"
                   : "Home Patient Admission Portal"}
               </h3>
-              <p className="text-xs text-[#13C5DD] font-bold">
-                થિયેટર સીટની જેમ લાઈવ બેડ કન્ફર્મેશન
+              <p className="text-xs text-[#F7B5C3] font-medium">
+                Live bed confirmation &amp; token dispatch
               </p>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 rounded-full text-slate-300 hover:text-white">
+          <button onClick={onClose} className="p-1 rounded text-white/70 hover:text-white">
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Modal Body */}
-        <div className="p-6 overflow-y-auto space-y-6 flex-1">
+        <div className="p-5 overflow-y-auto space-y-4 flex-1 text-xs">
           {step === "form" ? (
-            <form onSubmit={handleSubmit} className="space-y-4">
-              
+            <form onSubmit={handleSubmit} className="space-y-3">
               {/* Type Switcher */}
-              <div className="grid grid-cols-2 p-1.5 rounded-2xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-bold">
+              <div className="grid grid-cols-2 p-1 rounded-lg bg-[#F8F2F2] dark:bg-[#18141C] border border-[#E3DFDB] dark:border-[#3B3041] font-semibold">
                 <button
                   type="button"
                   onClick={() => setAdmissionType("ipd")}
-                  className={`py-2.5 rounded-xl transition-all ${
+                  className={`py-2 rounded-md transition-all ${
                     admissionType === "ipd"
-                      ? "bg-[#13C5DD] text-white shadow-sm font-extrabold"
-                      : "text-slate-600 dark:text-slate-400"
+                      ? "bg-[#4A1F2B] text-white shadow-xs"
+                      : "text-[#514346] dark:text-[#A89CA0]"
                   }`}
                 >
-                  🛏️ IPD બેડ એડમિશન (₹199)
+                  🛏️ IPD Bed Admission (₹199)
                 </button>
                 <button
                   type="button"
                   onClick={() => setAdmissionType("opd")}
-                  className={`py-2.5 rounded-xl transition-all ${
+                  className={`py-2 rounded-md transition-all ${
                     admissionType === "opd"
-                      ? "bg-[#13C5DD] text-white shadow-sm font-extrabold"
-                      : "text-slate-600 dark:text-slate-400"
+                      ? "bg-[#4A1F2B] text-white shadow-xs"
+                      : "text-[#514346] dark:text-[#A89CA0]"
                   }`}
                 >
-                  🩺 OPD ટોકન બુકિંગ (₹49)
+                  🩺 OPD Token Booking (₹49)
                 </button>
               </div>
 
               {/* Theater Seats Bed Picker Selection */}
               {admissionType === "ipd" && (
-                <div className="space-y-2">
-                  <label className="text-xs font-extrabold text-slate-700 dark:text-slate-200 uppercase flex items-center justify-between">
-                    <span>પસંદ કરેલ હોસ્પિટલ બેડ (Theater-Style Bed Map)</span>
-                    <span className="text-[#00C896] text-[10px]">🟢 ૬ બેડ અવેલેબલ</span>
+                <div className="space-y-1.5">
+                  <label className="text-[11px] font-semibold text-[#514346] dark:text-[#A89CA0] uppercase flex items-center justify-between">
+                    <span>Select Ward Bed (Live Map)</span>
+                    <span className="text-[#3F6B52] text-[10px]">🟢 6 Beds Available</span>
                   </label>
                   <div className="grid grid-cols-3 gap-2">
                     {BEDS_LIST.map((bed) => (
@@ -129,13 +128,13 @@ export default function PatientAdmissionModal({ isOpen, onClose }: PatientAdmiss
                         key={bed.code}
                         type="button"
                         onClick={() => setSelectedBedCode(bed.code)}
-                        className={`p-2.5 rounded-xl text-xs font-bold border flex flex-col items-center justify-center transition-all ${
+                        className={`p-2 rounded-lg text-xs font-semibold border flex flex-col items-center justify-center transition-all ${
                           selectedBedCode === bed.code
-                            ? "bg-[#13C5DD] text-white border-[#13C5DD] shadow-md ring-2 ring-[#13C5DD]/30"
-                            : "bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-[#13C5DD]"
+                            ? "bg-[#4A1F2B] text-white border-[#4A1F2B] shadow-xs"
+                            : "bg-[#F8F2F2] dark:bg-[#18141C] text-[#1D1B1B] dark:text-white border-[#E3DFDB] dark:border-[#3B3041] hover:border-[#4A1F2B]"
                         }`}
                       >
-                        <Bed className="w-4 h-4 mb-1" />
+                        <Bed className="w-3.5 h-3.5 mb-0.5" />
                         <span>{bed.code}</span>
                       </button>
                     ))}
@@ -143,94 +142,89 @@ export default function PatientAdmissionModal({ isOpen, onClose }: PatientAdmiss
                 </div>
               )}
 
-              {/* Form Inputs */}
-              <div className="space-y-3">
+              {/* Patient Demographics */}
+              <div className="space-y-2">
                 <div>
-                  <label className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-1 block">
-                    દર્દીનું પુરુ નામ (Patient Full Name)
-                  </label>
+                  <label className="block text-[11px] font-semibold text-[#514346] dark:text-[#A89CA0] mb-0.5">Patient Full Name *</label>
                   <input
                     type="text"
                     required
-                    placeholder="દા.ત. રમેશભાઈ પટેલ"
+                    placeholder="e.g. Anand Sharma"
                     value={formData.patientName}
                     onChange={(e) => setFormData({ ...formData, patientName: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:ring-2 focus:ring-[#13C5DD]"
+                    className="w-full h-8 px-3 rounded bg-[#F8F2F2] dark:bg-[#18141C] border border-[#E3DFDB] dark:border-[#3B3041] text-[#1D1B1B] dark:text-white font-semibold"
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <label className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-1 block">
-                      મોબાઈલ નંબર (Phone)
-                    </label>
+                    <label className="block text-[11px] font-semibold text-[#514346] dark:text-[#A89CA0] mb-0.5">Mobile Number *</label>
                     <input
                       type="tel"
                       required
-                      placeholder="9876543210"
+                      placeholder="+91 98250 00000"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:ring-2 focus:ring-[#13C5DD]"
+                      className="w-full h-8 px-3 rounded bg-[#F8F2F2] dark:bg-[#18141C] border border-[#E3DFDB] dark:border-[#3B3041] text-[#1D1B1B] dark:text-white font-semibold"
                     />
                   </div>
                   <div>
-                    <label className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-1 block">
-                      ઉંમર (Age)
-                    </label>
-                    <input
-                      type="number"
-                      required
-                      placeholder="45"
-                      value={formData.age}
-                      onChange={(e) => setFormData({ ...formData, age: e.target.value })}
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:ring-2 focus:ring-[#13C5DD]"
-                    />
+                    <label className="block text-[11px] font-semibold text-[#514346] dark:text-[#A89CA0] mb-0.5">Age &amp; Gender *</label>
+                    <div className="flex gap-1">
+                      <input
+                        type="number"
+                        placeholder="Age"
+                        required
+                        value={formData.age}
+                        onChange={(e) => setFormData({ ...formData, age: e.target.value })}
+                        className="w-16 h-8 px-2 rounded bg-[#F8F2F2] dark:bg-[#18141C] border border-[#E3DFDB] dark:border-[#3B3041] text-[#1D1B1B] dark:text-white"
+                      />
+                      <select
+                        value={formData.gender}
+                        onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
+                        className="flex-1 h-8 px-2 rounded bg-[#F8F2F2] dark:bg-[#18141C] border border-[#E3DFDB] dark:border-[#3B3041] text-[#1D1B1B] dark:text-white"
+                      >
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-1 block">
-                    તકલીફ / લક્ષણો (Health Symptoms)
-                  </label>
+                  <label className="block text-[11px] font-semibold text-[#514346] dark:text-[#A89CA0] mb-0.5">Primary Symptoms / Reason</label>
                   <textarea
                     rows={2}
-                    placeholder="દા.ત. તાવ, શ્વાસમાં તકલીફ, હાડકાનો દુખાવો..."
+                    placeholder="e.g. Chest discomfort, breathing difficulty since morning"
                     value={formData.symptoms}
                     onChange={(e) => setFormData({ ...formData, symptoms: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:ring-2 focus:ring-[#13C5DD]"
+                    className="w-full p-2 rounded bg-[#F8F2F2] dark:bg-[#18141C] border border-[#E3DFDB] dark:border-[#3B3041] text-[#1D1B1B] dark:text-white"
                   />
                 </div>
               </div>
 
-              {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full py-3.5 rounded-full bg-[#13C5DD] hover:bg-[#10b1c7] text-white font-extrabold text-xs uppercase tracking-wider shadow-lg flex items-center justify-center gap-2"
+                className="w-full h-9 rounded bg-[#4A1F2B] hover:bg-[#70404B] text-white font-semibold text-xs transition-colors flex items-center justify-center gap-1.5 shadow-xs"
               >
-                <Sparkles className="w-4 h-4 text-yellow-300" />
-                {admissionType === "ipd" ? `₹199 માં ${selectedBedCode} બુક કરો` : "₹49 માં OPD ટોકન બુક કરો"}
+                <span>Confirm &amp; Reserve {admissionType.toUpperCase()} Bed</span>
               </button>
             </form>
           ) : (
-            /* Success Screen */
-            <div className="text-center py-6 space-y-4">
-              <div className="w-16 h-16 rounded-full bg-[#00C896] text-white flex items-center justify-center mx-auto shadow-lg">
-                <CheckCircle2 className="w-10 h-10" />
+            <div className="text-center py-6 space-y-3">
+              <div className="w-12 h-12 rounded-full bg-[#3F6B52]/15 text-[#3F6B52] flex items-center justify-center mx-auto">
+                <CheckCircle2 className="w-6 h-6" />
               </div>
-              <div>
-                <h4 className="text-xl font-extrabold font-poppins text-[#1D2A4D] dark:text-white">
-                  એડમિશન બુકિંગ કન્ફર્મ થયું!
-                </h4>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                  તમારો બેડ કન્ફર્મેશન કોડ <strong className="text-[#13C5DD]">{selectedBedCode}</strong> તમારા મોબાઈલ નંબર પર વોટ્સએપ દ્વારા મોકલી દેવામાં આવ્યો છે.
-                </p>
-              </div>
-
+              <h4 className="text-base font-bold text-[#1D1B1B] dark:text-white">Admission Pre-Booked!</h4>
+              <p className="text-xs text-[#837376]">
+                Bed <strong>{selectedBedCode}</strong> is tentatively reserved for <strong>{formData.patientName || "Patient"}</strong>. Our reception team will reach out at {formData.phone || "your mobile"}.
+              </p>
               <button
                 onClick={onClose}
-                className="w-full py-3 rounded-full bg-[#13C5DD] text-white font-extrabold text-xs uppercase"
+                className="px-4 py-1.5 rounded bg-[#4A1F2B] text-white font-semibold text-xs hover:bg-[#70404B] transition-colors"
               >
-                બંધ કરો (Done)
+                Close Portal
               </button>
             </div>
           )}

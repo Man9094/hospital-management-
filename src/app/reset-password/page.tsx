@@ -94,47 +94,41 @@ function ResetPasswordContent() {
   if (!token) return null;
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row bg-[#0B0F17]">
+    <div className="min-h-screen flex flex-col lg:flex-row bg-[#18141C]">
       
       {/* ═══ Left Panel ═══ */}
-      <div className="hidden lg:flex lg:w-[48%] relative bg-[#1D2A4D] flex-col items-center justify-center p-12 overflow-hidden">
-        <div className="absolute inset-0 opacity-[0.06] bg-[radial-gradient(#13C5DD_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
-        <div className="absolute -top-32 -right-32 w-72 h-72 bg-[#13C5DD]/15 rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute -bottom-32 -left-32 w-72 h-72 bg-[#00C896]/10 rounded-full blur-[100px] pointer-events-none" />
-
+      <div className="hidden lg:flex lg:w-[48%] relative bg-[#241D29] flex-col items-center justify-center p-12 overflow-hidden border-r border-[#3B3041]">
         <div className="relative z-10 max-w-md w-full space-y-8 text-center">
           <div className="flex flex-col items-center gap-4">
-            <div className="w-16 h-16 rounded-2xl bg-[#13C5DD] flex items-center justify-center text-white shadow-lg shadow-[#13C5DD]/30">
-              <Cross className="w-9 h-9 stroke-[2.5]" />
+            <div className="w-14 h-14 rounded-md bg-[#4A1F2B] flex items-center justify-center text-white shadow-xs font-bold">
+              <Cross className="w-8 h-8 stroke-[2.5]" />
             </div>
             <div>
-              <h1 className="font-poppins font-extrabold text-3xl tracking-wider uppercase text-white">
-                MEDCORE <span className="text-[#13C5DD] text-sm lowercase font-semibold">hms</span>
+              <h1 className="font-sans font-bold text-3xl tracking-wider uppercase text-white">
+                MEDCORE <span className="text-[#C08491] text-sm lowercase font-semibold">hms</span>
               </h1>
-              <p className="text-slate-400 text-xs uppercase tracking-[0.3em] font-bold mt-1">
+              <p className="text-[#D5C2C5] text-xs uppercase tracking-[0.3em] font-semibold mt-1">
                 Set New Password
               </p>
             </div>
           </div>
 
           <div>
-            <h2 className="text-xl font-bold font-poppins text-white leading-relaxed">
+            <h2 className="text-xl font-bold text-white leading-relaxed">
               Create a Strong
-              <span className="text-[#13C5DD]"> New Password</span>
+              <span className="text-[#C08491]"> New Password</span>
             </h2>
-            <p className="text-sm text-slate-400 mt-3 leading-relaxed">
-              Choose a secure password that meets all requirements below. This protects your account and patient data.
+            <p className="text-sm text-[#D5C2C5] mt-3 leading-relaxed">
+              Choose a secure password that meets all requirements below to protect hospital and clinical records.
             </p>
           </div>
 
-          <ECGPulse color="#13C5DD" className="h-10 w-full px-6" />
+          <ECGPulse color="#C08491" className="h-10 w-full px-6" />
         </div>
       </div>
 
       {/* ═══ Right Panel ═══ */}
-      <div className="flex-1 flex items-center justify-center p-6 sm:p-10 relative">
-        <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[#13C5DD]/5 rounded-full blur-[120px] pointer-events-none" />
-
+      <div className="flex-1 flex items-center justify-center p-6 sm:p-10 relative bg-[#F7F6F3] dark:bg-[#18141C]">
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -142,26 +136,23 @@ function ResetPasswordContent() {
           className="w-full max-w-md relative z-10"
         >
           {/* Mobile Logo */}
-          <div className="lg:hidden text-center mb-8">
+          <div className="lg:hidden text-center mb-6">
             <div className="inline-flex items-center gap-2">
-              <div className="w-10 h-10 rounded-xl bg-[#13C5DD] flex items-center justify-center text-white shadow-md">
-                <Cross className="w-6 h-6 stroke-[2.5]" />
+              <div className="w-10 h-10 rounded-md bg-[#4A1F2B] flex items-center justify-center text-white shadow-xs">
+                <Cross className="w-5 h-5 stroke-[2.5]" />
               </div>
-              <div className="font-poppins font-extrabold text-xl tracking-wider uppercase text-white">
-                MEDCORE <span className="text-[#13C5DD] text-xs lowercase font-semibold">hms</span>
+              <div className="font-sans font-bold text-xl tracking-wider uppercase text-[#1D1B1B] dark:text-white">
+                MEDCORE <span className="text-[#4A1F2B] dark:text-[#C08491] text-xs lowercase font-semibold">hms</span>
               </div>
             </div>
           </div>
 
-          <div className="bg-white dark:bg-[#111827] rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 sm:p-8 relative overflow-hidden">
-            <div className="absolute -top-20 -right-20 w-40 h-40 bg-[#13C5DD]/10 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-[#00C896]/10 rounded-full blur-3xl pointer-events-none" />
-
+          <div className="bg-white dark:bg-[#241D29] rounded-lg border border-[#E3DFDB] dark:border-[#3B3041] shadow-[0_1px_3px_rgba(0,0,0,0.04)] p-6 sm:p-8 relative overflow-hidden">
             <div className="text-center mb-6 relative z-10">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#13C5DD]/10 text-[#13C5DD] text-xs font-semibold mb-3 border border-[#13C5DD]/20">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F3E9EB] dark:bg-[#32293D] text-[#4A1F2B] dark:text-[#F7B5C3] text-xs font-semibold mb-3 border border-[#E3DFDB] dark:border-[#4C3C54]">
                 <Activity className="w-3.5 h-3.5" /> Set New Password
               </div>
-              <h2 className="text-2xl font-bold font-poppins text-slate-900 dark:text-white">
+              <h2 className="text-2xl font-bold text-[#1D1B1B] dark:text-white">
                 {success ? "Password Updated!" : "Create New Password"}
               </h2>
             </div>
@@ -172,16 +163,16 @@ function ResetPasswordContent() {
                 animate={{ opacity: 1, scale: 1 }}
                 className="py-6 text-center space-y-4 relative z-10"
               >
-                <div className="w-14 h-14 mx-auto rounded-full bg-[#00C896]/20 text-[#00C896] flex items-center justify-center">
-                  <CheckCircle2 className="w-8 h-8" />
+                <div className="w-12 h-12 mx-auto rounded-full bg-[#EEF4F0] text-[#3F6B52] dark:bg-[#1C2C22] dark:text-[#7ADDB0] flex items-center justify-center border border-[#D4E3D9] dark:border-[#2C4A38]">
+                  <CheckCircle2 className="w-7 h-7" />
                 </div>
-                <p className="text-sm text-slate-600 dark:text-slate-400">
+                <p className="text-xs text-[#514346] dark:text-[#D5C2C5]">
                   Your password has been successfully changed.
                 </p>
-                <p className="text-xs text-slate-400">
+                <p className="text-[11px] text-[#837376]">
                   Redirecting to login...
                 </p>
-                <Loader2 className="w-5 h-5 mx-auto text-[#13C5DD] animate-spin" />
+                <Loader2 className="w-4 h-4 mx-auto text-[#4A1F2B] dark:text-[#C08491] animate-spin" />
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4 relative z-10">
@@ -189,7 +180,7 @@ function ResetPasswordContent() {
                   <motion.div
                     initial={{ opacity: 0, y: -5 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="flex items-start gap-2 p-3 rounded-xl bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 text-red-600 dark:text-red-400 text-xs font-medium"
+                    className="flex items-start gap-2 p-3 rounded-md bg-[#FFDAD6] border border-[#BA1A1A]/30 text-[#93000A] text-xs font-semibold"
                   >
                     <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
                     <span>{error}</span>
@@ -200,12 +191,12 @@ function ResetPasswordContent() {
                 <div>
                   <label
                     htmlFor="new-password"
-                    className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5"
+                    className="block text-xs font-semibold text-[#514346] dark:text-[#D5C2C5] mb-1"
                   >
                     New Password
                   </label>
                   <div className="relative">
-                    <Lock className="w-4 h-4 absolute left-3.5 top-3 text-slate-400" />
+                    <Lock className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#837376]" />
                     <input
                       id="new-password"
                       type={showPassword ? "text" : "password"}
@@ -217,12 +208,12 @@ function ResetPasswordContent() {
                         if (error) setError("");
                       }}
                       disabled={isSubmitting}
-                      className="w-full pl-10 pr-12 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-[#13C5DD] disabled:opacity-50 transition-all"
+                      className="w-full h-9 pl-9 pr-10 rounded-md bg-[#F8F2F2] dark:bg-[#18141C] border border-[#E3DFDB] dark:border-[#3B3041] text-xs font-semibold text-[#1D1B1B] dark:text-[#FEF8F7] placeholder:text-[#837376] focus:outline-none focus:border-[#4A1F2B] dark:focus:border-[#C08491] disabled:opacity-50 transition-all"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-2.5 p-0.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#837376] hover:text-[#1D1B1B]"
                       tabIndex={-1}
                     >
                       {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -235,16 +226,16 @@ function ResetPasswordContent() {
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
-                    className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1.5"
+                    className="p-3 rounded-md bg-[#F8F2F2] dark:bg-[#18141C] border border-[#E3DFDB] dark:border-[#3B3041] space-y-1.5"
                   >
                     {requirements.map((req) => (
                       <div key={req.label} className="flex items-center gap-2 text-xs">
                         {req.met ? (
-                          <Check className="w-3.5 h-3.5 text-[#00C896]" />
+                          <Check className="w-3.5 h-3.5 text-[#3F6B52]" />
                         ) : (
-                          <X className="w-3.5 h-3.5 text-red-400" />
+                          <X className="w-3.5 h-3.5 text-[#BA1A1A]" />
                         )}
-                        <span className={req.met ? "text-[#00C896]" : "text-slate-500 dark:text-slate-400"}>
+                        <span className={req.met ? "text-[#3F6B52] font-semibold" : "text-[#837376]"}>
                           {req.label}
                         </span>
                       </div>
@@ -256,12 +247,12 @@ function ResetPasswordContent() {
                 <div>
                   <label
                     htmlFor="confirm-password"
-                    className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5"
+                    className="block text-xs font-semibold text-[#514346] dark:text-[#D5C2C5] mb-1"
                   >
                     Confirm Password
                   </label>
                   <div className="relative">
-                    <Lock className="w-4 h-4 absolute left-3.5 top-3 text-slate-400" />
+                    <Lock className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#837376]" />
                     <input
                       id="confirm-password"
                       type={showConfirmPassword ? "text" : "password"}
@@ -273,23 +264,23 @@ function ResetPasswordContent() {
                         if (error) setError("");
                       }}
                       disabled={isSubmitting}
-                      className={`w-full pl-10 pr-12 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border text-slate-900 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-[#13C5DD] disabled:opacity-50 transition-all ${
+                      className={`w-full h-9 pl-9 pr-10 rounded-md bg-[#F8F2F2] dark:bg-[#18141C] text-xs font-semibold text-[#1D1B1B] dark:text-[#FEF8F7] placeholder:text-[#837376] focus:outline-none focus:border-[#4A1F2B] dark:focus:border-[#C08491] disabled:opacity-50 transition-all ${
                         confirmPassword.length > 0 && !passwordsMatch
-                          ? "border-red-300 dark:border-red-500/30"
-                          : "border-slate-200 dark:border-slate-800"
+                          ? "border border-[#BA1A1A]"
+                          : "border border-[#E3DFDB] dark:border-[#3B3041]"
                       }`}
                     />
                     <button
                       type="button"
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      className="absolute right-3 top-2.5 p-0.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#837376] hover:text-[#1D1B1B]"
                       tabIndex={-1}
                     >
                       {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
                   </div>
                   {confirmPassword.length > 0 && !passwordsMatch && (
-                    <p className="text-xs text-red-500 mt-1">Passwords do not match.</p>
+                    <p className="text-xs text-[#BA1A1A] mt-1 font-semibold">Passwords do not match.</p>
                   )}
                 </div>
 
@@ -297,23 +288,23 @@ function ResetPasswordContent() {
                 <button
                   type="submit"
                   disabled={isSubmitting || !allRequirementsMet || !passwordsMatch}
-                  className="w-full mt-2 py-3 px-4 rounded-xl bg-gradient-to-r from-[#13C5DD] to-[#00C896] hover:from-[#10b1c7] hover:to-[#00a87e] text-white font-semibold text-sm shadow-lg shadow-[#13C5DD]/25 flex items-center justify-center gap-2 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="w-full h-9 rounded-md bg-[#4A1F2B] hover:bg-[#70404B] text-white font-semibold text-xs flex items-center justify-center gap-2 transition-all shadow-xs disabled:opacity-50"
                 >
                   {isSubmitting ? (
                     <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
                       Resetting Password...
                     </>
                   ) : (
                     <>
-                      Set New Password
-                      <ArrowRight className="w-4 h-4" />
+                      <span>Set New Password</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
                     </>
                   )}
                 </button>
 
-                <div className="pt-2 text-center text-xs text-slate-500 dark:text-slate-400">
-                  <Link href="/login" className="text-[#13C5DD] font-semibold hover:underline">
+                <div className="pt-2 text-center text-xs text-[#837376]">
+                  <Link href="/login" className="text-[#4A1F2B] dark:text-[#C08491] font-semibold hover:underline">
                     ← Back to Login
                   </Link>
                 </div>
@@ -330,8 +321,8 @@ export default function ResetPasswordPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[#0B0F17] flex items-center justify-center">
-          <Loader2 className="w-8 h-8 text-[#13C5DD] animate-spin" />
+        <div className="min-h-screen bg-[#18141C] flex items-center justify-center">
+          <Loader2 className="w-8 h-8 text-[#4A1F2B] dark:text-[#C08491] animate-spin" />
         </div>
       }
     >

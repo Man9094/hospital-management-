@@ -21,77 +21,76 @@ export default function DemoVideoModal() {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-lg">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
-          className="relative w-full max-w-4xl overflow-hidden rounded-2xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 shadow-2xl"
+          className="relative w-full max-w-4xl overflow-hidden rounded-lg bg-white dark:bg-[#241D29] border border-[#E3DFDB] dark:border-[#3B3041] shadow-[0_4px_16px_rgba(41,39,39,0.08)]"
         >
           {/* Header */}
-          <div className="flex items-center justify-between p-4 sm:p-6 border-b border-slate-200 dark:border-slate-800">
+          <div className="flex items-center justify-between p-4 sm:p-5 border-b border-[#E3DFDB] dark:border-[#3B3041] bg-[#FAF7F6] dark:bg-[#1F1924]">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-xl bg-[#0F6CBD]/10 text-[#0F6CBD] dark:text-[#4CC9F0]">
+              <div className="p-2 rounded-md bg-[#F3E9EB] dark:bg-[#32293D] text-[#4A1F2B] dark:text-[#F7B5C3]">
                 <Play className="w-5 h-5 fill-current" />
               </div>
               <div>
-                <h3 className="text-lg font-bold font-poppins text-slate-900 dark:text-white">
+                <h3 className="text-base font-bold text-[#1D1B1B] dark:text-[#FEF8F7]">
                   MedCore Enterprise Product Walkthrough
                 </h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400">
-                  Full 8-minute interactive demonstration for Chief Medical Officers & IT Directors
+                <p className="text-xs text-[#686563] dark:text-[#D5C2C5]">
+                  Full 8-minute interactive demonstration for Chief Medical Officers &amp; IT Directors
                 </p>
               </div>
             </div>
             <button
               onClick={() => setIsDemoVideoOpen(false)}
-              className="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+              className="p-1.5 rounded-md text-[#837376] hover:text-[#1D1B1B] dark:hover:text-white transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
           {/* Video Mockup Area */}
-          <div className="relative aspect-video bg-slate-950 flex flex-col items-center justify-center overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-tr from-[#0F6CBD]/30 via-transparent to-[#00C896]/20" />
+          <div className="relative aspect-video bg-[#18141C] flex flex-col items-center justify-center overflow-hidden">
             <div className="relative z-10 text-center p-6 space-y-4">
-              <div className="w-20 h-20 mx-auto rounded-full bg-[#0F6CBD] text-white flex items-center justify-center shadow-xl shadow-[#0F6CBD]/40 border-4 border-white/20 animate-pulse">
-                <Play className="w-10 h-10 fill-current ml-1" />
+              <div className="w-16 h-16 mx-auto rounded-full bg-[#4A1F2B] text-white flex items-center justify-center shadow-lg border-2 border-white/20">
+                <Play className="w-8 h-8 fill-current ml-1" />
               </div>
               <div>
-                <h4 className="text-xl font-bold text-white">
+                <h4 className="text-lg font-bold text-white">
                   Playing: {bookmarks[activeBookmark].title}
                 </h4>
-                <p className="text-sm text-slate-300 max-w-md mx-auto mt-1">
+                <p className="text-xs text-stone-300 max-w-md mx-auto mt-1">
                   {bookmarks[activeBookmark].desc}
                 </p>
               </div>
             </div>
 
             {/* Video Timeline Bar */}
-            <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-slate-800">
-              <div className="h-full bg-gradient-to-r from-[#0F6CBD] via-[#4CC9F0] to-[#00C896] w-2/5 animate-pulse" />
+            <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-stone-800">
+              <div className="h-full bg-[#4A1F2B] dark:bg-[#C08491] w-2/5" />
             </div>
           </div>
 
           {/* Interactive Bookmark Chapters */}
-          <div className="p-4 sm:p-6 bg-slate-50 dark:bg-slate-900/60 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+          <div className="p-4 sm:p-5 bg-[#F7F6F3] dark:bg-[#18141C] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
             {bookmarks.map((bm, index) => {
               const Icon = bm.icon;
               return (
                 <button
                   key={index}
                   onClick={() => setActiveBookmark(index)}
-                  className={`flex items-center gap-3 p-3 rounded-xl text-left border transition-all ${
+                  className={`flex items-center gap-3 p-2.5 rounded-md text-left border transition-all ${
                     activeBookmark === index
-                      ? "bg-[#0F6CBD]/10 border-[#0F6CBD] text-[#0F6CBD] dark:text-[#4CC9F0]"
-                      : "bg-white dark:bg-slate-800/60 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-700"
+                      ? "bg-[#F3E9EB] dark:bg-[#32293D] border-[#4A1F2B] dark:border-[#C08491] text-[#4A1F2B] dark:text-[#F7B5C3] font-semibold"
+                      : "bg-white dark:bg-[#241D29] border-[#E3DFDB] dark:border-[#3B3041] text-[#514346] dark:text-[#D5C2C5] hover:border-[#837376]"
                   }`}
                 >
-                  <Icon className="w-4 h-4 shrink-0" />
+                  <Icon className="w-4 h-4 shrink-0 text-[#83505B] dark:text-[#C08491]" />
                   <div>
                     <div className="text-xs font-semibold">{bm.title}</div>
-                    <div className="text-[10px] opacity-75 truncate max-w-[160px]">{bm.desc}</div>
+                    <div className="text-[10px] text-[#837376] truncate max-w-[160px]">{bm.desc}</div>
                   </div>
                 </button>
               );

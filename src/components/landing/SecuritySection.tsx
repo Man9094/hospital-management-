@@ -36,18 +36,18 @@ export default function SecuritySection() {
   ];
 
   return (
-    <section id="security" className="py-20 lg:py-28 bg-slate-50 dark:bg-[#0B0F17]/60 border-y border-slate-200 dark:border-slate-800">
+    <section id="security" className="py-20 lg:py-28 bg-[#FBF9F9] dark:bg-[#18141C]/60 border-y border-[#E5E0E2] dark:border-[#3E3842]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
-          <div className="text-xs font-extrabold text-[#13C5DD] uppercase tracking-wider">
+          <div className="text-xs font-bold text-[#4A1F2B] dark:text-[#E2838E] uppercase tracking-wider">
             HEALTHCARE SECURITY & DATA PRIVACY
           </div>
-          <h2 className="text-3xl sm:text-5xl font-black font-poppins text-slate-900 dark:text-white tracking-tight">
+          <h2 className="text-3xl sm:text-5xl font-bold font-sans text-[#292727] dark:text-[#FEF8F7] tracking-tight">
             Designed for Indian Healthcare Compliance
           </h2>
-          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400">
+          <p className="text-sm sm:text-base text-[#686563] dark:text-[#D5C2C5]">
             MedCore HMS is architected with rigorous healthcare data protection standards, strict least-privilege role boundaries, and patient privacy at its core.
           </p>
         </div>
@@ -59,15 +59,15 @@ export default function SecuritySection() {
             return (
               <div
                 key={idx}
-                className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 shadow-md space-y-4"
+                className="p-6 sm:p-8 rounded-lg bg-white dark:bg-[#242026] border border-[#E5E0E2] dark:border-[#3E3842] shadow-[0_1px_3px_rgba(41,39,39,0.06)] space-y-4"
               >
-                <div className="w-12 h-12 rounded-2xl bg-[#13C5DD]/15 text-[#13C5DD] flex items-center justify-center">
-                  <Icon className="w-6 h-6" />
+                <div className="w-11 h-11 rounded-md bg-[#F3E9EB] dark:bg-[#32293D] text-[#4A1F2B] dark:text-[#E2838E] flex items-center justify-center">
+                  <Icon className="w-5 h-5" />
                 </div>
-                <h3 className="text-lg font-extrabold font-poppins text-slate-900 dark:text-white">
+                <h3 className="text-base font-bold font-sans text-[#292727] dark:text-[#FEF8F7]">
                   {feat.title}
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                <p className="text-xs sm:text-sm text-[#686563] dark:text-[#D5C2C5] leading-relaxed">
                   {feat.desc}
                 </p>
               </div>
@@ -76,15 +76,15 @@ export default function SecuritySection() {
         </div>
 
         {/* Security Assurance Banner */}
-        <div className="p-6 rounded-3xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-800 dark:text-emerald-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+        <div className="p-6 rounded-lg bg-[#E8F0EC] border border-[#3F6B52]/30 text-[#2A4837] dark:bg-[#23382B] dark:text-[#85B599] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
           <div className="flex items-center gap-3">
-            <ShieldCheck className="w-6 h-6 text-emerald-500 shrink-0" />
+            <ShieldCheck className="w-6 h-6 text-[#3F6B52] dark:text-[#85B599] shrink-0" />
             <div>
-              <strong className="text-sm font-bold block">Patient Data Isolation & Zero Third-Party Tracking</strong>
-              <span>Medical records and patient identities are never shared or indexed. Each hospital organization operates with isolated database structures.</span>
+              <strong className="text-sm font-bold block text-[#2A4837] dark:text-[#ECE5E7]">Patient Data Isolation & Zero Third-Party Tracking</strong>
+              <span className="text-[#3F6B52] dark:text-[#85B599]">Medical records and patient identities are never shared or indexed. Each hospital organization operates with isolated database structures.</span>
             </div>
           </div>
-          <span className="px-3 py-1.5 rounded-full bg-emerald-500 text-white font-extrabold text-[11px] whitespace-nowrap shadow-sm">
+          <span className="px-3 py-1 rounded-md bg-[#3F6B52] text-white font-medium text-[11px] whitespace-nowrap shadow-xs">
             Security Verified
           </span>
         </div>

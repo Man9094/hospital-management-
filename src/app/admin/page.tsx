@@ -87,9 +87,9 @@ export default function AdminPage() {
   // ─── Auth Guards ──────────────────────────────────────────
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#0B0F17] flex items-center justify-center">
+      <div className="min-h-screen bg-[#18141C] flex items-center justify-center">
         <div className="text-center space-y-3">
-          <Loader2 className="w-8 h-8 text-[#13C5DD] animate-spin mx-auto" />
+          <Loader2 className="w-8 h-8 text-[#4A1F2B] dark:text-[#C08491] animate-spin mx-auto" />
           <p className="text-xs text-slate-400 font-medium">Verifying admin access...</p>
         </div>
       </div>
@@ -101,23 +101,23 @@ export default function AdminPage() {
   const allowedRoles = ["hospital_admin", "super_admin"];
   if (!allowedRoles.includes(user.role)) {
     return (
-      <div className="min-h-screen bg-[#0B0F17] flex items-center justify-center p-6">
+      <div className="min-h-screen bg-[#18141C] flex items-center justify-center p-6">
         <div className="max-w-md w-full text-center space-y-6">
-          <div className="p-8 rounded-3xl bg-[#111827] border border-red-500/20 shadow-2xl space-y-4">
-            <div className="w-16 h-16 mx-auto rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center">
-              <ShieldAlert className="w-8 h-8 text-red-400" />
+          <div className="p-8 rounded-lg bg-[#242026] border border-[#3E3842] shadow-[0_4px_16px_rgba(0,0,0,0.2)] space-y-4">
+            <div className="w-14 h-14 mx-auto rounded-md bg-[#5C2329]/30 border border-[#8C3A45]/40 flex items-center justify-center">
+              <ShieldAlert className="w-7 h-7 text-[#E2838E]" />
             </div>
-            <h1 className="text-2xl font-extrabold font-poppins text-white">Access Denied</h1>
-            <p className="text-sm text-slate-400">
-              The <span className="font-bold text-white">Hospital Admin Panel</span> is restricted to authorized administrators only.
+            <h1 className="text-2xl font-bold font-sans text-[#ECE5E7]">Access Denied</h1>
+            <p className="text-sm text-[#9B8E92]">
+              The <span className="font-bold text-[#ECE5E7]">Hospital Admin Panel</span> is restricted to authorized administrators only.
             </p>
-            <p className="text-xs text-slate-500">
-              Your role: <span className="font-bold text-[#13C5DD]">{user.role.replace("_", " ").toUpperCase()}</span>
+            <p className="text-xs text-[#9B8E92]">
+              Your role: <span className="font-semibold text-[#E2838E]">{user.role.replace("_", " ").toUpperCase()}</span>
             </p>
           </div>
           <button
             onClick={() => router.push("/app")}
-            className="px-6 py-3 rounded-xl bg-[#13C5DD] text-white font-bold text-xs uppercase flex items-center justify-center gap-2 mx-auto"
+            className="px-5 py-2.5 rounded-md bg-[#4A1F2B] hover:bg-[#5E2737] text-white font-medium text-xs uppercase flex items-center justify-center gap-2 mx-auto transition-colors"
           >
             <ArrowLeft className="w-4 h-4" /> Go to My Dashboard
           </button>
@@ -145,89 +145,83 @@ export default function AdminPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#F3F6F9] dark:bg-[#0B0F17] flex flex-col font-sans transition-colors duration-300">
+    <div className="min-h-screen bg-[#F7F6F3] dark:bg-[#18141C] flex flex-col font-sans transition-colors duration-200 text-[#1D1B1B] dark:text-[#FEF8F7]">
       
       {/* ═══ Admin Top Header ═══ */}
-      <header className="sticky top-0 z-40 bg-white dark:bg-[#0F1629] border-b border-slate-200 dark:border-slate-800 px-4 sm:px-6 py-3 flex items-center justify-between shadow-sm">
+      <header className="sticky top-0 z-40 bg-white dark:bg-[#241D29] border-b border-[#E3DFDB] dark:border-[#3B3041] px-4 sm:px-6 py-2.5 flex items-center justify-between shadow-xs">
         <div className="flex items-center gap-4">
-          <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800">
+          <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-1.5 rounded-md text-[#514346] hover:bg-[#F7F6F3] dark:hover:bg-[#32293D]">
             <Menu className="w-5 h-5" />
           </button>
 
           <Link href="/" className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-[#13C5DD] flex items-center justify-center text-white shadow-md">
-              <Cross className="w-5 h-5 stroke-[2.5]" />
+            <div className="w-8 h-8 rounded-md bg-[#4A1F2B] flex items-center justify-center text-white shadow-xs font-bold">
+              <Cross className="w-4 h-4 stroke-[3]" />
             </div>
             <div>
-              <span className="font-poppins font-extrabold text-lg text-[#1D2A4D] dark:text-white tracking-wide uppercase">
-                MEDCORE <span className="text-[#13C5DD] text-xs font-bold lowercase">admin</span>
+              <span className="font-sans font-bold text-base text-[#1D1B1B] dark:text-white tracking-wide uppercase">
+                MEDCORE <span className="text-[#4A1F2B] dark:text-[#C08491] text-xs font-bold lowercase">admin</span>
               </span>
             </div>
           </Link>
 
           {/* Admin Badge */}
-          <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-500 text-[10px] font-extrabold uppercase">
-            <ShieldCheck className="w-3 h-3" /> Hospital Admin Panel
+          <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-[#F3E9EB] dark:bg-[#32293D] border border-[#E3DFDB] dark:border-[#4C3C54] text-[#4A1F2B] dark:text-[#F7B5C3] text-[10px] font-bold uppercase">
+            <ShieldCheck className="w-3 h-3 text-[#4A1F2B] dark:text-[#C08491]" /> Hospital Governance
           </div>
         </div>
 
         {/* Search */}
         <div className="hidden lg:flex items-center relative max-w-xs w-full">
-          <Search className="w-4 h-4 absolute left-3 text-slate-400" />
+          <Search className="w-3.5 h-3.5 absolute left-3 text-[#837376]" />
           <input
             type="text"
             placeholder="Search staff, patient, department..."
-            className="w-full pl-9 pr-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#13C5DD]"
+            className="w-full h-8 pl-8 pr-4 rounded-md bg-[#F8F2F2] dark:bg-[#18141C] border border-[#E3DFDB] dark:border-[#3B3041] text-xs text-[#1D1B1B] dark:text-[#FEF8F7] placeholder:text-[#837376] focus:outline-none focus:border-[#4A1F2B]"
           />
         </div>
 
         {/* Right */}
         <div className="flex items-center gap-3">
           {/* Notifications */}
-          <button className="relative p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800">
-            <Bell className="w-5 h-5" />
-            <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-red-500" />
+          <button className="relative p-1.5 rounded-md text-[#514346] hover:bg-[#F7F6F3] dark:hover:bg-[#32293D]">
+            <Bell className="w-4 h-4" />
+            <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#BA1A1A]" />
           </button>
 
           <ThemeToggle />
 
           {/* User Menu */}
-          <div className="relative pl-2 border-l border-slate-200 dark:border-slate-800">
+          <div className="relative pl-2 border-l border-[#E3DFDB] dark:border-[#3B3041]">
             <button
               onClick={() => setUserMenuOpen(!userMenuOpen)}
-              className="flex items-center gap-2 p-1 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="flex items-center gap-2 p-1 rounded-md hover:bg-[#F7F6F3] dark:hover:bg-[#32293D] transition-colors"
             >
-              <div className="w-8 h-8 rounded-full bg-amber-500/20 border-2 border-amber-500 flex items-center justify-center text-amber-500">
-                <ShieldCheck className="w-4 h-4" />
+              <div className="w-7 h-7 rounded-full bg-[#F3E9EB] dark:bg-[#32293D] border border-[#4A1F2B] dark:border-[#C08491] flex items-center justify-center text-[#4A1F2B] dark:text-[#C08491]">
+                <User className="w-4 h-4" />
               </div>
               <div className="hidden sm:block text-left">
-                <div className="text-xs font-bold text-slate-900 dark:text-white truncate max-w-[120px]">{user.name}</div>
-                <div className="text-[10px] text-amber-500 font-bold">Administrator</div>
+                <div className="text-xs font-bold text-[#1D1B1B] dark:text-white leading-tight">Admin Console</div>
+                <div className="text-[10px] text-[#837376]">Superadmin</div>
               </div>
-              <ChevronDown className="w-3.5 h-3.5 text-slate-400 hidden sm:block" />
+              <ChevronDown className="w-3 h-3 text-[#837376] hidden sm:block" />
             </button>
 
             {userMenuOpen && (
-              <div className="absolute right-0 top-full mt-2 w-56 rounded-2xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 shadow-2xl p-2 z-50">
-                <div className="px-3 py-2 border-b border-slate-100 dark:border-slate-800 mb-1">
-                  <div className="text-xs font-bold text-slate-900 dark:text-white">{user.name}</div>
-                  <div className="text-[10px] text-slate-500 dark:text-slate-400">{user.email}</div>
-                  <div className="text-[10px] font-bold text-amber-500 mt-0.5">Hospital Administrator</div>
-                </div>
+              <div className="absolute right-0 top-full mt-2 w-52 rounded-md bg-white dark:bg-[#241D29] border border-[#E3DFDB] dark:border-[#3B3041] shadow-xl p-1.5 z-50">
                 <Link
                   href="/app"
-                  onClick={() => setUserMenuOpen(false)}
-                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-left text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded text-left text-xs font-semibold text-[#1D1B1B] dark:text-[#FEF8F7] hover:bg-[#F7F6F3] dark:hover:bg-[#32293D] transition-colors"
                 >
-                  <LayoutDashboard className="w-3.5 h-3.5" /> General Dashboard
+                  <LayoutDashboard className="w-3.5 h-3.5 text-[#4A1F2B]" /> Hospital Workspace
                 </Link>
                 <button
                   onClick={() => { setUserMenuOpen(false); handleLogout(); }}
                   disabled={isLoggingOut}
-                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-left text-xs font-bold text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors disabled:opacity-50"
+                  className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded text-left text-xs font-semibold text-[#BA1A1A] hover:bg-[#FFDAD6]/40 transition-colors disabled:opacity-50"
                 >
                   {isLoggingOut ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <LogOut className="w-3.5 h-3.5" />}
-                  {isLoggingOut ? "Logging out..." : "Logout"}
+                  <span>{isLoggingOut ? "Logging out..." : "Logout"}</span>
                 </button>
               </div>
             )}
@@ -239,9 +233,9 @@ export default function AdminPage() {
       <div className="flex-1 flex overflow-hidden">
         
         {/* ═══ Admin Sidebar ═══ */}
-        <aside className={`bg-white dark:bg-[#0F1629] border-r border-slate-200 dark:border-slate-800 transition-all duration-300 flex flex-col ${sidebarOpen ? "w-64" : "w-0 overflow-hidden"}`}>
-          <div className="flex-1 p-4 space-y-1 overflow-y-auto">
-            <div className="px-3 py-2 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Administration</div>
+        <aside className={`bg-white dark:bg-[#241D29] border-r border-[#E3DFDB] dark:border-[#3B3041] transition-all duration-200 flex flex-col shrink-0 ${sidebarOpen ? "w-60" : "w-0 overflow-hidden"}`}>
+          <div className="flex-1 p-3 space-y-1 overflow-y-auto">
+            <div className="px-2.5 py-1.5 text-[10px] font-bold text-[#837376] uppercase tracking-wider">Administration</div>
             {sidebarItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeSection === item.id;
@@ -249,18 +243,18 @@ export default function AdminPage() {
                 <button
                   key={item.id}
                   onClick={() => setActiveSection(item.id)}
-                  className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all ${
+                  className={`w-full flex items-center justify-between px-3 py-2 rounded-md text-xs font-semibold transition-colors ${
                     isActive
-                      ? "bg-[#13C5DD] text-white shadow-md"
-                      : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
+                      ? "bg-[#4A1F2B] text-white shadow-xs font-bold"
+                      : "text-[#514346] dark:text-[#D5C2C5] hover:bg-[#F7F6F3] dark:hover:bg-[#32293D]"
                   }`}
                 >
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2.5">
                     <Icon className="w-4 h-4 shrink-0" />
                     <span>{item.label}</span>
                   </div>
                   {item.badge && (
-                    <span className={`px-1.5 py-0.5 rounded-md text-[10px] font-bold ${isActive ? "bg-white/20 text-white" : "bg-slate-100 dark:bg-slate-800 text-slate-500"}`}>
+                    <span className={`px-1.5 py-0.2 rounded text-[10px] font-bold ${isActive ? "bg-white/20 text-white" : "bg-[#F2EDEC] dark:bg-[#18141C] text-[#837376]"}`}>
                       {item.badge}
                     </span>
                   )}
@@ -270,14 +264,14 @@ export default function AdminPage() {
           </div>
 
           {/* Sidebar Footer */}
-          <div className="p-4 border-t border-slate-200 dark:border-slate-800">
+          <div className="p-3 border-t border-[#E3DFDB] dark:border-[#3B3041]">
             <button
               onClick={handleLogout}
               disabled={isLoggingOut}
-              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-extrabold text-slate-600 dark:text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors uppercase disabled:opacity-50"
+              className="w-full flex items-center justify-center gap-2 py-2 rounded-md bg-[#F2EDEC] dark:bg-[#18141C] text-xs font-semibold text-[#837376] hover:text-[#BA1A1A] hover:bg-[#FFDAD6]/30 transition-colors uppercase disabled:opacity-50"
             >
               {isLoggingOut ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <LogOut className="w-3.5 h-3.5" />}
-              {isLoggingOut ? "Logging out..." : "Logout"}
+              <span>Logout</span>
             </button>
           </div>
         </aside>
@@ -314,12 +308,12 @@ export default function AdminPage() {
 // ═══════════════════════════════════════════════════════════════
 function AdminDashboard() {
   const stats: StatCard[] = [
-    { label: "Total Patients Today", value: "247", change: "+12%", trend: "up", icon: Heart, color: "#E63946" },
-    { label: "Beds Occupied", value: "182/240", change: "76%", trend: "neutral", icon: Bed, color: "#13C5DD" },
-    { label: "Active Staff", value: "32", change: "+2", trend: "up", icon: Users, color: "#00C896" },
-    { label: "Today's Revenue", value: "₹4,82,500", change: "+18%", trend: "up", icon: CreditCard, color: "#F59E0B" },
-    { label: "OPD Tokens", value: "89", change: "-5%", trend: "down", icon: Calendar, color: "#8B5CF6" },
-    { label: "Pending Lab Reports", value: "14", change: "-3", trend: "down", icon: FlaskConical, color: "#EC4899" },
+    { label: "Total Patients Today", value: "247", change: "+12%", trend: "up", icon: Heart, color: "#8C3A45" },
+    { label: "Beds Occupied", value: "182/240", change: "76%", trend: "neutral", icon: Bed, color: "#3E6177" },
+    { label: "Active Staff", value: "32", change: "+2", trend: "up", icon: Users, color: "#3F6B52" },
+    { label: "Today's Revenue", value: "₹4,82,500", change: "+18%", trend: "up", icon: CreditCard, color: "#C07830" },
+    { label: "OPD Tokens", value: "89", change: "-5%", trend: "down", icon: Calendar, color: "#83505B" },
+    { label: "Pending Lab Reports", value: "14", change: "-3", trend: "down", icon: FlaskConical, color: "#5C2329" },
   ];
 
   return (
@@ -327,10 +321,10 @@ function AdminDashboard() {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="text-xs font-extrabold text-[#13C5DD] uppercase tracking-wider flex items-center gap-1.5">
+          <div className="text-xs font-extrabold text-[#4A1F2B] dark:text-[#E2838E] uppercase tracking-wider flex items-center gap-1.5">
             <LayoutDashboard className="w-4 h-4" /> HOSPITAL ADMINISTRATION — OVERVIEW
           </div>
-          <h1 className="text-2xl font-extrabold font-poppins text-slate-900 dark:text-white mt-1">
+          <h1 className="text-2xl font-bold font-sans text-slate-900 dark:text-white mt-1">
             Admin Command Center
           </h1>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
@@ -338,10 +332,10 @@ function AdminDashboard() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <button className="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-600 dark:text-slate-300 flex items-center gap-2 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+          <button className="px-4 py-2.5 rounded-md bg-slate-100 dark:bg-slate-800 text-xs font-medium text-slate-600 dark:text-slate-300 flex items-center gap-2 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
             <Download className="w-3.5 h-3.5" /> Export Report
           </button>
-          <button className="px-4 py-2.5 rounded-xl bg-[#13C5DD] text-white text-xs font-bold flex items-center gap-2 shadow-md hover:bg-[#10b1c7] transition-colors">
+          <button className="px-4 py-2.5 rounded-md bg-[#4A1F2B] text-white text-xs font-medium flex items-center gap-2 shadow-xs hover:bg-[#5E2737] transition-colors">
             <RefreshCw className="w-3.5 h-3.5" /> Refresh Data
           </button>
         </div>
@@ -352,20 +346,20 @@ function AdminDashboard() {
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (
-            <div key={stat.label} className="p-5 rounded-2xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow">
+            <div key={stat.label} className="p-5 rounded-lg bg-white dark:bg-[#241D29] border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow">
               <div className="flex items-start justify-between">
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: stat.color + "15" }}>
+                <div className="w-10 h-10 rounded-md flex items-center justify-center" style={{ backgroundColor: stat.color + "15" }}>
                   <Icon className="w-5 h-5" style={{ color: stat.color }} />
                 </div>
-                <div className={`flex items-center gap-1 text-xs font-bold ${stat.trend === "up" ? "text-[#00C896]" : stat.trend === "down" ? "text-red-400" : "text-slate-400"}`}>
+                <div className={`flex items-center gap-1 text-xs font-bold ${stat.trend === "up" ? "text-[#3F6B52] dark:text-[#85B599]" : stat.trend === "down" ? "text-red-400" : "text-slate-400"}`}>
                   {stat.trend === "up" && <TrendingUp className="w-3.5 h-3.5" />}
                   {stat.trend === "down" && <TrendingDown className="w-3.5 h-3.5" />}
                   {stat.change}
                 </div>
               </div>
               <div className="mt-3">
-                <div className="text-2xl font-extrabold text-slate-900 dark:text-white">{stat.value}</div>
-                <div className="text-[11px] font-bold text-slate-500 dark:text-slate-400 mt-0.5">{stat.label}</div>
+                <div className="text-2xl font-bold font-sans text-slate-900 dark:text-white">{stat.value}</div>
+                <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 mt-0.5">{stat.label}</div>
               </div>
             </div>
           );
@@ -375,9 +369,9 @@ function AdminDashboard() {
       {/* Recent Activity & Quick Actions */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Recent Activity */}
-        <div className="lg:col-span-2 p-6 rounded-2xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 shadow-sm">
-          <h3 className="text-sm font-extrabold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-            <Activity className="w-4 h-4 text-[#13C5DD]" /> Recent Hospital Activity
+        <div className="lg:col-span-2 p-6 rounded-lg bg-white dark:bg-[#241D29] border border-slate-200 dark:border-slate-800 shadow-sm">
+          <h3 className="text-sm font-bold font-sans text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+            <Activity className="w-4 h-4 text-[#4A1F2B] dark:text-[#E2838E]" /> Recent Hospital Activity
           </h3>
           <div className="space-y-3">
             {[
@@ -390,10 +384,10 @@ function AdminDashboard() {
             ].map((event, i) => (
               <div key={i} className="flex items-start gap-3 py-2 border-b border-slate-100 dark:border-slate-800 last:border-0">
                 <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${
-                  event.type === "success" ? "bg-[#00C896]" :
+                  event.type === "success" ? "bg-[#3F6B52]" :
                   event.type === "warning" ? "bg-amber-400" :
                   event.type === "danger" ? "bg-red-400" :
-                  "bg-[#13C5DD]"
+                  "bg-[#4A1F2B]"
                 }`} />
                 <div className="flex-1">
                   <p className="text-xs text-slate-700 dark:text-slate-300 font-medium">{event.text}</p>
@@ -405,23 +399,23 @@ function AdminDashboard() {
         </div>
 
         {/* Quick Actions */}
-        <div className="p-6 rounded-2xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 shadow-sm">
-          <h3 className="text-sm font-extrabold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+        <div className="p-6 rounded-lg bg-white dark:bg-[#241D29] border border-slate-200 dark:border-slate-800 shadow-sm">
+          <h3 className="text-sm font-bold font-sans text-slate-900 dark:text-white mb-4 flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-amber-400" /> Quick Actions
           </h3>
           <div className="space-y-2">
             {[
-              { label: "Add New Staff Member", icon: UserPlus, color: "#00C896" },
-              { label: "Register Patient", icon: Heart, color: "#E63946" },
-              { label: "Create Department", icon: Building2, color: "#8B5CF6" },
-              { label: "Generate Invoice", icon: CreditCard, color: "#F59E0B" },
-              { label: "View Audit Logs", icon: ShieldCheck, color: "#13C5DD" },
-              { label: "Download Reports", icon: Download, color: "#EC4899" },
+              { label: "Add New Staff Member", icon: UserPlus, color: "#3F6B52" },
+              { label: "Register Patient", icon: Heart, color: "#8C3A45" },
+              { label: "Create Department", icon: Building2, color: "#83505B" },
+              { label: "Generate Invoice", icon: CreditCard, color: "#C07830" },
+              { label: "View Audit Logs", icon: ShieldCheck, color: "#3E6177" },
+              { label: "Download Reports", icon: Download, color: "#5C2329" },
             ].map((action) => {
               const Icon = action.icon;
               return (
-                <button key={action.label} className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-left text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-                  <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: action.color + "15" }}>
+                <button key={action.label} className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-md text-left text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                  <div className="w-8 h-8 rounded-md flex items-center justify-center shrink-0" style={{ backgroundColor: action.color + "15" }}>
                     <Icon className="w-4 h-4" style={{ color: action.color }} />
                   </div>
                   {action.label}
@@ -454,12 +448,12 @@ function StaffManagement() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="text-xs font-extrabold text-[#13C5DD] uppercase tracking-wider flex items-center gap-1.5">
+          <div className="text-xs font-extrabold text-[#4A1F2B] dark:text-[#C08491] uppercase tracking-wider flex items-center gap-1.5">
             <Users className="w-4 h-4" /> STAFF MANAGEMENT
           </div>
           <h1 className="text-2xl font-extrabold font-poppins text-slate-900 dark:text-white mt-1">Hospital Staff Directory</h1>
         </div>
-        <button className="px-5 py-2.5 rounded-xl bg-[#13C5DD] text-white text-xs font-bold flex items-center gap-2 shadow-md">
+        <button className="px-5 py-2.5 rounded-xl bg-[#4A1F2B] text-white text-xs font-bold flex items-center gap-2 shadow-md">
           <UserPlus className="w-4 h-4" /> Add New Staff
         </button>
       </div>
@@ -467,26 +461,26 @@ function StaffManagement() {
       {/* Staff Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {[
-          { label: "Total Staff", value: "32", icon: Users, color: "#13C5DD" },
-          { label: "Active", value: "28", icon: UserCheck, color: "#00C896" },
-          { label: "On Leave", value: "3", icon: Clock, color: "#F59E0B" },
-          { label: "Inactive", value: "1", icon: UserX, color: "#E63946" },
+          { label: "Total Staff", value: "32", icon: Users, color: "#3E6177" },
+          { label: "Active", value: "28", icon: UserCheck, color: "#3F6B52" },
+          { label: "On Leave", value: "3", icon: Clock, color: "#C07830" },
+          { label: "Inactive", value: "1", icon: UserX, color: "#8C3A45" },
         ].map((s) => {
           const Icon = s.icon;
           return (
-            <div key={s.label} className="p-4 rounded-2xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800">
+            <div key={s.label} className="p-4 rounded-lg bg-white dark:bg-[#242026] border border-slate-200 dark:border-slate-800">
               <div className="flex items-center gap-2">
                 <Icon className="w-4 h-4" style={{ color: s.color }} />
                 <span className="text-[10px] font-bold text-slate-500 uppercase">{s.label}</span>
               </div>
-              <div className="text-xl font-extrabold text-slate-900 dark:text-white mt-1">{s.value}</div>
+              <div className="text-xl font-bold font-sans text-slate-900 dark:text-white mt-1">{s.value}</div>
             </div>
           );
         })}
       </div>
 
       {/* Staff Table */}
-      <div className="rounded-2xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+      <div className="rounded-lg bg-white dark:bg-[#242026] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-xs text-left">
             <thead className="bg-slate-50 dark:bg-slate-900/50 text-slate-500 font-extrabold uppercase border-b border-slate-200 dark:border-slate-800">
@@ -504,7 +498,7 @@ function StaffManagement() {
                 <tr key={member.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
                   <td className="p-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-[#13C5DD]/10 flex items-center justify-center text-[#13C5DD] font-bold text-[10px]">
+                      <div className="w-8 h-8 rounded-full bg-[#F3E9EB] dark:bg-[#32293D] flex items-center justify-center text-[#4A1F2B] dark:text-[#E2838E] font-bold text-[10px]">
                         {member.name.split(" ").map(n => n[0]).join("").slice(0, 2)}
                       </div>
                       <div>
@@ -517,7 +511,7 @@ function StaffManagement() {
                   <td className="p-4 font-medium">{member.dept}</td>
                   <td className="p-4">
                     <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${
-                      member.status === "active" ? "bg-[#00C896]/10 text-[#00C896]" :
+                      member.status === "active" ? "bg-[#E8F0EC] text-[#3F6B52] dark:bg-[#23382B] dark:text-[#85B599]" :
                       member.status === "on_leave" ? "bg-amber-500/10 text-amber-500" :
                       "bg-red-500/10 text-red-500"
                     }`}>
@@ -527,9 +521,9 @@ function StaffManagement() {
                   <td className="p-4 text-slate-400">{member.joined}</td>
                   <td className="p-4">
                     <div className="flex items-center gap-1">
-                      <button className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-[#13C5DD]"><Eye className="w-3.5 h-3.5" /></button>
-                      <button className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-amber-500"><Edit className="w-3.5 h-3.5" /></button>
-                      <button className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-red-500"><Trash2 className="w-3.5 h-3.5" /></button>
+                      <button className="p-1.5 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-[#4A1F2B] dark:hover:text-[#E2838E]"><Eye className="w-3.5 h-3.5" /></button>
+                      <button className="p-1.5 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-amber-500"><Edit className="w-3.5 h-3.5" /></button>
+                      <button className="p-1.5 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-red-500"><Trash2 className="w-3.5 h-3.5" /></button>
                     </div>
                   </td>
                 </tr>
@@ -549,29 +543,29 @@ function PatientRecords() {
   return (
     <div className="space-y-6">
       <div>
-        <div className="text-xs font-extrabold text-[#13C5DD] uppercase tracking-wider flex items-center gap-1.5">
+        <div className="text-xs font-extrabold text-[#4A1F2B] dark:text-[#E2838E] uppercase tracking-wider flex items-center gap-1.5">
           <Heart className="w-4 h-4" /> PATIENT RECORDS
         </div>
-        <h1 className="text-2xl font-extrabold font-poppins text-slate-900 dark:text-white mt-1">Patient Database</h1>
+        <h1 className="text-2xl font-bold font-sans text-slate-900 dark:text-white mt-1">Patient Database</h1>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {[
-          { label: "Total Registered", value: "12,847", icon: Users, color: "#13C5DD" },
-          { label: "Active (IPD)", value: "182", icon: Bed, color: "#00C896" },
-          { label: "Today OPD", value: "89", icon: Calendar, color: "#8B5CF6" },
+          { label: "Total Registered", value: "12,847", icon: Users, color: "#3E6177" },
+          { label: "Active (IPD)", value: "182", icon: Bed, color: "#3F6B52" },
+          { label: "Today OPD", value: "89", icon: Calendar, color: "#83505B" },
         ].map((s) => {
           const Icon = s.icon;
           return (
-            <div key={s.label} className="p-5 rounded-2xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800">
+            <div key={s.label} className="p-5 rounded-lg bg-white dark:bg-[#241D29] border border-slate-200 dark:border-slate-800">
               <div className="flex items-center gap-2"><Icon className="w-4 h-4" style={{ color: s.color }} /><span className="text-[10px] font-bold text-slate-500 uppercase">{s.label}</span></div>
-              <div className="text-2xl font-extrabold text-slate-900 dark:text-white mt-1">{s.value}</div>
+              <div className="text-2xl font-bold font-sans text-slate-900 dark:text-white mt-1">{s.value}</div>
             </div>
           );
         })}
       </div>
 
-      <div className="rounded-2xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 p-6 overflow-x-auto">
+      <div className="rounded-lg bg-white dark:bg-[#241D29] border border-slate-200 dark:border-slate-800 p-6 overflow-x-auto">
         <table className="w-full text-xs text-left">
           <thead className="bg-slate-50 dark:bg-slate-900/50 text-slate-500 font-extrabold uppercase">
             <tr>
@@ -590,15 +584,15 @@ function PatientRecords() {
               { mrn: "#90420", name: "કિશોરભાઈ જોશી", abha: "91-7710-3028-2290", phone: "+91 76543 21098", lastVisit: "20 Aug 2026", status: "Discharged" },
             ].map((p) => (
               <tr key={p.mrn} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                <td className="p-3 font-extrabold text-[#13C5DD]">{p.mrn}</td>
+                <td className="p-3 font-bold text-[#4A1F2B] dark:text-[#E2838E]">{p.mrn}</td>
                 <td className="p-3 font-bold text-slate-900 dark:text-white">{p.name}</td>
                 <td className="p-3 text-slate-400 font-mono">{p.abha}</td>
                 <td className="p-3">{p.phone}</td>
                 <td className="p-3">{p.lastVisit}</td>
                 <td className="p-3">
                   <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${
-                    p.status === "IPD" ? "bg-[#13C5DD]/10 text-[#13C5DD]" :
-                    p.status === "OPD" ? "bg-[#00C896]/10 text-[#00C896]" :
+                    p.status === "IPD" ? "bg-[#F3E9EB] dark:bg-[#32293D] text-[#4A1F2B] dark:text-[#E2838E]" :
+                    p.status === "OPD" ? "bg-[#E8F0EC] text-[#3F6B52] dark:bg-[#23382B] dark:text-[#85B599]" :
                     "bg-slate-100 dark:bg-slate-800 text-slate-500"
                   }`}>{p.status}</span>
                 </td>
@@ -616,38 +610,38 @@ function PatientRecords() {
 // ═══════════════════════════════════════════════════════════════
 function DepartmentsSection() {
   const departments = [
-    { name: "Cardiology", head: "Dr. Sneha Shah", staff: 8, patients: 24, status: "active", color: "#E63946" },
-    { name: "Orthopedic", head: "Dr. Amit Mehta", staff: 6, patients: 18, status: "active", color: "#13C5DD" },
-    { name: "Pathology Lab", head: "David Chen", staff: 5, patients: 0, status: "active", color: "#8B5CF6" },
-    { name: "General Medicine", head: "Dr. Rajesh Patel", staff: 10, patients: 42, status: "active", color: "#00C896" },
-    { name: "Pharmacy", head: "Maria Santos", staff: 4, patients: 0, status: "active", color: "#F59E0B" },
-    { name: "Emergency / ICU", head: "Dr. Anand Kumar", staff: 12, patients: 8, status: "active", color: "#EC4899" },
+    { name: "Cardiology", head: "Dr. Sneha Shah", staff: 8, patients: 24, status: "active", color: "#8C3A45" },
+    { name: "Orthopedic", head: "Dr. Amit Mehta", staff: 6, patients: 18, status: "active", color: "#3E6177" },
+    { name: "Pathology Lab", head: "David Chen", staff: 5, patients: 0, status: "active", color: "#83505B" },
+    { name: "General Medicine", head: "Dr. Rajesh Patel", staff: 10, patients: 42, status: "active", color: "#3F6B52" },
+    { name: "Pharmacy", head: "Maria Santos", staff: 4, patients: 0, status: "active", color: "#C07830" },
+    { name: "Emergency / ICU", head: "Dr. Anand Kumar", staff: 12, patients: 8, status: "active", color: "#5C2329" },
   ];
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="text-xs font-extrabold text-[#13C5DD] uppercase tracking-wider flex items-center gap-1.5">
+          <div className="text-xs font-extrabold text-[#4A1F2B] dark:text-[#E2838E] uppercase tracking-wider flex items-center gap-1.5">
             <Building2 className="w-4 h-4" /> DEPARTMENTS
           </div>
-          <h1 className="text-2xl font-extrabold font-poppins text-slate-900 dark:text-white mt-1">Department Management</h1>
+          <h1 className="text-2xl font-bold font-sans text-slate-900 dark:text-white mt-1">Department Management</h1>
         </div>
-        <button className="px-5 py-2.5 rounded-xl bg-[#13C5DD] text-white text-xs font-bold flex items-center gap-2 shadow-md">
+        <button className="px-5 py-2.5 rounded-md bg-[#4A1F2B] hover:bg-[#5E2737] text-white text-xs font-medium flex items-center gap-2 shadow-xs transition-colors">
           <Building2 className="w-4 h-4" /> Add Department
         </button>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {departments.map((dept) => (
-          <div key={dept.name} className="p-5 rounded-2xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow">
+          <div key={dept.name} className="p-5 rounded-lg bg-white dark:bg-[#241D29] border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-start justify-between mb-3">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: dept.color + "15" }}>
+              <div className="w-10 h-10 rounded-md flex items-center justify-center" style={{ backgroundColor: dept.color + "15" }}>
                 <Stethoscope className="w-5 h-5" style={{ color: dept.color }} />
               </div>
-              <span className="px-2 py-0.5 rounded-md bg-[#00C896]/10 text-[#00C896] text-[10px] font-bold">● Active</span>
+              <span className="px-2 py-0.5 rounded-md bg-[#E8F0EC] text-[#3F6B52] dark:bg-[#23382B] dark:text-[#85B599] text-[10px] font-bold">● Active</span>
             </div>
-            <h3 className="text-sm font-extrabold text-slate-900 dark:text-white">{dept.name}</h3>
+            <h3 className="text-sm font-bold font-sans text-slate-900 dark:text-white">{dept.name}</h3>
             <p className="text-[10px] text-slate-400 mt-0.5">Head: {dept.head}</p>
             <div className="flex items-center gap-4 mt-3 pt-3 border-t border-slate-100 dark:border-slate-800">
               <div className="text-[10px]"><span className="font-bold text-slate-900 dark:text-white">{dept.staff}</span> <span className="text-slate-400">Staff</span></div>
@@ -667,23 +661,23 @@ function BedConfigSection() {
   return (
     <div className="space-y-6">
       <div>
-        <div className="text-xs font-extrabold text-[#13C5DD] uppercase tracking-wider flex items-center gap-1.5"><Bed className="w-4 h-4" /> BED & WARD CONFIGURATION</div>
-        <h1 className="text-2xl font-extrabold font-poppins text-slate-900 dark:text-white mt-1">Ward & Bed Management</h1>
+        <div className="text-xs font-extrabold text-[#4A1F2B] dark:text-[#E2838E] uppercase tracking-wider flex items-center gap-1.5"><Bed className="w-4 h-4" /> BED & WARD CONFIGURATION</div>
+        <h1 className="text-2xl font-bold font-sans text-slate-900 dark:text-white mt-1">Ward & Bed Management</h1>
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {[
-          { label: "Total Beds", value: "240", color: "#13C5DD" },
-          { label: "Occupied", value: "182", color: "#E63946" },
-          { label: "Available", value: "52", color: "#00C896" },
-          { label: "Maintenance", value: "6", color: "#F59E0B" },
+          { label: "Total Beds", value: "240", color: "#3E6177" },
+          { label: "Occupied", value: "182", color: "#8C3A45" },
+          { label: "Available", value: "52", color: "#3F6B52" },
+          { label: "Maintenance", value: "6", color: "#C07830" },
         ].map((s) => (
-          <div key={s.label} className="p-4 rounded-2xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 text-center">
-            <div className="text-2xl font-extrabold" style={{ color: s.color }}>{s.value}</div>
+          <div key={s.label} className="p-4 rounded-lg bg-white dark:bg-[#241D29] border border-slate-200 dark:border-slate-800 text-center">
+            <div className="text-2xl font-bold font-sans" style={{ color: s.color }}>{s.value}</div>
             <div className="text-[10px] font-bold text-slate-500 uppercase mt-1">{s.label}</div>
           </div>
         ))}
       </div>
-      <div className="rounded-2xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 p-6 overflow-x-auto">
+      <div className="rounded-lg bg-white dark:bg-[#241D29] border border-slate-200 dark:border-slate-800 p-6 overflow-x-auto">
         <table className="w-full text-xs text-left">
           <thead className="bg-slate-50 dark:bg-slate-900/50 text-slate-500 font-extrabold uppercase">
             <tr><th className="p-3">Ward</th><th className="p-3">Total</th><th className="p-3">Occupied</th><th className="p-3">Available</th><th className="p-3">Rate / Day</th></tr>
@@ -700,8 +694,8 @@ function BedConfigSection() {
                 <td className="p-3 font-bold text-slate-900 dark:text-white">{w.ward}</td>
                 <td className="p-3 font-bold">{w.total}</td>
                 <td className="p-3 font-bold text-red-400">{w.occupied}</td>
-                <td className="p-3 font-bold text-[#00C896]">{w.available}</td>
-                <td className="p-3 font-bold text-[#13C5DD]">{w.rate}</td>
+                <td className="p-3 font-bold text-[#3F6B52] dark:text-[#85B599]">{w.available}</td>
+                <td className="p-3 font-bold text-[#4A1F2B] dark:text-[#E2838E]">{w.rate}</td>
               </tr>
             ))}
           </tbody>
@@ -718,23 +712,23 @@ function BillingSection() {
   return (
     <div className="space-y-6">
       <div>
-        <div className="text-xs font-extrabold text-[#13C5DD] uppercase tracking-wider flex items-center gap-1.5"><CreditCard className="w-4 h-4" /> REVENUE & BILLING</div>
-        <h1 className="text-2xl font-extrabold font-poppins text-slate-900 dark:text-white mt-1">Financial Overview</h1>
+        <div className="text-xs font-extrabold text-[#4A1F2B] dark:text-[#E2838E] uppercase tracking-wider flex items-center gap-1.5"><CreditCard className="w-4 h-4" /> REVENUE & BILLING</div>
+        <h1 className="text-2xl font-bold font-sans text-slate-900 dark:text-white mt-1">Financial Overview</h1>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {[
-          { label: "Monthly Revenue", value: "₹1,42,50,000", change: "+22%", color: "#00C896" },
-          { label: "Pending Payments", value: "₹8,45,000", change: "12 invoices", color: "#F59E0B" },
-          { label: "Insurance Claims", value: "₹34,00,000", change: "8 pending", color: "#13C5DD" },
+          { label: "Monthly Revenue", value: "₹1,42,50,000", change: "+22%", color: "#3F6B52" },
+          { label: "Pending Payments", value: "₹8,45,000", change: "12 invoices", color: "#C07830" },
+          { label: "Insurance Claims", value: "₹34,00,000", change: "8 pending", color: "#3E6177" },
         ].map((s) => (
-          <div key={s.label} className="p-5 rounded-2xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800">
+          <div key={s.label} className="p-5 rounded-lg bg-white dark:bg-[#241D29] border border-slate-200 dark:border-slate-800">
             <div className="text-[10px] font-bold text-slate-500 uppercase">{s.label}</div>
-            <div className="text-2xl font-extrabold text-slate-900 dark:text-white mt-1">{s.value}</div>
+            <div className="text-2xl font-bold font-sans text-slate-900 dark:text-white mt-1">{s.value}</div>
             <div className="text-[10px] font-bold mt-1" style={{ color: s.color }}>{s.change}</div>
           </div>
         ))}
       </div>
-      <div className="p-6 rounded-2xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 text-center">
+      <div className="p-6 rounded-lg bg-white dark:bg-[#241D29] border border-slate-200 dark:border-slate-800 text-center">
         <div className="text-sm text-slate-500 dark:text-slate-400 py-8">Detailed billing charts and GST reports will appear here.</div>
       </div>
     </div>
@@ -748,8 +742,8 @@ function ReportsSection() {
   return (
     <div className="space-y-6">
       <div>
-        <div className="text-xs font-extrabold text-[#13C5DD] uppercase tracking-wider flex items-center gap-1.5"><FileText className="w-4 h-4" /> REPORTS & ANALYTICS</div>
-        <h1 className="text-2xl font-extrabold font-poppins text-slate-900 dark:text-white mt-1">Hospital Analytics</h1>
+        <div className="text-xs font-extrabold text-[#4A1F2B] dark:text-[#E2838E] uppercase tracking-wider flex items-center gap-1.5"><FileText className="w-4 h-4" /> REPORTS & ANALYTICS</div>
+        <h1 className="text-2xl font-bold font-sans text-slate-900 dark:text-white mt-1">Hospital Analytics</h1>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {[
@@ -762,11 +756,11 @@ function ReportsSection() {
         ].map((report) => {
           const Icon = report.icon;
           return (
-            <div key={report.title} className="p-5 rounded-2xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow cursor-pointer">
-              <Icon className="w-5 h-5 text-[#13C5DD] mb-3" />
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white">{report.title}</h3>
+            <div key={report.title} className="p-5 rounded-lg bg-white dark:bg-[#241D29] border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow cursor-pointer">
+              <Icon className="w-5 h-5 text-[#4A1F2B] dark:text-[#E2838E] mb-3" />
+              <h3 className="text-sm font-bold font-sans text-slate-900 dark:text-white">{report.title}</h3>
               <p className="text-[10px] text-slate-400 mt-1">{report.desc}</p>
-              <button className="mt-3 text-[10px] font-bold text-[#13C5DD] flex items-center gap-1">Download PDF <Download className="w-3 h-3" /></button>
+              <button className="mt-3 text-[10px] font-bold text-[#4A1F2B] dark:text-[#E2838E] flex items-center gap-1">Download PDF <Download className="w-3 h-3" /></button>
             </div>
           );
         })}
@@ -782,10 +776,10 @@ function AuditSection() {
   return (
     <div className="space-y-6">
       <div>
-        <div className="text-xs font-extrabold text-[#13C5DD] uppercase tracking-wider flex items-center gap-1.5"><ShieldCheck className="w-4 h-4" /> AUDIT & SECURITY LOGS</div>
-        <h1 className="text-2xl font-extrabold font-poppins text-slate-900 dark:text-white mt-1">Security Audit Trail</h1>
+        <div className="text-xs font-extrabold text-[#4A1F2B] dark:text-[#E2838E] uppercase tracking-wider flex items-center gap-1.5"><ShieldCheck className="w-4 h-4" /> AUDIT & SECURITY LOGS</div>
+        <h1 className="text-2xl font-bold font-sans text-slate-900 dark:text-white mt-1">Security Audit Trail</h1>
       </div>
-      <div className="p-6 rounded-2xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 space-y-3 font-mono text-xs">
+      <div className="p-6 rounded-lg bg-white dark:bg-[#241D29] border border-slate-200 dark:border-slate-800 space-y-3 font-mono text-xs">
         {[
           { time: "21:46:02", msg: "ABDM Health Data Exchange API v2.0 — Signature Validated (AES-256 GCM)", level: "info" },
           { time: "21:45:18", msg: "Cloud Backup Completed Successfully — Encrypted Payload Saved (Mumbai Region)", level: "info" },
@@ -794,8 +788,8 @@ function AuditSection() {
           { time: "21:40:15", msg: "Patient record MRN #90412 accessed by Dr. Rajesh Patel (Authorized)", level: "info" },
           { time: "21:38:00", msg: "Password reset token generated for admin@medcore.in", level: "auth" },
         ].map((log, i) => (
-          <div key={i} className={`p-3 rounded-xl bg-slate-900 ${
-            log.level === "warn" ? "text-amber-400" : log.level === "auth" ? "text-blue-400" : "text-green-400"
+          <div key={i} className={`p-3 rounded-md bg-[#1C1820] border border-[#3E3842] ${
+            log.level === "warn" ? "text-amber-400" : log.level === "auth" ? "text-[#E2838E]" : "text-[#85B599]"
           }`}>
             [2026-08-22 {log.time}] {log.level.toUpperCase()}: {log.msg}
           </div>
@@ -812,14 +806,14 @@ function SettingsSection() {
   return (
     <div className="space-y-6">
       <div>
-        <div className="text-xs font-extrabold text-[#13C5DD] uppercase tracking-wider flex items-center gap-1.5"><Settings className="w-4 h-4" /> HOSPITAL SETTINGS</div>
-        <h1 className="text-2xl font-extrabold font-poppins text-slate-900 dark:text-white mt-1">System Configuration</h1>
+        <div className="text-xs font-extrabold text-[#4A1F2B] dark:text-[#E2838E] uppercase tracking-wider flex items-center gap-1.5"><Settings className="w-4 h-4" /> HOSPITAL SETTINGS</div>
+        <h1 className="text-2xl font-bold font-sans text-slate-900 dark:text-white mt-1">System Configuration</h1>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Hospital Info */}
-        <div className="p-6 rounded-2xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 space-y-4">
-          <h3 className="text-sm font-extrabold text-slate-900 dark:text-white flex items-center gap-2"><Building2 className="w-4 h-4 text-[#13C5DD]" /> Hospital Information</h3>
+        <div className="p-6 rounded-lg bg-white dark:bg-[#241D29] border border-slate-200 dark:border-slate-800 space-y-4">
+          <h3 className="text-sm font-bold font-sans text-slate-900 dark:text-white flex items-center gap-2"><Building2 className="w-4 h-4 text-[#4A1F2B] dark:text-[#E2838E]" /> Hospital Information</h3>
           {[
             { label: "Hospital Name", value: "Apex MedCore Superspeciality Hospital" },
             { label: "Registration No.", value: "GJ-AHM-MED-2024-8841" },
@@ -835,8 +829,8 @@ function SettingsSection() {
         </div>
 
         {/* System Config */}
-        <div className="p-6 rounded-2xl bg-white dark:bg-[#1D2A4D] border border-slate-200 dark:border-slate-800 space-y-4">
-          <h3 className="text-sm font-extrabold text-slate-900 dark:text-white flex items-center gap-2"><Settings className="w-4 h-4 text-[#13C5DD]" /> System Config</h3>
+        <div className="p-6 rounded-lg bg-white dark:bg-[#241D29] border border-slate-200 dark:border-slate-800 space-y-4">
+          <h3 className="text-sm font-bold font-sans text-slate-900 dark:text-white flex items-center gap-2"><Settings className="w-4 h-4 text-[#4A1F2B] dark:text-[#E2838E]" /> System Config</h3>
           {[
             { label: "OPD Token Rate", value: "₹49 / token" },
             { label: "IPD Admission Fee", value: "₹199 / admission" },
