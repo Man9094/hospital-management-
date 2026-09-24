@@ -57,8 +57,11 @@
   --font-source: var(--font-source-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
+@custom-variant dark (&:where(.never-match-dark-disabled, .never-match-dark-disabled *));
+
 @layer base {
-  :root {
+  :root,
+  .dark {
     --bg-main: #F7F6F3;
     --card-bg: #FFFFFF;
     --text-primary: #1D1B1B;
@@ -74,24 +77,6 @@
     --warning: #9A6A25;
     --danger: #A33A35;
     --info: #665C72;
-  }
-
-  .dark {
-    --bg-main: #18141C;
-    --card-bg: #241D29;
-    --text-primary: #FEF8F7;
-    --text-secondary: #D5C2C5;
-    --text-muted: #9B90A8;
-    --border-color: #3B3041;
-    --primary: #C08491;
-    --primary-hover: #D89AA7;
-    --secondary: #83505B;
-    --accent-tint: #32293D;
-    --hover-bg: #32293D;
-    --success: #67B28B;
-    --warning: #E8B96F;
-    --danger: #E06D67;
-    --info: #C5BED1;
   }
 }
 
@@ -120,7 +105,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Clinical Subheading */
-.clinical-subheading {
+.clinical-subheading,
+.dark .clinical-subheading {
   display: inline-block;
   color: #4A1F2B;
   text-transform: uppercase;
@@ -130,11 +116,6 @@ h1, h2, h3, h4, h5, h6 {
   border-bottom: 2px solid #4A1F2B;
   padding-bottom: 2px;
   margin-bottom: 8px;
-}
-
-.dark .clinical-subheading {
-  color: #C08491;
-  border-bottom-color: #C08491;
 }
 
 /* Clinical Standardized Table */
@@ -153,14 +134,10 @@ h1, h2, h3, h4, h5, h6 {
   border-collapse: collapse;
 }
 
-.clinical-table thead {
+.clinical-table thead,
+.dark .clinical-table thead {
   background-color: #F8F2F2;
   border-bottom: 1px solid #E3DFDB;
-}
-
-.dark .clinical-table thead {
-  background-color: #1F1924;
-  border-bottom: 1px solid #3B3041;
 }
 
 .clinical-table th {
@@ -179,12 +156,9 @@ h1, h2, h3, h4, h5, h6 {
   font-variant-numeric: tabular-nums;
 }
 
-.clinical-table tbody tr:hover {
-  background-color: rgba(243, 233, 235, 0.4);
-}
-
+.clinical-table tbody tr:hover,
 .dark .clinical-table tbody tr:hover {
-  background-color: rgba(50, 41, 61, 0.5);
+  background-color: rgba(243, 233, 235, 0.4);
 }
 
 /* Custom Scrollbar - Warm Clinical Theme */
@@ -197,19 +171,14 @@ h1, h2, h3, h4, h5, h6 {
   background: transparent;
 }
 
-::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb,
+.dark ::-webkit-scrollbar-thumb {
   background: #A0828A;
   border-radius: 9999px;
 }
 
-::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover,
+.dark ::-webkit-scrollbar-thumb:hover {
   background: #4A1F2B;
 }
 
-.dark ::-webkit-scrollbar-thumb {
-  background: #4C3C54;
-}
-
-.dark ::-webkit-scrollbar-thumb:hover {
-  background: #C08491;
-}

@@ -54,12 +54,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="gu" className={`${sourceSans.variable} ${poppins.variable} ${inter.variable} ${mukta.variable} dark antialiased`} suppressHydrationWarning>
+    <html lang="gu" className={`${sourceSans.variable} ${poppins.variable} ${inter.variable} ${mukta.variable} antialiased`} suppressHydrationWarning>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" href="/favicon.ico" />
       </head>
-      <body className="min-h-screen bg-[#F7F6F3] dark:bg-[#18141C] text-[#292727] dark:text-[#FEF8F7] transition-colors duration-300 flex flex-col font-sans" suppressHydrationWarning>
+      <body className="min-h-screen bg-[#F7F6F3] text-[#292727] transition-colors duration-300 flex flex-col font-sans" suppressHydrationWarning>
         <ThemeProvider>
           <LanguageProvider>
             <AuthProvider>

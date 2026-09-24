@@ -55,10 +55,10 @@ export default function SaaSAppPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#18141C] flex items-center justify-center">
+      <div className="min-h-screen bg-[#F7F6F3] flex items-center justify-center">
         <div className="text-center space-y-3">
-          <Loader2 className="w-8 h-8 text-[#4A1F2B] dark:text-[#C08491] animate-spin mx-auto" />
-          <p className="text-xs text-slate-400 font-medium">Authenticating MedCore Hospital Workspace...</p>
+          <Loader2 className="w-8 h-8 text-[#4A1F2B] animate-spin mx-auto" />
+          <p className="text-xs text-[#514346] font-medium">Authenticating MedCore Hospital Workspace...</p>
         </div>
       </div>
     );
