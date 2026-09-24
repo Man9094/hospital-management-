@@ -1,21 +1,58 @@
 import Database from "better-sqlite3";
 import path from "path";
 import fs from "fs";
+import bcrypt from "bcryptjs";
 
-// Database file stored in project root /data directory
-const DB_DIR = path.join(process.cwd(), "data");
-const DB_PATH = path.join(DB_DIR, "medcore.db");
+function getDatabasePath(): string {
+  if (process.env.DATABASE_PATH) {
+    return process.env.DATABASE_PATH;
+  }
 
-// Ensure data directory exists
-if (!fs.existsSync(DB_DIR)) {
-  fs.mkdirSync(DB_DIR, { recursive: true });
+  // On Vercel or read-only serverless environments, /var/task is read-only
+  // The only writable directory is /tmp
+  if (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME) {
+    const tmpPath = path.join("/tmp", "medcore.db");
+    const localBundledPath = path.join(process.cwd(), "data", "medcore.db");
+    if (!fs.existsSync(tmpPath) && fs.existsSync(localBundledPath)) {
+      try {
+        fs.copyFileSync(localBundledPath, tmpPath);
+      } catch (e) {
+        console.warn("Could not copy bundled DB to /tmp:", e);
+      }
+    }
+    return tmpPath;
+  }
+
+  const localDir = path.join(process.cwd(), "data");
+  try {
+    if (!fs.existsSync(localDir)) {
+      fs.mkdirSync(localDir, { recursive: true });
+    }
+    return path.join(localDir, "medcore.db");
+  } catch {
+    return path.join("/tmp", "medcore.db");
+  }
 }
 
+const DB_PATH = getDatabasePath();
 const db = new Database(DB_PATH);
 
-// Enable WAL mode and foreign key enforcement
-db.pragma("journal_mode = WAL");
-db.pragma("foreign_keys = ON");
+// Enable WAL mode if supported, fallback to DELETE journal mode
+try {
+  db.pragma("journal_mode = WAL");
+} catch {
+  try {
+    db.pragma("journal_mode = DELETE");
+  } catch (e) {
+    console.warn("Could not set journal mode:", e);
+  }
+}
+
+try {
+  db.pragma("foreign_keys = ON");
+} catch (e) {
+  console.warn("Could not enable foreign keys:", e);
+}
 
 // ─── INITIALIZE COMPREHENSIVE MEDCORE HMS SCHEMA ───────────────
 db.exec(`
@@ -603,6 +640,79 @@ try {
   db.prepare(`CREATE INDEX IF NOT EXISTS idx_appointments_case ON appointments(case_number)`).run();
 } catch (migErr) {
   console.log("DB migration info:", migErr);
+}
+
+// Auto-seed default hospital & users if users table is empty
+try {
+  const userCount = db.prepare("SELECT COUNT(*) as count FROM users").get() as { count: number };
+  if (userCount && userCount.count === 0) {
+    const DEMO_PASSWORD = "MedCore@2026";
+    const passwordHash = bcrypt.hashSync(DEMO_PASSWORD, 10);
+
+    db.prepare(`
+      INSERT OR IGNORE INTO hospitals (id, name, tagline, registration_number, email, phone, address, city, state, pincode, gst_number, abha_facility_id)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `).run(
+      "HOSP-001",
+      "Apex MedCore Superspeciality Hospital",
+      "Indian Hospital Operating System & Advanced Healthcare Center",
+      "GJ-AHM-MED-2024-8841",
+      "contact@apexmedcore.in",
+      "+91 79 2658 9000",
+      "Plot 42, SG Highway, Bodakdev",
+      "Ahmedabad",
+      "Gujarat",
+      "380054",
+      "24AAACH1234F1Z5",
+      "IN2400049182"
+    );
+
+    const departments = [
+      { id: "DEP-MED", name: "General Medicine", code: "MED", head: "Dr. Rajesh Patel", loc: "Ground Floor, Block A" },
+      { id: "DEP-CARD", name: "Cardiology", code: "CARD", head: "Dr. Sneha Shah", loc: "2nd Floor, Heart Wing" },
+      { id: "DEP-ORTH", name: "Orthopedics & Joint Replacement", code: "ORTH", head: "Dr. Amit Mehta", loc: "1st Floor, Block B" },
+      { id: "DEP-PED", name: "Pediatrics & Neonatology", code: "PED", head: "Dr. Pooja Joshi", loc: "3rd Floor, Mother & Child" },
+      { id: "DEP-SURG", name: "General & Laparoscopic Surgery", code: "SURG", head: "Dr. Vikram Deshmukh", loc: "4th Floor, OT Complex" },
+      { id: "DEP-EMER", name: "Emergency & Trauma Command", code: "EMER", head: "Dr. Sandeep Rao", loc: "Ground Floor, ER Bay" },
+      { id: "DEP-LAB", name: "Pathology & Diagnostics (LIS)", code: "LAB", head: "Dr. Kirit Solanki", loc: "Basement 1" },
+      { id: "DEP-RAD", name: "Radiology & Imaging (RIS)", code: "RAD", head: "Dr. Alpa Bhatt", loc: "Ground Floor, Imaging Wing" },
+      { id: "DEP-PHARM", name: "Pharmacy & Store", code: "PHARM", head: "Pravin Bhai Parmar", loc: "Ground Floor, Main Lobby" },
+      { id: "DEP-ADMIN", name: "Hospital Administration & Billing", code: "ADMIN", head: "Priya Sharma", loc: "5th Floor, Executive Wing" }
+    ];
+
+    const insertDept = db.prepare(`
+      INSERT OR IGNORE INTO departments (id, hospital_id, name, code, head_doctor_name, location, status)
+      VALUES (?, 'HOSP-001', ?, ?, ?, ?, 'active')
+    `);
+    for (const d of departments) {
+      insertDept.run(d.id, d.name, d.code, d.head, d.loc);
+    }
+
+    const staffUsers = [
+      { name: "Rajesh Kumar", email: "superadmin@medcore.in", role: "super_admin", dept: "DEP-ADMIN", qual: "M.Tech, MBA", reg: "SYS-001" },
+      { name: "Priya Sharma", email: "admin@medcore.in", role: "hospital_admin", dept: "DEP-ADMIN", qual: "MHA (Hospital Admin)", reg: "MHA-2018-91" },
+      { name: "Dr. Rajesh Patel", email: "doctor@medcore.in", role: "doctor", dept: "DEP-MED", qual: "M.D. (Internal Medicine), FICP", reg: "GMC-G-40912" },
+      { name: "Dr. Sneha Shah", email: "doctor.shah@medcore.in", role: "doctor", dept: "DEP-CARD", qual: "M.D., D.M. (Cardiology)", reg: "GMC-G-38102" },
+      { name: "Dr. Amit Mehta", email: "doctor.mehta@medcore.in", role: "doctor", dept: "DEP-ORTH", qual: "M.S. (Orthopedics), MCh", reg: "GMC-G-44190" },
+      { name: "Sister Anjali Nair", email: "nurse@medcore.in", role: "nurse", dept: "DEP-MED", qual: "B.Sc Nursing, Critical Care", reg: "GNC-N-50124" },
+      { name: "Elena Rostova", email: "reception@medcore.in", role: "reception", dept: "DEP-ADMIN", qual: "B.Com, Healthcare Mgmt", reg: "STF-2022-10" },
+      { name: "David Chen", email: "lab@medcore.in", role: "lab", dept: "DEP-LAB", qual: "M.Sc (Medical Laboratory Tech)", reg: "MLT-88912" },
+      { name: "Dr. Alpa Bhatt", email: "radiology@medcore.in", role: "radiology", dept: "DEP-RAD", qual: "M.D. (Radio-Diagnosis)", reg: "GMC-G-29910" },
+      { name: "Maria Santos", email: "pharmacy@medcore.in", role: "pharmacist", dept: "DEP-PHARM", qual: "B.Pharm, Registered Pharmacist", reg: "GPC-P-99214" },
+      { name: "Ketan Trivedi", email: "billing@medcore.in", role: "billing", dept: "DEP-ADMIN", qual: "B.Com, GST & TPA Specialist", reg: "ACC-2021-08" },
+      { name: "Alexander Vance (Patient)", email: "patient@medcore.in", role: "patient", dept: null, qual: "Patient Portal User", reg: "PAT-001" }
+    ];
+
+    const insertUser = db.prepare(`
+      INSERT OR IGNORE INTO users (name, email, password_hash, role, department_id, qualification, registration_number, status)
+      VALUES (?, ?, ?, ?, ?, ?, ?, 'active')
+    `);
+    for (const u of staffUsers) {
+      insertUser.run(u.name, u.email, passwordHash, u.role, u.dept, u.qual, u.reg);
+    }
+  }
+} catch (seedErr) {
+  console.warn("Auto-seed error:", seedErr);
 }
 
 export default db;

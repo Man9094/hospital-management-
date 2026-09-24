@@ -3,6 +3,8 @@ import db from "@/lib/db";
 import { createToken, AUTH_COOKIE_NAME } from "@/lib/auth";
 import { sendAutomatedWhatsAppOtp } from "@/lib/whatsapp";
 
+export const runtime = "nodejs";
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();

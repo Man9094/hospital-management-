@@ -3,11 +3,12 @@ import db from "@/lib/db";
 import {
   verifyPassword,
   createToken,
-  setAuthCookie,
   checkRateLimit,
   recordLoginAttempt,
   AUTH_COOKIE_NAME,
 } from "@/lib/auth";
+
+export const runtime = "nodejs";
 
 interface UserRow {
   id: number;
@@ -20,20 +21,29 @@ interface UserRow {
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { email, password, rememberMe } = body;
+    let body: any;
+    try {
+      body = await request.json();
+    } catch {
+      return NextResponse.json(
+        { success: false, error: "Invalid JSON in request body." },
+        { status: 400 }
+      );
+    }
+
+    const { email, password, rememberMe } = body || {};
 
     // ─── Input Validation ────────────────────────────────────
     if (!email || !password) {
       return NextResponse.json(
-        { error: "Email and password are required." },
+        { success: false, error: "Email and password are required." },
         { status: 400 }
       );
     }
 
     if (typeof email !== "string" || typeof password !== "string") {
       return NextResponse.json(
-        { error: "Invalid input format." },
+        { success: false, error: "Invalid input format." },
         { status: 400 }
       );
     }
@@ -48,6 +58,7 @@ export async function POST(request: NextRequest) {
     if (!rateLimit.allowed) {
       return NextResponse.json(
         {
+          success: false,
           error: `Too many failed login attempts. Please try again after ${rateLimit.lockoutMinutes} minutes.`,
         },
         { status: 429 }
@@ -65,7 +76,7 @@ export async function POST(request: NextRequest) {
     if (!user) {
       recordLoginAttempt(db, ip, cleanEmail, false);
       return NextResponse.json(
-        { error: "Invalid email or password." },
+        { success: false, error: "Invalid email or password." },
         { status: 401 }
       );
     }
@@ -73,7 +84,7 @@ export async function POST(request: NextRequest) {
     // Check account status
     if (user.status !== "active") {
       return NextResponse.json(
-        { error: "Your account has been deactivated. Please contact the hospital administrator." },
+        { success: false, error: "Your account has been deactivated. Please contact the hospital administrator." },
         { status: 403 }
       );
     }
@@ -84,7 +95,7 @@ export async function POST(request: NextRequest) {
     if (!passwordValid) {
       recordLoginAttempt(db, ip, cleanEmail, false);
       return NextResponse.json(
-        { error: "Invalid email or password." },
+        { success: false, error: "Invalid email or password." },
         { status: 401 }
       );
     }
@@ -92,7 +103,6 @@ export async function POST(request: NextRequest) {
     // ─── Success: Create JWT & Set Cookie ───────────────────
     recordLoginAttempt(db, ip, cleanEmail, true);
 
-    // Update last_login
     const token = await createToken(
       {
         userId: user.id,
@@ -124,9 +134,9 @@ export async function POST(request: NextRequest) {
 
     return response;
   } catch (error: any) {
-    console.error("Login error:", error);
+    console.error("Login server error:", error);
     return NextResponse.json(
-      { error: error?.message || "An unexpected error occurred during login. Please try again." },
+      { success: false, error: "An unexpected error occurred during login. Please try again." },
       { status: 500 }
     );
   }
