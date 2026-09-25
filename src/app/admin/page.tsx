@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -43,6 +43,8 @@ import {
   Lock,
   Loader2,
   Eye,
+  EyeOff,
+  Mail,
   Edit,
   Trash2,
   MoreVertical,
@@ -75,14 +77,259 @@ interface StatCard {
   color: string;
 }
 
+// ─── Admin Login Page Component (Shown when unauthenticated on /admin) ───
+function AdminLoginPage() {
+  const router = useRouter();
+  const { login, checkAuth } = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
+  const [accessDeniedMsg, setAccessDeniedMsg] = useState("");
+
+  const handleAdminLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setAccessDeniedMsg("");
+
+    if (!email.trim() || !password) {
+      setError("Please enter administrator email and password.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const res = await login(email.trim(), password, rememberMe);
+      if (!res.success) {
+        setError(res.error || "Invalid administrator credentials. Access restricted.");
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Re-verify server-side session and role
+      const meRes = await fetch("/api/auth/me", { credentials: "include" });
+      const meData = await meRes.json();
+      if (meData.authenticated && meData.user) {
+        const role = meData.user.role;
+        if (!["hospital_admin", "super_admin"].includes(role)) {
+          // TEST 3: Authenticated non-admin role -> Admin access denied -> Redirect to /app
+          setAccessDeniedMsg(
+            `Authenticated as ${meData.user.name} (${role.replace("_", " ").toUpperCase()}). Hospital Admin privileges required. Redirecting to your clinical dashboard...`
+          );
+          setTimeout(() => {
+            router.push("/app");
+          }, 1800);
+          return;
+        }
+
+        // Admin role confirmed -> sync auth state and load dashboard
+        await checkAuth();
+      }
+    } catch {
+      setError("An unexpected network error occurred. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const fillTestCredentials = (testEmail: string) => {
+    setEmail(testEmail);
+    setPassword("MedCore@2026");
+    setError("");
+    setAccessDeniedMsg("");
+  };
+
+  return (
+    <div className="min-h-screen bg-[#F7F6F3] dark:bg-[#18141C] flex flex-col justify-center py-10 px-4 sm:px-6 lg:px-8 font-sans transition-colors text-[#1D1B1B] dark:text-[#FEF8F7]">
+      {/* Top Hospital Branding */}
+      <div className="sm:mx-auto sm:w-full sm:max-w-md text-center space-y-2.5">
+        <Link href="/" className="inline-flex items-center gap-2.5">
+          <div className="w-10 h-10 rounded-md bg-[#4A1F2B] flex items-center justify-center text-white shadow-xs font-bold">
+            <Cross className="w-5 h-5 stroke-[2.5]" />
+          </div>
+          <span className="font-sans font-bold text-2xl text-[#1D1B1B] dark:text-white uppercase tracking-tight">
+            MEDCORE <span className="text-[#4A1F2B] dark:text-[#C08491] text-xs font-bold lowercase">admin</span>
+          </span>
+        </Link>
+        <div>
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#F3E9EB] dark:bg-[#32293D] text-[#4A1F2B] dark:text-[#F7B5C3] text-[10px] font-bold uppercase tracking-wider">
+            <ShieldAlert className="w-3.5 h-3.5 text-[#4A1F2B] dark:text-[#C08491]" />
+            Restricted Governance Portal
+          </div>
+        </div>
+      </div>
+
+      {/* Main Admin Login Card */}
+      <div className="mt-6 sm:mx-auto sm:w-full sm:max-w-md">
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-white dark:bg-[#241D29] border border-[#E3DFDB] dark:border-[#3B3041] rounded-lg p-6 sm:p-8 shadow-[0_4px_16px_rgba(41,39,39,0.06)] space-y-5"
+        >
+          <div>
+            <h2 className="text-lg font-bold text-[#1D1B1B] dark:text-white">
+              Administrator Sign In
+            </h2>
+            <p className="text-xs text-[#837376] mt-0.5">
+              Enter verified administrator credentials to access the hospital management console.
+            </p>
+          </div>
+
+          {/* Error Notice (TEST 2) */}
+          {error && (
+            <div className="p-3 rounded-md bg-[#FFDAD6] border border-[#BA1A1A]/30 text-[#93000A] text-xs font-semibold flex items-start gap-2 animate-in fade-in">
+              <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+              <span>{error}</span>
+            </div>
+          )}
+
+          {/* Access Denied Notice (TEST 3) */}
+          {accessDeniedMsg && (
+            <div className="p-3 rounded-md bg-[#FAF4EB] border border-[#9A6A25]/30 text-[#9A6A25] text-xs font-semibold flex items-start gap-2 animate-in fade-in">
+              <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+              <span>{accessDeniedMsg}</span>
+            </div>
+          )}
+
+          {/* Form */}
+          <form onSubmit={handleAdminLogin} className="space-y-4">
+            <div>
+              <label className="block text-xs font-semibold text-[#514346] dark:text-[#D5C2C5] uppercase mb-1">
+                Admin Official Email ID
+              </label>
+              <div className="relative">
+                <ShieldCheck className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#837376]" />
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="admin@medcore.in"
+                  className="w-full h-9 pl-9 pr-3 rounded-md bg-[#F8F2F2] dark:bg-[#18141C] border border-[#E3DFDB] dark:border-[#3B3041] text-xs font-semibold text-[#1D1B1B] dark:text-[#FEF8F7] placeholder:text-[#837376] focus:outline-none focus:border-[#4A1F2B] dark:focus:border-[#C08491]"
+                />
+              </div>
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between mb-1">
+                <label className="text-xs font-semibold text-[#514346] dark:text-[#D5C2C5] uppercase">
+                  Password
+                </label>
+                <Link
+                  href="/forgot-password"
+                  className="text-[11px] font-semibold text-[#4A1F2B] dark:text-[#C08491] hover:underline"
+                >
+                  Forgot?
+                </Link>
+              </div>
+              <div className="relative">
+                <Lock className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#837376]" />
+                <input
+                  type={showPassword ? "text" : "password"}
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  className="w-full h-9 pl-9 pr-10 rounded-md bg-[#F8F2F2] dark:bg-[#18141C] border border-[#E3DFDB] dark:border-[#3B3041] text-xs font-semibold text-[#1D1B1B] dark:text-[#FEF8F7] placeholder:text-[#837376] focus:outline-none focus:border-[#4A1F2B] dark:focus:border-[#C08491]"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#837376] hover:text-[#1D1B1B] dark:hover:text-white"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between text-xs">
+              <label className="flex items-center gap-2 cursor-pointer text-[#514346] dark:text-[#D5C2C5] font-medium">
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="w-4 h-4 rounded border-[#E3DFDB] text-[#4A1F2B] focus:ring-[#4A1F2B]"
+                />
+                <span>Remember admin session (7 days)</span>
+              </label>
+            </div>
+
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full h-9 rounded-md bg-[#4A1F2B] hover:bg-[#70404B] text-white font-semibold text-xs transition-colors flex items-center justify-center gap-2 shadow-xs disabled:opacity-50"
+            >
+              {isSubmitting ? (
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+              ) : (
+                <>
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  <span>Authenticate &amp; Open Admin Console</span>
+                </>
+              )}
+            </button>
+          </form>
+
+          {/* Test Account Helper Chips */}
+          <div className="pt-2 border-t border-[#E3DFDB] dark:border-[#3B3041] space-y-2">
+            <div className="text-[10px] font-bold text-[#837376] uppercase tracking-wider flex items-center gap-1">
+              <Sparkles className="w-3 h-3 text-[#4A1F2B] dark:text-[#C08491]" />
+              <span>Fill Test Credentials (Development)</span>
+            </div>
+            <div className="grid grid-cols-2 gap-1.5 text-xs">
+              <button
+                type="button"
+                onClick={() => fillTestCredentials("admin@medcore.in")}
+                className="p-2 rounded border border-[#E3DFDB] dark:border-[#3B3041] bg-[#F8F2F2] dark:bg-[#18141C] text-left hover:border-[#4A1F2B] transition-colors"
+              >
+                <div className="font-bold text-[11px] text-[#1D1B1B] dark:text-white">Hospital Admin</div>
+                <div className="text-[10px] text-[#837376] truncate">admin@medcore.in</div>
+              </button>
+              <button
+                type="button"
+                onClick={() => fillTestCredentials("superadmin@medcore.in")}
+                className="p-2 rounded border border-[#E3DFDB] dark:border-[#3B3041] bg-[#F8F2F2] dark:bg-[#18141C] text-left hover:border-[#4A1F2B] transition-colors"
+              >
+                <div className="font-bold text-[11px] text-[#1D1B1B] dark:text-white">Super Admin</div>
+                <div className="text-[10px] text-[#837376] truncate">superadmin@medcore.in</div>
+              </button>
+            </div>
+            <p className="text-[10px] text-[#837376] italic">
+              Note: Test buttons only fill email and password. Explicit login submission is strictly required.
+            </p>
+          </div>
+
+          {/* Footer Security Badges */}
+          <div className="pt-3 border-t border-[#E3DFDB] dark:border-[#3B3041] flex items-center justify-between text-[11px] text-[#837376]">
+            <span className="flex items-center gap-1">
+              <ShieldCheck className="w-3.5 h-3.5 text-[#3F6B52]" /> RBAC Protected
+            </span>
+            <span>MedCore HMS v2.4</span>
+          </div>
+        </motion.div>
+      </div>
+    </div>
+  );
+}
+
 // ─── Admin Page Component ───────────────────────────────────
 export default function AdminPage() {
   const router = useRouter();
   const { user, isAuthenticated, isLoading, logout } = useAuth();
   const [activeSection, setActiveSection] = useState<AdminSection>("dashboard");
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  // Set sidebar open on desktop screens initially
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.innerWidth >= 1024) {
+      setSidebarOpen(true);
+    }
+  }, []);
 
   // ─── Auth Guards ──────────────────────────────────────────
   if (isLoading) {
@@ -96,8 +343,12 @@ export default function AdminPage() {
     );
   }
 
-  if (!isAuthenticated || !user) return null;
+  // 1. Unauthenticated: Render Admin Login page directly on /admin (NO REDIRECT, NO AUTO-AUTH)
+  if (!isAuthenticated || !user) {
+    return <AdminLoginPage />;
+  }
 
+  // 2. Role verification: Non-admin roles are strictly denied
   const allowedRoles = ["hospital_admin", "super_admin"];
   if (!allowedRoles.includes(user.role)) {
     return (
@@ -230,10 +481,35 @@ export default function AdminPage() {
       </header>
 
       {/* ═══ Body ═══ */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex overflow-hidden relative">
         
-        {/* ═══ Admin Sidebar ═══ */}
-        <aside className={`bg-white dark:bg-[#241D29] border-r border-[#E3DFDB] dark:border-[#3B3041] transition-all duration-200 flex flex-col shrink-0 ${sidebarOpen ? "w-60" : "w-0 overflow-hidden"}`}>
+        {/* Mobile Backdrop Overlay */}
+        {sidebarOpen && (
+          <div
+            onClick={() => setSidebarOpen(false)}
+            className="fixed inset-0 bg-black/60 z-40 lg:hidden backdrop-blur-xs transition-opacity"
+            aria-label="Close admin menu"
+          />
+        )}
+
+        {/* ═══ Admin Sidebar (Drawer on mobile, rail on desktop) ═══ */}
+        <aside
+          className={`fixed inset-y-0 left-0 z-50 bg-white dark:bg-[#241D29] border-r border-[#E3DFDB] dark:border-[#3B3041] transition-transform duration-200 flex flex-col shrink-0 w-64 lg:static lg:z-auto shadow-2xl lg:shadow-none ${
+            sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0 lg:w-60"
+          }`}
+        >
+          {/* Mobile Header in Sidebar */}
+          <div className="p-3 border-b border-[#E3DFDB] dark:border-[#3B3041] flex items-center justify-between lg:hidden shrink-0">
+            <span className="text-xs font-bold text-[#4A1F2B] dark:text-[#C08491]">Admin Navigation</span>
+            <button
+              onClick={() => setSidebarOpen(false)}
+              className="p-1 rounded text-[#837376] hover:text-[#1D1B1B] dark:hover:text-white"
+              aria-label="Close navigation"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+
           <div className="flex-1 p-3 space-y-1 overflow-y-auto">
             <div className="px-2.5 py-1.5 text-[10px] font-bold text-[#837376] uppercase tracking-wider">Administration</div>
             {sidebarItems.map((item) => {
@@ -242,7 +518,12 @@ export default function AdminPage() {
               return (
                 <button
                   key={item.id}
-                  onClick={() => setActiveSection(item.id)}
+                  onClick={() => {
+                    setActiveSection(item.id);
+                    if (typeof window !== "undefined" && window.innerWidth < 1024) {
+                      setSidebarOpen(false);
+                    }
+                  }}
                   className={`w-full flex items-center justify-between px-3 py-2 rounded-md text-xs font-semibold transition-colors ${
                     isActive
                       ? "bg-[#4A1F2B] text-white shadow-xs font-bold"
@@ -277,7 +558,7 @@ export default function AdminPage() {
         </aside>
 
         {/* ═══ Main Content ═══ */}
-        <main className="flex-1 p-6 sm:p-8 overflow-y-auto">
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto min-w-0">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeSection}

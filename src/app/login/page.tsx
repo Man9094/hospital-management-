@@ -42,14 +42,14 @@ export default function LoginPage() {
   const [portalMode, setPortalMode] = useState<"patient" | "staff">("patient");
 
   // ─── Staff Login State ──────────────────────────────────────────
-  const [email, setEmail] = useState("doctor@medcore.in");
-  const [password, setPassword] = useState("MedCore@2026");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // ─── Patient OTP Login State ────────────────────────────────────
-  const [patientIdentifier, setPatientIdentifier] = useState("9328898884");
+  const [patientIdentifier, setPatientIdentifier] = useState("");
   const [patientStep, setPatientStep] = useState<"input" | "otp">("input");
   const [otpCode, setOtpCode] = useState("");
   const [otpMessage, setOtpMessage] = useState("");
@@ -86,7 +86,8 @@ export default function LoginPage() {
       if (result.success) {
         setSuccess(true);
         setTimeout(() => {
-          router.push("/app");
+          const redirectUrl = typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("redirect") : null;
+          router.push(redirectUrl || "/app");
         }, 600);
       } else {
         setError(result.error || "Authentication failed. Please check credentials.");
@@ -517,24 +518,10 @@ export default function LoginPage() {
                     <button
                       key={acc.email}
                       type="button"
-                      onClick={async () => {
+                      onClick={() => {
                         setEmail(acc.email);
                         setPassword("MedCore@2026");
                         setError("");
-                        setIsSubmitting(true);
-                        try {
-                          const result = await login(acc.email, "MedCore@2026", true);
-                          if (result.success) {
-                            setSuccess(true);
-                            setTimeout(() => router.push("/app"), 500);
-                          } else {
-                            setError(result.error || "Login failed");
-                          }
-                        } catch {
-                          setError("Network error");
-                        } finally {
-                          setIsSubmitting(false);
-                        }
                       }}
                       className={`p-2 rounded-md border text-left transition-all group ${
                         email === acc.email
@@ -545,11 +532,14 @@ export default function LoginPage() {
                       <div className="font-bold truncate text-[11px] group-hover:text-[#4A1F2B] dark:group-hover:text-[#C08491] transition-colors">{acc.label}</div>
                       <div className="text-[9px] text-[#4A1F2B] dark:text-[#C08491] font-semibold truncate flex items-center justify-between mt-0.5">
                         <span>{acc.badge}</span>
-                        <ArrowRight className="w-2.5 h-2.5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <span className="text-[8px] text-[#837376] uppercase">Select</span>
                       </div>
                     </button>
                   ))}
                 </div>
+                <p className="text-[10px] text-[#837376] italic">
+                  Selecting a test account only fills credentials into the form. You must explicitly click Sign In below to authenticate.
+                </p>
               </div>
 
               {/* Staff Form */}

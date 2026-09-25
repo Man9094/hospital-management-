@@ -9,6 +9,10 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    if (!["hospital_admin", "super_admin"].includes(user.role)) {
+      return NextResponse.json({ error: "Forbidden: Administrator privileges required" }, { status: 403 });
+    }
+
     const { searchParams } = new URL(request.url);
     const module = searchParams.get("module") || "";
     const limit = parseInt(searchParams.get("limit") || "100");

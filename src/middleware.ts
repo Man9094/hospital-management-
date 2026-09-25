@@ -6,24 +6,26 @@ const secret = new TextEncoder().encode(JWT_SECRET_KEY);
 const AUTH_COOKIE_NAME = "medcore-auth-token";
 
 // Routes that require authentication (any role)
-const PROTECTED_ROUTES = ["/app", "/admin"];
+const PROTECTED_ROUTES = ["/app"];
 
 // Routes that should redirect to dashboard if already authenticated
 const AUTH_ROUTES = ["/login", "/forgot-password", "/reset-password"];
 
-// Role-restricted routes: only specific roles can access
-const ROLE_RESTRICTED_ROUTES: Record<string, string[]> = {
-  "/admin": ["hospital_admin", "super_admin"],
-};
+// Admin restricted roles
+const ADMIN_ALLOWED_ROLES = ["hospital_admin", "super_admin"];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get(AUTH_COOKIE_NAME)?.value;
 
-  // Check if accessing a protected route
+  // Check if accessing a protected client route (/app)
   const isProtectedRoute = PROTECTED_ROUTES.some(
     (route) => pathname === route || pathname.startsWith(route + "/")
   );
+
+  // Check if accessing /admin or admin subroutes
+  const isAdminRoute = pathname === "/admin" || pathname.startsWith("/admin/");
+  const isAdminSubRoute = pathname.startsWith("/admin/");
 
   // Check if accessing an auth route (login, forgot-password, etc.)
   const isAuthRoute = AUTH_ROUTES.some(
@@ -32,19 +34,26 @@ export async function middleware(request: NextRequest) {
 
   // Verify JWT if token exists
   let isValidToken = false;
-  let tokenPayload: { role?: string } = {};
+  let tokenPayload: { role?: string; userId?: number; email?: string } = {};
   if (token) {
     try {
       const { payload } = await jwtVerify(token, secret);
       isValidToken = true;
-      tokenPayload = payload as { role?: string };
+      tokenPayload = payload as { role?: string; userId?: number; email?: string };
     } catch {
       // Token is invalid or expired
       isValidToken = false;
     }
   }
 
-  // Protected route: redirect to login if not authenticated
+  // 1. Unauthenticated access to /admin:
+  // /admin directly renders its own Admin Login Page — DO NOT REDIRECT to /login or /app.
+  // For deep subroutes like /admin/settings without auth, redirect to /admin.
+  if (isAdminSubRoute && !isValidToken) {
+    return NextResponse.redirect(new URL("/admin", request.url));
+  }
+
+  // 2. Protected client routes (/app): redirect to /login if unauthenticated
   if (isProtectedRoute && !isValidToken) {
     const loginUrl = new URL("/login", request.url);
     loginUrl.searchParams.set("redirect", pathname);
@@ -65,24 +74,26 @@ export async function middleware(request: NextRequest) {
     return response;
   }
 
-  // ─── ROLE-BASED ACCESS CONTROL ─────────────────────────────
-  // Check if the route has role restrictions
-  if (isValidToken && tokenPayload.role) {
-    for (const [route, allowedRoles] of Object.entries(ROLE_RESTRICTED_ROUTES)) {
-      if (pathname === route || pathname.startsWith(route + "/")) {
-        if (!allowedRoles.includes(tokenPayload.role)) {
-          // User is authenticated but doesn't have the right role
-          // Redirect to /app (their own dashboard) with an access-denied flag
-          const dashboardUrl = new URL("/app", request.url);
-          dashboardUrl.searchParams.set("access_denied", "1");
-          return NextResponse.redirect(dashboardUrl);
-        }
-      }
+  // 3. Admin Route RBAC:
+  // If user is authenticated, verify that their role has admin permission.
+  // Non-admin roles (doctor, nurse, receptionist, patient, etc.) are strictly forbidden.
+  if (isAdminRoute && isValidToken) {
+    const userRole = tokenPayload.role || "";
+    if (!ADMIN_ALLOWED_ROLES.includes(userRole)) {
+      // Authenticated user lacks administrator privileges
+      const dashboardUrl = new URL("/app", request.url);
+      dashboardUrl.searchParams.set("access_denied", "1");
+      return NextResponse.redirect(dashboardUrl);
     }
   }
 
-  // Auth routes: redirect to dashboard if already authenticated
+  // 4. Auth routes (/login, /forgot-password, etc.):
+  // If already authenticated with a valid session, redirect to appropriate area
   if (isAuthRoute && isValidToken) {
+    const userRole = tokenPayload.role || "";
+    if (ADMIN_ALLOWED_ROLES.includes(userRole)) {
+      return NextResponse.redirect(new URL("/admin", request.url));
+    }
     return NextResponse.redirect(new URL("/app", request.url));
   }
 

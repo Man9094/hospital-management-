@@ -11,9 +11,9 @@ export default function AuthModal() {
   const router = useRouter();
   const { isAuthModalOpen, setIsAuthModalOpen, authModalMode, setAuthModalMode, activeRole, setActiveRole } = usePortal();
   const { login } = useAuth();
-  const [selectedRole, setSelectedRole] = useState<RoleType>("hospital_admin");
-  const [email, setEmail] = useState("admin@medcore.in");
-  const [password, setPassword] = useState("MedCore@2026");
+  const [selectedRole, setSelectedRole] = useState<RoleType | null>(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
 
@@ -35,7 +35,9 @@ export default function AuthModal() {
     try {
       const result = await login(email, password, true);
       if (result.success) {
-        setActiveRole(selectedRole);
+        if (selectedRole) {
+          setActiveRole(selectedRole);
+        }
         setIsAuthModalOpen(false);
         router.push("/app");
       } else {

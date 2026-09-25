@@ -1,6 +1,7 @@
 "use client";
 
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { useAuth } from "@/context/AuthContext";
 
 export type RoleType = 
   | "super_admin" 
@@ -125,12 +126,25 @@ interface PortalContextType {
 const PortalContext = createContext<PortalContextType | undefined>(undefined);
 
 export function PortalProvider({ children }: { children: React.ReactNode }) {
-  const [activeRole, setActiveRole] = useState<RoleType>("hospital_admin");
+  const { user, isAuthenticated } = useAuth();
+  const [activeRole, setActiveRole] = useState<RoleType>("patient");
   const [selectedUhid, setSelectedUhid] = useState<string | null>(null);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authModalMode, setAuthModalMode] = useState<"login" | "signup" | "forgot">("login");
   const [isDemoVideoOpen, setIsDemoVideoOpen] = useState(false);
   const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState(false);
+
+  // Synchronize active role strictly with authenticated session
+  useEffect(() => {
+    if (isAuthenticated && user?.role) {
+      const validRole = user.role as RoleType;
+      if (ROLES[validRole] && activeRole !== validRole) {
+        setActiveRole(validRole);
+      }
+    } else if (!isAuthenticated && activeRole !== "patient") {
+      setActiveRole("patient");
+    }
+  }, [isAuthenticated, user, activeRole]);
 
   const openAuthModal = (mode: "login" | "signup" | "forgot" = "login") => {
     setAuthModalMode(mode);
